@@ -79,12 +79,20 @@ coordinate files a docking run needs. Re-deriving them later would mean
 re-running a tool whose numbers move between runs, so they are kept
 whole.
 
+`run` never overwrites. If `<stem>.pockets.json`, `<stem>.pockets.meta.json`
+or `<stem>_fpocket/` already exist in the destination it refuses, and the
+remedy is a new `--out`; the existing bundle is evidence and stays as it is.
+A failed run leaves `.<stem>.failed-*/` holding `failure.json` and any partial
+output, beside a retained `.<stem>.pocket.lock`. Leave both for diagnosis.
+
 `analyze` with `--near` answers a different question from `analyze`
 alone. Without `--near`, it reports the best pocket anywhere in the
 structure. With `--near`, it reports whether any pocket lines the
 specified residues — and if so, that pocket's score, not the global
-best. The `--near` selector requires chain identifiers (`A:145`, not
-just `145`) because residue numbering repeats across chains.
+best. The `--near` selector is `CHAIN:RESNUM[INSERTION]` (`A:145`,
+`A:145A`). The chain is required because residue numbering repeats across
+chains; an unqualified `A:145` that matches more than one insertion variant
+is refused rather than silently merged.
 
 All output options: `--json` for machine-readable output, `--quiet` for
 paths only, `--out` to override the default output directory. When a work

@@ -76,7 +76,7 @@ Options:
 
 - `--concept-ref` (required): concept reference (IC-NNN) the screen is for.
 - `--modality` (required): intervention modality (`small_molecule`, `molecular_glue`, `antibody`, etc.). Non-pocket-relevant modalities produce a `not_yet_applicable` assessment immediately.
-- `--near`: residues defining the intervention site (CHAIN:RESNUM, comma-separated). Passed through to `dde pocket analyze --near`.
+- `--near`: residues defining the intervention site (CHAIN:RESNUM[INSERTION], comma-separated). Passed through to `dde pocket analyze --near`.
 - `--source`: structure source type (`pdb`, `alphafold_db`, `existing_model`). Default: `pdb`.
 - `--experimental/--no-experimental`: whether structures are experimental. Auto-detected from source type if omitted.
 - `--max-structures`: maximum structures to evaluate (default: 5).
@@ -84,6 +84,7 @@ Options:
 - `--json`: machine-readable JSON output.
 - `--quiet`: paths only.
 - `--claim`: the claim being assessed (default: "target has a druggable binding pocket").
+- `--out`: forwarded to both `dde pocket run` and `dde pocket analyze`. Neither overwrites an existing bundle or a differing analysis, so re-screening a structure whose pocket bundle already exists requires a new `--out`.
 
 ## 4. Preconditions
 

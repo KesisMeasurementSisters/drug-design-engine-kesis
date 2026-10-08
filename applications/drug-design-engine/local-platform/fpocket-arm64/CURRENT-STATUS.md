@@ -1,11 +1,11 @@
-# Repaired ARM64 fpocket enabled and verified
+# Release v3 enabled and verified (2026-10-08)
 
-The six findings in [the review](review-20261007/REPORT.md) are repaired.
-The new release passed two clean ARM builds, all 724 DDE tests, 20,000 sanitizer
-mutations, scientific/Intel comparisons, and final installed Scion execution.
+The six 2026-10-07 review findings and the four 2026-10-08 review findings are
+repaired. The verified 2026-10-07 state is committed; release v3 re-qualified both
+clean ARM builds against the fixed source (binary unchanged) and passed the full gate,
+Scion-namespace checks and live enablement.
 
-See the [current handover](repair/review-fixes-20261007/REPORT.md),
-[verification record](repair/review-fixes-20261007/verification.json), and
-[release manifest](repair/review-fixes-20261007/release-manifest.json).
-Both earlier revoked releases remain permanently revoked. Historical reports,
-failed cases and existing learning artifacts are preserved.
+See the [current handover](repair/review-fixes-20261008/REPORT.md),
+[verification record](repair/review-fixes-20261008/verification.json), and
+[release manifest](repair/review-fixes-20261008/release-manifest.json). The 2026-10-07
+handover remains as history; both earlier revoked releases remain permanently revoked.

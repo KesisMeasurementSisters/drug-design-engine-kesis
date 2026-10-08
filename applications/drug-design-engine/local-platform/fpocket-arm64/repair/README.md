@@ -115,6 +115,7 @@ successful skip. Test-only dependencies remain outside the working DDE environme
 | Additional interleaved-column array overflow | Enforce actual 32-slot legacy boundary before parsing; retained UBSan reproduction and boundary cases |
 | Insertion-code and publication defects | Distinct residue identities, lock, completion marker, output hashes; concurrency, corruption, and interrupted-publication tests |
 | New output-check PQR parsing defect | Fixed-width coordinates rather than whitespace splitting; adjacent-negative-coordinate regression and real 3VI4 integration |
+| 2026-10-08 review: screening runner crash, `repr` residue order, lock scoping | Click 8.5 runner reading `outputs.*` with `--out` forwarded; numeric residue order; lock taken outside the retained-failure block | Fake-CLI runner test, numeric-order and body-`BlockingIOError` unit cases; release v3 re-qualification |
 
 ## Baseline test corrections
 

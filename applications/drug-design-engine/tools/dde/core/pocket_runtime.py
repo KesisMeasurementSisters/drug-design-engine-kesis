@@ -106,6 +106,12 @@ def residue_key(record):
     )
 
 
+def residue_order(key):
+    """Numeric ordering for residue keys; absent label parts sort first."""
+    chain, number, insertion, label_chain, label_number = key
+    return (chain, number, insertion, label_chain or "", label_number or 0)
+
+
 def _sequence(value):
     if value is None:
         return None
@@ -175,7 +181,7 @@ def residue_records(text: str, fmt: str, *, identities=None):
         else:
             record = _residue(row, fmt)
         seen[residue_key(record) + (record.get("resname"),)] = record
-    return sorted(seen.values(), key=lambda r: repr(residue_key(r)))
+    return sorted(seen.values(), key=lambda r: residue_order(residue_key(r)))
 
 
 def stage_structure(source: Path, work: Path, fmt: str):
@@ -320,12 +326,8 @@ def calculation_workspace(stage):
     """Keep partial calculation files on failure; clean successful scratch work."""
     work = stage / "calculation"
     work.mkdir()
-    try:
-        yield work
-    except BaseException:
-        raise
-    else:
-        shutil.rmtree(work)
+    yield work
+    shutil.rmtree(work)
 
 
 def validate_pockets(
@@ -357,11 +359,18 @@ def publication(destination: Path, stem: str):
     """
     lock_path = destination / f".{stem}.pocket.lock"
     fd = os.open(lock_path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError as exc:
+        os.close(fd)
+        raise ArtifactError(
+            "another pocket run owns this destination",
+            remedy="choose --out or wait for that run",
+        ) from exc
     stage = None
     moved = []
     names = [f"{stem}_fpocket", f"{stem}.pockets.json", f"{stem}.pockets.meta.json"]
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if any(os.path.lexists(destination / name) for name in names):
             raise ArtifactError(
                 "pocket results already exist",
@@ -378,11 +387,6 @@ def publication(destination: Path, stem: str):
             moved.append(name)
         stage.rmdir()
         stage = None
-    except BlockingIOError as exc:
-        raise ArtifactError(
-            "another pocket run owns this destination",
-            remedy="choose --out or wait for that run",
-        ) from exc
     except BaseException as exc:
         if stage is not None:
             (stage / "failure.json").write_text(

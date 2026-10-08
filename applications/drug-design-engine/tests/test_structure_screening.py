@@ -1651,38 +1651,127 @@ _check(
 print("\n--- Integration: real pocket_runner via CliRunner ---")
 
 
-def test_make_pocket_runner_requires_click():
-    """make_pocket_runner requires click to be installed.
-    Tests the import path and validates the function signature."""
+_ANALYSIS_DOC = {
+    "source": "raw/structures/TEST.pockets.json",
+    "threshold_set": "pocket@1.0",
+    "thresholds_applied": {"druggable_dscore": 0.5, "borderline_dscore": 0.2},
+    "metrics": {
+        "n_pockets": 2,
+        "best_pocket": {
+            "rank": 1,
+            "druggability_score": 0.65,
+            "score": 0.3,
+            "volume": 950.0,
+            "n_alpha_spheres": 35,
+        },
+        "site": None,
+        "volume_estimate_tolerance": 0.03,
+    },
+    "assessment": {
+        "verdict": "druggable-pocket-present",
+        "statement": "Best pocket scores 0.650 (druggable) across 2 detected pocket(s).",
+        "advisories": [],
+    },
+    "mandatory_relays": [
+        {
+            "code": "fpocket.druggability_is_not_affinity",
+            "message": "0.650 is cavity shape in TEST.pdb; not an affinity.",
+        }
+    ],
+}
+
+
+def test_make_pocket_runner_returns_callable():
+    """The factory builds its CliRunner eagerly; a constructor-API drift
+    (Click 8.2 removed ``mix_stderr``) must fail here, not inside a screen."""
     from dde.commands.structure_screening import make_pocket_runner
 
-    # The function itself is importable regardless of click.
-    # Calling it requires click.testing.CliRunner.
-    try:
-        from click.testing import CliRunner  # noqa: F401 — availability check
-
-        # Click IS available — test that make_pocket_runner returns a callable
-        runner = make_pocket_runner(project_dir="/tmp/nonexistent")
-        assert callable(runner), "make_pocket_runner should return a callable"
-        print("    (click is available, make_pocket_runner returns a callable)")
-    except ImportError:
-        # Click is not installed — the function exists but calling it
-        # should raise ImportError
-        try:
-            make_pocket_runner()
-            raise AssertionError(
-                "make_pocket_runner should raise ImportError without click"
-            )
-        except ImportError:
-            pass
-        print(
-            "    (click not installed — skipped CliRunner test, import path validated)"
-        )
+    assert callable(make_pocket_runner(project_dir="/tmp/nonexistent"))
 
 
 _check(
-    "make_pocket_runner: import path and callable validation",
-    test_make_pocket_runner_requires_click,
+    "make_pocket_runner returns a callable",
+    test_make_pocket_runner_returns_callable,
+)
+
+
+def test_make_pocket_runner_end_to_end():
+    """_run reads outputs.* from --json stdout, forwards --project and --out to
+    both pocket commands, and surfaces the nested CLI's refusal on failure."""
+    import tempfile
+
+    import click
+
+    from dde.commands.structure_screening import make_pocket_runner
+
+    calls: list[list[Any]] = []
+
+    with tempfile.TemporaryDirectory() as tmp:
+        analysis_path = Path(tmp) / "TEST.pocket.analysis.json"
+        analysis_path.write_text(json.dumps(_ANALYSIS_DOC), encoding="utf-8")
+        pockets_path = Path(tmp) / "TEST.pockets.json"
+
+        @click.group()
+        @click.option("--project", default=None)
+        def fake(project):
+            calls.append(["project", project])
+
+        @fake.group()
+        def pocket():
+            pass
+
+        @pocket.command()
+        @click.argument("structure")
+        @click.option("--out", default=None)
+        @click.option("--json", "as_json", is_flag=True)
+        def run(structure, out, as_json):
+            calls.append(["run", structure, out])
+            if structure == "EXISTS.pdb":
+                raise click.ClickException(
+                    "pocket results already exist\n"
+                    "  remedy: choose a new destination with --out"
+                )
+            click.echo("Warning: DDE source has uncommitted modifications", err=True)
+            click.echo(json.dumps({"outputs": {"pockets": str(pockets_path)}}, indent=2))
+
+        @pocket.command()
+        @click.argument("path")
+        @click.option("--near", default=None)
+        @click.option("--out", default=None)
+        @click.option("--json", "as_json", is_flag=True)
+        def analyze(path, near, out, as_json):
+            calls.append(["analyze", path, near, out])
+            click.echo(json.dumps({"outputs": {"analysis": str(analysis_path)}}, indent=2))
+
+        runner = make_pocket_runner(
+            project_dir="/proj", near="A:145", out="screen/run-2", cli=fake
+        )
+        candidate = StructureCandidate(
+            source="pdb", identifier="TEST.pdb", is_experimental=True
+        )
+        result = runner(candidate)
+        assert result.verdict == "druggable-pocket-present", result.verdict
+        assert calls == [
+            ["project", "/proj"],
+            ["run", "TEST.pdb", "screen/run-2"],
+            ["project", "/proj"],
+            ["analyze", str(pockets_path), "A:145", "screen/run-2"],
+        ], calls
+
+        refused = StructureCandidate(
+            source="pdb", identifier="EXISTS.pdb", is_experimental=True
+        )
+        try:
+            runner(refused)
+            raise AssertionError("expected RuntimeError from refused pocket run")
+        except RuntimeError as exc:
+            assert "dde pocket run failed (exit 1)" in str(exc), str(exc)
+            assert "already exist" in str(exc) and "--out" in str(exc), str(exc)
+
+
+_check(
+    "make_pocket_runner: _run end-to-end via fake cli",
+    test_make_pocket_runner_end_to_end,
 )
 
 
@@ -1727,34 +1816,7 @@ def test_screen_structures_with_parsed_analysis():
     import tempfile
 
     # Write a realistic analysis JSON to disk
-    analysis_data = {
-        "source": "raw/structures/TEST.pockets.json",
-        "threshold_set": "pocket@1.0",
-        "thresholds_applied": {"druggable_dscore": 0.5, "borderline_dscore": 0.2},
-        "metrics": {
-            "n_pockets": 2,
-            "best_pocket": {
-                "rank": 1,
-                "druggability_score": 0.65,
-                "score": 0.3,
-                "volume": 950.0,
-                "n_alpha_spheres": 35,
-            },
-            "site": None,
-            "volume_estimate_tolerance": 0.03,
-        },
-        "assessment": {
-            "verdict": "druggable-pocket-present",
-            "statement": "Best pocket scores 0.650 (druggable) across 2 detected pocket(s).",
-            "advisories": [],
-        },
-        "mandatory_relays": [
-            {
-                "code": "fpocket.druggability_is_not_affinity",
-                "message": "0.650 is cavity shape in TEST.pdb; not an affinity.",
-            }
-        ],
-    }
+    analysis_data = _ANALYSIS_DOC
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         json.dump(analysis_data, f)

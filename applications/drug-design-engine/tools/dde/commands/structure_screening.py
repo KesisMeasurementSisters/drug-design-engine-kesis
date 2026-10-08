@@ -812,11 +812,15 @@ def _parse_pocket_analysis(
 def make_pocket_runner(
     project_dir: str | None = None,
     near: str | None = None,
+    out: str | None = None,
+    *,
+    cli: Any = None,
 ) -> Any:
     """Build a real pocket_runner that invokes ``dde pocket run`` + ``analyze``.
 
-    Uses ``click.testing.CliRunner`` to invoke the CLI programmatically,
-    matching the pattern established in ``eval/harness.py``.
+    Uses ``click.testing.CliRunner`` to invoke the CLI in-process, matching
+    ``core/triage.py``. Output paths are read from the ``outputs`` block of
+    each command's ``--json`` record, never reconstructed.
 
     Parameters
     ----------
@@ -826,6 +830,12 @@ def make_pocket_runner(
     near:
         ``--near`` residue selector passed to ``dde pocket analyze``.
         If None, global pocket analysis is performed.
+    out:
+        ``--out`` forwarded to both ``dde pocket run`` and ``dde pocket
+        analyze``. Neither overwrites an existing bundle or a differing
+        analysis, so re-screening a structure needs a fresh destination.
+    cli:
+        Click root to invoke; defaults to ``dde``. Tests inject a stand-in.
 
     Returns
     -------
@@ -834,86 +844,38 @@ def make_pocket_runner(
     """
     from click.testing import CliRunner
 
-    from ..cli import cli
+    from ..core.triage import _extract_json_object
 
-    runner = CliRunner(mix_stderr=False)
+    if cli is None:
+        from ..cli import cli
+
+    runner = CliRunner()
+    base = ["--project", project_dir] if project_dir is not None else []
+    dest = ["--out", out] if out is not None else []
+
+    def _invoke(step: str, role: str, *args: str) -> Path:
+        result = runner.invoke(
+            cli, [*base, "pocket", step, *args, "--json", *dest], catch_exceptions=False
+        )
+        if result.exit_code != 0:
+            # ``output`` interleaves stderr, so a refusal rendered by DDEGroup
+            # (and its --out remedy) reaches the assessment's reason field.
+            raise RuntimeError(
+                f"dde pocket {step} failed (exit {result.exit_code}): "
+                f"{result.output.strip()[:500]}"
+            )
+        outputs = (_extract_json_object(result.stdout) or {}).get("outputs") or {}
+        if not outputs.get(role):
+            raise RuntimeError(
+                f"dde pocket {step} succeeded but reported no outputs.{role}"
+            )
+        return Path(outputs[role])
 
     def _run(candidate: StructureCandidate) -> PocketResult:
-        # --- Phase 1: dde pocket run ---
-        run_args = []
-        if project_dir is not None:
-            run_args += ["--project", project_dir]
-        run_args += ["pocket", "run", candidate.identifier, "--json"]
-
-        result = runner.invoke(cli, run_args, catch_exceptions=False)
-        if result.exit_code != 0:
-            raise RuntimeError(
-                f"dde pocket run failed (exit {result.exit_code}): "
-                f"{(result.output or '').strip()[:500]}"
-            )
-
-        # Locate the pockets record. The pocket run command writes
-        # <stem>.pockets.json into the structures artifact directory.
-        # Parse the JSON output to find the path.
-        pockets_path: str | None = None
-        for line in result.output.strip().splitlines():
-            line = line.strip()
-            if line.endswith(".pockets.json"):
-                pockets_path = line
-                break
-
-        if pockets_path is None:
-            # Try to find from project directory
-            if project_dir is not None:
-                p = Path(project_dir)
-            else:
-                import os
-
-                p = Path(os.environ.get("DDE_PROJECT", "."))
-            stem = Path(candidate.identifier).stem
-            candidate_path = p / "raw" / "structures" / f"{stem}.pockets.json"
-            if candidate_path.is_file():
-                pockets_path = str(candidate_path)
-
-        if pockets_path is None:
-            raise RuntimeError(
-                "dde pocket run succeeded but pockets record path not found in output"
-            )
-
-        # --- Phase 2: dde pocket analyze ---
-        analyze_args = []
-        if project_dir is not None:
-            analyze_args += ["--project", project_dir]
-        analyze_args += ["pocket", "analyze", pockets_path, "--json"]
-        if near is not None:
-            analyze_args += ["--near", near]
-
-        result = runner.invoke(cli, analyze_args, catch_exceptions=False)
-        if result.exit_code != 0:
-            raise RuntimeError(
-                f"dde pocket analyze failed (exit {result.exit_code}): "
-                f"{(result.output or '').strip()[:500]}"
-            )
-
-        # Find the analysis output file
-        stem = Path(candidate.identifier).stem
-        if project_dir is not None:
-            analysis_dir = Path(project_dir) / "raw" / "structures"
-        else:
-            import os
-
-            analysis_dir = (
-                Path(os.environ.get("DDE_PROJECT", ".")) / "raw" / "structures"
-            )
-        analysis_path = analysis_dir / f"{stem}.pocket.analysis.json"
-
-        if not analysis_path.is_file():
-            raise RuntimeError(
-                f"dde pocket analyze succeeded but analysis file not found: "
-                f"{analysis_path}"
-            )
-
-        return _parse_pocket_analysis(analysis_path, candidate)
+        pockets = _invoke("run", "pockets", candidate.identifier)
+        site = ["--near", near] if near is not None else []
+        analysis = _invoke("analyze", "analysis", str(pockets), *site)
+        return _parse_pocket_analysis(analysis, candidate)
 
     return _run
 
@@ -925,6 +887,7 @@ def make_pocket_runner(
 if _HAS_CLICK:
     from ..common import (
         AppState,
+        out_option,
         output_options,
         pass_state,
     )
@@ -991,6 +954,7 @@ if _HAS_CLICK:
         help="Whether structures are experimental. If omitted, "
         "pocket.py's _is_experimental() auto-detects per structure.",
     )
+    @out_option
     @output_options
     @pass_state
     def run(
@@ -1004,6 +968,7 @@ if _HAS_CLICK:
         claim: str | None,
         source_type: str,
         experimental: bool | None,
+        out: str | None,
         as_json: bool,
         quiet: bool,
     ) -> None:
@@ -1018,6 +983,9 @@ if _HAS_CLICK:
 
             dde structure-screen run 1HCK.pdb --concept-ref IC-001 --modality small_molecule
             dde structure-screen run AF-P04637-F1.cif --concept-ref IC-002 --modality small_molecule --near A:145,A:146
+
+        ``--out`` is forwarded to both pocket commands; re-screening a
+        structure whose pocket bundle already exists needs a new ``--out``.
         """
         budget = ScreenBudget(
             max_structures=max_structures,
@@ -1044,10 +1012,10 @@ if _HAS_CLICK:
             )
 
         # Build the real pocket runner
-        project_path = state.project_override
         pocket_runner = make_pocket_runner(
-            project_dir=project_path,
+            project_dir=state.project_override,
             near=near,
+            out=out,
         )
 
         # Parse site residues from --near

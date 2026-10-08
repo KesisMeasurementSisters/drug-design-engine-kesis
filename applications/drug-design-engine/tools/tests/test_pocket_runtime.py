@@ -79,3 +79,14 @@ def test_adjacent_negative_pqr_coordinates():
     from dde.core.pocket_runtime import validate_vertices
     row='ATOM      8    O STP    77      -6.783 -39.303-102.796    0.00     3.96'
     validate_vertices([row],1)
+
+
+def test_residues_sort_numerically():
+    from dde.core.pocket_runtime import residue_records
+    nine=PDB[:22]+f"{9:4d}"+PDB[26:];ten=PDB[:22]+f"{10:4d}"+PDB[26:]
+    assert [r['resnum'] for r in residue_records(ten+nine,'pdb')]==[9,10]
+
+def test_body_blocking_error_is_retained_failure(tmp_path):
+    with pytest.raises(BlockingIOError):
+        with publication(tmp_path,'a'):raise BlockingIOError('injected from body')
+    assert len(list(tmp_path.glob('.a.failed-*')))==1

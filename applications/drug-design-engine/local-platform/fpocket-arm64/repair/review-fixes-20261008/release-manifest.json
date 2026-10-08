@@ -1,0 +1,456 @@
+{
+  "pre_enablement_passed": true,
+  "fpocket_version": "4.2.2",
+  "candidate_abi": 18,
+  "architecture": "AArch64",
+  "binary_sha256": "d6a779e6e4932805fa775200f17d23e8dbbfe63dc145848b3570b6fc7c156cb0",
+  "library_sha256": "32f1571015af13da6d63ec67a69eef9e211996c12a278c21310a36f26ecec40b",
+  "compiler": "g++ (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "flags": "-W -Wextra -Wwrite-strings -Wstrict-prototypes -DM_OS_LINUX -DMNO_MEM_DEBUG -O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -std=gnu99 -Iplugins/include -Iplugins/LINUXAMD64/molfile -ffp-contract=off\n",
+  "molfile_commit": "5f817f263b89e8420174bb4bf0d0875a6ebe6136",
+  "source_archive_hashes": {
+    "fpocket": "4042125e7243e03465200bee787e55a54c16c1a10908718af75275c46bfafaad",
+    "molfile": "5af0805b7fb106652895e4132f9fe0d11e02ef85042b65f700e69ffe94bc316c"
+  },
+  "patches": {
+    "pdbxplugin.C.patch": "0eae70d8480ecf2d2f03aaf3a3b353f0dd36e2cdd5e5e534c8cd7d12968baa50",
+    "write_visu.c.patch": "34f87f54f39f63338bc5700df2d4ba04ec66cb076aa3874ee28c16177e947889",
+    "fpout.c.patch": "f6e6f507ee3522bc8a25ab3b9ee7b2fdb69af7ce166a5490b14aeaa4732860f3",
+    "parm7plugin.C.patch": "c37b8ed9d1cadc1f03e7faa61c6cc2349fcaa8252a5f3a5c93d9a2c685797e21",
+    "ReadPARM7.h.patch": "2c48c040c77044cf49e6c1f74c0ed8f578628ffa09c4bbd337e42d2cb5b8962c"
+  },
+  "reader_validation_sha256": "01dff62912976274aa21c54c51559331e490b543b63b1ec1e2afe8ff7902a348",
+  "dde_source_files": {
+    "commands/pocket.py": "7057a8e67013b04e600fb67b00182cac419752dc681eb4bce67aca104eeef044",
+    "core/pocket_runtime.py": "9f2fe43ca85a9938757187493f7be647895d08e8363325192823f8e3e9778952"
+  },
+  "qualification_code_sha256": {
+    "assemble_release.py": "bcdec78f73ee039a18406faea01134178a39375e9055e5c953bba70f5ca27182",
+    "release_checks.py": "f234c10cd3cadb78a4e9256e2eea14ae51279bf4df821abb586e901b0b054b76",
+    "acceptance-inventory.json": "61a0c9f32992ba84051e58ec1127b912e6e3257633e00133141649cf6653d4cb",
+    "promote.py": "0b61e73edb6518750d02d4fdb89c3e117a5f21d461d5c46a557c596d87bd8f52",
+    "rollback.py": "1522fc4713101c5e6e674753dc3ff95f09b3949a7cc7f8b2373e99e7388e3035",
+    "provision.sh": "cdbd5a5ae9870f8475ccc9ddbc3008f72201ffc48ccad5944d57b7601b7f39f1",
+    "prepare_installer.py": "749de80c1f247483934bd9f07863eab2a974d575e65df28bbd67b06beb42e9ee",
+    "test_original_reference.py": "c2d1a8843d3ccfbb2b802fb1bc315452098a65d3f9c6a1bb8ac241e8340dbb71",
+    "test_deployment_copy.py": "335d19273d6314ac0a9ab77bd2cd13d92c6bd3bac05df17f61570f636c613ffc"
+  },
+  "reports": {
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/binding.json": {
+      "sha256": "487cc7b65836d26ddee38ecc82b0947f151664cbb47b7c111cafe8d9c8dbb2ac"
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/science/report.json": {
+      "sha256": "79a7e822878488f8326201dda034315557e8a74a755be5be0e9994425ee25a44",
+      "checks": 45
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/boundaries/report.json": {
+      "sha256": "730cc26535cccf153c408ec61f1ca81b6d6da35902223ba24568fbc4a6e1ce63",
+      "checks": 67
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/columns/report.json": {
+      "sha256": "bceb9f33cde91972ec3cabff95b4e46dbe1e28101f8bdb274c5376cc68362c10",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/all-cif/report.json": {
+      "sha256": "fb36f568dae66302e24300886d0c3d54b6695dcc7e406a7a14185dfe6227bf6f",
+      "checks": 20
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/additional/report.json": {
+      "sha256": "8a49c3a51836a8f26ab5d2a7d5137b6de50aac71c38c6272c88a13127f421a3a",
+      "checks": 10
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-a/sanitizers/report.json": {
+      "sha256": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+      "checks": 5
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/binding.json": {
+      "sha256": "e2ee67de9cc7e369dc0e9b0e1a63d8318a709d0c9dd066e551c8037517f5514e"
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/science/report.json": {
+      "sha256": "d90f7ebc04bcffcdac09ed3bb857a1ee783908fed9b7e2263ebbe8c3ede59fdb",
+      "checks": 45
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/boundaries/report.json": {
+      "sha256": "06abab3113e7c3f43afddbefd35d9875af42dfcfb73e29764919e739f2de8193",
+      "checks": 67
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/columns/report.json": {
+      "sha256": "f21d026cdeeb9918fa97295d64c04b4d582bf1cb082b1ac78891ccf2876cd8eb",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/all-cif/report.json": {
+      "sha256": "fb36f568dae66302e24300886d0c3d54b6695dcc7e406a7a14185dfe6227bf6f",
+      "checks": 20
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/additional/report.json": {
+      "sha256": "8a49c3a51836a8f26ab5d2a7d5137b6de50aac71c38c6272c88a13127f421a3a",
+      "checks": 10
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/accept-b/sanitizers/report.json": {
+      "sha256": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+      "checks": 5
+    },
+    "/host-repo/.dde-local/fpocket-validation/review-fixes-final-intel/science/report.json": {
+      "sha256": "70435018451bd9d7dda9cca4d1c1749414c4b63d4cc705305c9ca3195714f667",
+      "checks": 39
+    },
+    "/host-repo/.dde-local/fpocket-validation/review-fixes-final-intel/boundaries/report.json": {
+      "sha256": "08ec127311a1f58cccfe5de8ebef587ec3acc923e79fdee2066c5350576d7e3f",
+      "checks": 67
+    },
+    "/host-repo/.dde-local/fpocket-validation/review-fixes-final-intel/columns/report.json": {
+      "sha256": "26b8d5ef2ca041cdedf874a3db0350cafe95ccbe1ea9e92859736f8e2e0d60c7",
+      "checks": 6
+    },
+    "/host-repo/.dde-local/fpocket-validation/review-fixes-final-intel/binding.json": {
+      "sha256": "3f3ca6f3f9f11d89474f43f6c1cb59fdd8c163bbbf86d3bcac1720530e246176"
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/mutations/binding.json": {
+      "sha256": "77da3d675c86dae62aa079495f541ad1b5b91e59202093d6812dcd7d9a0b0433"
+    },
+    "mutations": {
+      "sha256": "e864fba241fca221e8b2217aa596e7374d692696f1292a7cb67eab5fcab55662",
+      "cases": 20000
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/dde-tests/binding.json": {
+      "sha256": "f9d876972f8749898a91082d91e6f976829a97864a3ff26360375b837987174a"
+    },
+    "dde": {
+      "sha256": "1f6f9109d0b33b3bcd0bd68b8174c2141f5910ea09fd3d1b1a139b3053d1078e",
+      "tests": 813
+    },
+    "runner": {
+      "sha256": "d3aa3c83862a634213d11893de9b100176a486bd5ca33c7c6061a732442f1acb",
+      "tests": 4
+    },
+    "comparator": {
+      "sha256": "a383d6491b5a3ce300c7f9c2337affd1bfa94720b0088f6983baf1006f79a5f0",
+      "tests": 11
+    },
+    "release": {
+      "sha256": "a104746ef0fd1967ff6d9cca6e668d8135c02500a5f88e37e72e628313fcdf94",
+      "tests": 6
+    },
+    "original-reference": {
+      "sha256": "0ebe6e7b93530700861983c2ec9709d451081efae2bf53267f451b2af79764a2",
+      "tests": 6
+    },
+    "deployment-copy": {
+      "sha256": "4bbec35596d776b9d009d02cfd988c1c31cdba58fbdc3ae57d5ce03a242b2bd6",
+      "tests": 2
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/scion.json": {
+      "sha256": "49de1efc181407ef689c29337806d2641f120605f25857925302a07308910e0a",
+      "checks": 7
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/workflow/report.json": {
+      "sha256": "4c4a275278e64f262735e2d0a162929834361b7d7fef9348af5d25e461d4d491",
+      "checks": 21
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/smokes/report.json": {
+      "sha256": "84703747dd76e709c4c6b6bf4d54d039284b3809176263e666f02a5c2115df8d",
+      "checks": 4
+    },
+    "/scion-volumes/fpocket-validation/review-fixes-v3-20261008/review-workflow/report.json": {
+      "sha256": "424aabafad8a4b6253f93d5644a27035e26918fe36d45002a09d5df18f9f7033",
+      "checks": 6
+    },
+    "original-intel": {
+      "sha256": "9ce0729b0a46f808374f1f4d39ef833d4d4181361c5a4438084c738765b58e19",
+      "scientific_checks": 40,
+      "reader_checks": 5
+    }
+  },
+  "volume_variability": {
+    "original_intel": {
+      "medians": [
+        1454.234,
+        424.3225,
+        781.5185,
+        444.7685,
+        274.8945,
+        241.334,
+        256.23400000000004,
+        283.44100000000003,
+        262.334,
+        187.6205,
+        327.1425,
+        314.577,
+        257.3365
+      ],
+      "ranges": [
+        [
+          1430.048,
+          1494.786
+        ],
+        [
+          416.73,
+          427.163
+        ],
+        [
+          770.171,
+          800.02
+        ],
+        [
+          434.106,
+          451.641
+        ],
+        [
+          261.51,
+          280.362
+        ],
+        [
+          237.628,
+          246.632
+        ],
+        [
+          248.394,
+          262.402
+        ],
+        [
+          276.492,
+          286.324
+        ],
+        [
+          257.563,
+          267.165
+        ],
+        [
+          184.363,
+          193.809
+        ],
+        [
+          323.863,
+          334.649
+        ],
+        [
+          307.932,
+          318.73
+        ],
+        [
+          252.244,
+          266.836
+        ]
+      ]
+    },
+    "patched_intel": {
+      "medians": [
+        1442.232,
+        424.78650000000005,
+        778.558,
+        446.85400000000004,
+        277.645,
+        244.8755,
+        255.851,
+        284.1995,
+        260.11400000000003,
+        187.563,
+        329.32849999999996,
+        315.3035,
+        258.395
+      ],
+      "ranges": [
+        [
+          1407.863,
+          1463.872
+        ],
+        [
+          413.252,
+          434.118
+        ],
+        [
+          749.448,
+          783.985
+        ],
+        [
+          442.921,
+          456.474
+        ],
+        [
+          274.19,
+          283.851
+        ],
+        [
+          235.542,
+          249.433
+        ],
+        [
+          249.509,
+          259.545
+        ],
+        [
+          280.498,
+          288.144
+        ],
+        [
+          252.883,
+          266.745
+        ],
+        [
+          184.132,
+          190.223
+        ],
+        [
+          326.632,
+          335.159
+        ],
+        [
+          311.531,
+          320.391
+        ],
+        [
+          252.587,
+          262.83
+        ]
+      ],
+      "maximum_relative_median_difference": 0.014674683219107067
+    },
+    "arm_a": {
+      "medians": [
+        1448.051,
+        421.7725,
+        783.8615,
+        445.2425,
+        276.404,
+        242.9535,
+        254.0735,
+        285.3225,
+        260.534,
+        189.664,
+        329.03700000000003,
+        316.89549999999997,
+        257.136
+      ],
+      "ranges": [
+        [
+          1368.22,
+          1478.783
+        ],
+        [
+          411.05,
+          436.552
+        ],
+        [
+          756.849,
+          800.267
+        ],
+        [
+          434.674,
+          451.546
+        ],
+        [
+          268.085,
+          283.314
+        ],
+        [
+          238.342,
+          247.621
+        ],
+        [
+          249.369,
+          258.012
+        ],
+        [
+          279.709,
+          291.603
+        ],
+        [
+          253.303,
+          264.404
+        ],
+        [
+          185.982,
+          193.693
+        ],
+        [
+          321.531,
+          332.171
+        ],
+        [
+          310.978,
+          321.913
+        ],
+        [
+          251.214,
+          261.399
+        ]
+      ],
+      "maximum_relative_median_difference": 0.010891666955369987
+    },
+    "arm_b": {
+      "medians": [
+        1441.5045,
+        420.84450000000004,
+        780.5315,
+        443.0625,
+        274.66,
+        242.707,
+        254.562,
+        284.169,
+        263.95399999999995,
+        189.74149999999997,
+        327.7255,
+        312.812,
+        258.65250000000003
+      ],
+      "ranges": [
+        [
+          1411.864,
+          1464.963
+        ],
+        [
+          418.469,
+          430.64
+        ],
+        [
+          752.655,
+          809.394
+        ],
+        [
+          436.191,
+          450.598
+        ],
+        [
+          268.421,
+          282.442
+        ],
+        [
+          237.628,
+          245.315
+        ],
+        [
+          248.324,
+          258.918
+        ],
+        [
+          279.769,
+          292.089
+        ],
+        [
+          261.224,
+          266.205
+        ],
+        [
+          185.558,
+          192.267
+        ],
+        [
+          322.697,
+          334.94
+        ],
+        [
+          307.032,
+          318.384
+        ],
+        [
+          254.475,
+          263.402
+        ]
+      ],
+      "maximum_relative_median_difference": 0.011304734823753167
+    }
+  },
+  "volume_tolerance": 0.05,
+  "additional_intel_sanitizer_status": "unavailable under QEMU; native ARM ASan/UBSan required and passed",
+  "working_environment_enablement": "pending"
+}

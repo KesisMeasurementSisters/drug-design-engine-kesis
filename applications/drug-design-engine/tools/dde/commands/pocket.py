@@ -78,6 +78,7 @@ from ..core.pocket_runtime import (
     resolve_selectors,
     residue_key,
     residue_label,
+    residue_order,
     calculation_workspace,
     primary_chain,
 )
@@ -867,7 +868,7 @@ def analyze(
         hits = []
         for entry in pockets:
             lining = {residue_key(r) for r in entry.get("residues", [])}
-            overlap = sorted(wanted & lining, key=repr)
+            overlap = sorted(wanted & lining, key=residue_order)
             if overlap:
                 hits.append(
                     {
