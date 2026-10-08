@@ -270,9 +270,9 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
 
         from dde.cli import cli
 
-        runner = CliRunner(mix_stderr=False)
-        env = {k: v for k, v in os.environ.items() if k != "DDE_NO_DIRTY_WARNING"}
-        result = runner.invoke(cli, ["--version"], env=env)
+        runner = CliRunner()
+        env = dict(os.environ, DDE_NO_DIRTY_WARNING=None)
+        result = runner.invoke(cli, ["pocket", "--help"], env=env)
         self.assertIn("uncommitted modifications", result.stderr)
         self.assertIn("3 files", result.stderr)
 
@@ -286,10 +286,10 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
 
         from dde.cli import cli
 
-        runner = CliRunner(mix_stderr=False)
+        runner = CliRunner()
         env = dict(os.environ)
         env["DDE_NO_DIRTY_WARNING"] = "1"
-        result = runner.invoke(cli, ["--version"], env=env)
+        result = runner.invoke(cli, ["pocket", "--help"], env=env)
         self.assertNotIn("uncommitted modifications", result.stderr)
 
     @mock.patch(
@@ -302,8 +302,8 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
 
         from dde.cli import cli
 
-        runner = CliRunner(mix_stderr=False)
-        result = runner.invoke(cli, ["--version"])
+        runner = CliRunner()
+        result = runner.invoke(cli, ["pocket", "--help"])
         self.assertNotIn("uncommitted modifications", result.stderr)
 
 

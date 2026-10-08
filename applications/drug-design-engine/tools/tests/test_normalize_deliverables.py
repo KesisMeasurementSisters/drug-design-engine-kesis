@@ -143,10 +143,11 @@ def test_normalize_layer_0_classes_wins_over_layer_0():
 
 
 def test_normalize_non_list_layer_0_classes_unchanged():
-    """Non-list layer_0_classes values are left unchanged (guard works)."""
+    """Invalid values remain in the canonical field for downstream validation."""
     deliverables = {"layer_0_classes": "single-string"}
     result = normalize_deliverables(deliverables)
-    assert result["layer_0_classes"] == "single-string"
+    assert result["required_classes"] == "single-string"
+    assert result["layer_0_classes"] == []
 
 
 def test_normalize_plain_string_lists_unchanged():
@@ -165,7 +166,8 @@ def test_normalize_returns_new_dict():
     original = {"layer_0_classes": ["docking"]}
     result = normalize_deliverables(original)
     assert result is not original
-    assert result == original
+    assert original == {"layer_0_classes": ["docking"]}
+    assert result == {"layer_0_classes": ["docking"], "required_classes": ["docking"]}
 
 
 # ---------------------------------------------------------------------------

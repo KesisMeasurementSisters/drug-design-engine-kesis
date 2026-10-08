@@ -220,17 +220,19 @@ class TestPreflightPassesCleanSystem(unittest.TestCase):
         ]
         return all(checks)
 
-    def test_exits_zero_when_ready(self):
-        """If all prerequisites are present, preflight should exit 0."""
-        if not self._all_prerequisites_present():
-            self.skipTest("Prerequisites not fully present on this system")
+    def test_verdict_matches_all_reported_checks(self):
+        """Python.h and gcc alone do not establish platform/network readiness."""
         r = _run(["--no-remediate"])
-        self.assertIn(
-            r.returncode,
-            (0, 2),
-            f"Expected exit 0 or 2, got {r.returncode}.\n"
-            f"stdout:\n{r.stdout}\nstderr:\n{r.stderr}",
-        )
+        combined = r.stdout + r.stderr
+        if "MISSING" in combined:
+            self.assertEqual(r.returncode, 1, combined)
+        elif "not Debian-family" in combined or "cannot identify" in combined:
+            self.assertEqual(r.returncode, 2, combined)
+        else:
+            self.assertEqual(r.returncode, 0, combined)
+        if os.uname().machine != "x86_64":
+            self.assertIn("not x86_64", combined)
+            self.assertEqual(r.returncode, 1)
 
 
 # ---------------------------------------------------------------------------

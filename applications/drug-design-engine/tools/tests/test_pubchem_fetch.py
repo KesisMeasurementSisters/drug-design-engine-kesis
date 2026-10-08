@@ -462,7 +462,7 @@ class TestFetchInvalidCID(unittest.TestCase):
 
 
 class TestFetchSlugOverride(unittest.TestCase):
-    """--name option overrides the output filename slug."""
+    """--name selects a readable prefix; CID remains for collision avoidance."""
 
     def test_custom_slug(self):
         resp = _make_http_response(_property_response(cid=2244))
@@ -474,12 +474,12 @@ class TestFetchSlugOverride(unittest.TestCase):
         self.assertEqual(exit_code, 0, f"exit {exit_code}:\n{output}")
 
         self.assertIn(
-            "aspirin.pubchem-compound.artifact.json",
+            "aspirin-2244.pubchem-compound.artifact.json",
             files,
             "custom-slug artifact not written",
         )
         self.assertIn(
-            "aspirin.pubchem-compound.meta.json",
+            "aspirin-2244.pubchem-compound.meta.json",
             files,
             "custom-slug sidecar not written",
         )

@@ -52,7 +52,7 @@ def test_prox_dependencies_have_an_independent_install_transaction() -> None:
     requirements = (TOOLS / "requirements-hypex.txt").read_text()
     for dependency in ("scipy", "scikit-learn", "networkx"):
         assert dependency in requirements
-    assert 'pip install -r "${SCRIPT_DIR}/requirements-hypex.txt"' in INSTALL
+    assert 'pip install --require-hashes -r "${SCRIPT_DIR}/requirements-hypex.txt"' in INSTALL
 
 
 def test_generated_environment_activates_configured_venv() -> None:
