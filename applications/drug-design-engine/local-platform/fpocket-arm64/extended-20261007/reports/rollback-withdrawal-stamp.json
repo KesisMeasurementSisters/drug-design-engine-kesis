@@ -1,0 +1,24 @@
+{
+  "env_version": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "previous": "sha256:befbee9638683c52ce6460c889902e26b967e05a4d30207ec1169d3dbc15f3a0",
+  "changed": true,
+  "changes": [
+    "- fpocket\t497ab782ee2d35b676caaaa6010355347ac0e6aff0a42c53b18a715d0ae18960\t2147072"
+  ],
+  "manifest": "/scion-volumes/tools/env-manifest.txt",
+  "source": {
+    "commit": "45f7f26b10592183956cbb35d11b02c0651e6d24",
+    "dirty": false,
+    "dirty_inputs": [],
+    "on_origin": true,
+    "remote_ref": "origin/HEAD",
+    "stamped_at": "2026-10-07T02:41:10Z",
+    "env_version": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b"
+  },
+  "outputs": {
+    "manifest": "/scion-volumes/tools/env-manifest.txt"
+  },
+  "paths": [
+    "/scion-volumes/tools/env-manifest.txt"
+  ]
+}

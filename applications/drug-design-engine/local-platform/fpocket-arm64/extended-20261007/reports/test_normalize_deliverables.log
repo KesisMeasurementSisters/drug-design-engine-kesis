@@ -1,0 +1,33 @@
+...........F.F                                                           [100%]
+=================================== FAILURES ===================================
+______________ test_normalize_non_list_layer_0_classes_unchanged _______________
+
+    def test_normalize_non_list_layer_0_classes_unchanged():
+        """Non-list layer_0_classes values are left unchanged (guard works)."""
+        deliverables = {"layer_0_classes": "single-string"}
+        result = normalize_deliverables(deliverables)
+>       assert result["layer_0_classes"] == "single-string"
+E       AssertionError: assert [] == 'single-string'
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py:149: AssertionError
+_______________________ test_normalize_returns_new_dict ________________________
+
+    def test_normalize_returns_new_dict():
+        """normalize_deliverables returns a new dict, not a mutated input."""
+        original = {"layer_0_classes": ["docking"]}
+        result = normalize_deliverables(original)
+        assert result is not original
+>       assert result == original
+E       AssertionError: assert {'layer_0_cla...: ['docking']} == {'layer_0_cla...: ['docking']}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'required_classes': ['docking']}
+E         Use -v to get more diff
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py:168: AssertionError
+- generated xml file: /scion-volumes/fpocket-validation/extended-20261007/dde-modules-readable/test_normalize_deliverables.xml -
+=========================== short test summary info ============================
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py::test_normalize_non_list_layer_0_classes_unchanged
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py::test_normalize_returns_new_dict
+2 failed, 12 passed in 0.02s

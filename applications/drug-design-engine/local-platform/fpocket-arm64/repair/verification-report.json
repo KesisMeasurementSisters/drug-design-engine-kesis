@@ -1,0 +1,63 @@
+{
+  "status": "enabled_after_required_acceptance",
+  "verified_at_utc": "2026-10-07T03:46:48.964241+00:00",
+  "environment": {
+    "tools_home": "/scion-volumes/tools",
+    "env_version": "sha256:0339c6fecf8fe875d1bfdc2ba675ffe306d6da79d06551f9f95781839bb4d277",
+    "live_env_version": "sha256:0339c6fecf8fe875d1bfdc2ba675ffe306d6da79d06551f9f95781839bb4d277",
+    "provisioned": true,
+    "drifted": false,
+    "counts": {
+      "packages": 83,
+      "binaries": 7
+    },
+    "host_requirements": {
+      "added": [],
+      "removed": [],
+      "changed": false,
+      "before_count": 17,
+      "after_count": 17
+    }
+  },
+  "acceptance_receipt_sha256": "7c133a1534e7e348ef2fc93504ae57f8e49d6437516fa487f82a3832dde6bede",
+  "binary_sha256": "99394e525e4a93f9d95dddc4a7d7ddcb4e10d4a4a5a650c26792fbf28bbf9c65",
+  "library_sha256": "16b32687ae75e893044093889e16a11692df0412d93a0f2240130955fa72249d",
+  "dde_source_files": {
+    "commands/pocket.py": "42910fe19a485b1241933be681147dd52d0705cf80c060ee99f9bbfb71a832a7",
+    "core/pocket_runtime.py": "b3af4bb7ce93a3e9de4114c315993c4f92b42e24000f95d711c3e0f07d34499c"
+  },
+  "agent_verification": {
+    "run_exit": 0,
+    "analyze_exit": 0,
+    "n_pockets": 13,
+    "best_pocket": {
+      "rank": 1,
+      "druggability_score": 0.855,
+      "score": 0.664,
+      "volume": 1476.965,
+      "n_alpha_spheres": 143.0,
+      "centre_of_mass_max_sphere_distance": 21.512
+    },
+    "outputs": {
+      "pockets": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD.pockets.json",
+      "fpocket_tree": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD_fpocket",
+      "sidecar": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD.pockets.meta.json"
+    }
+  },
+  "preservation": {
+    "learning_files_unchanged": 28,
+    "other_tool_binaries_unchanged": 6,
+    "upstream_commit": "45f7f26b10592183956cbb35d11b02c0651e6d24",
+    "model": "Gemini 3.8 Flash High",
+    "authentication": "unchanged subscription login",
+    "paid_cloud_services_used": false
+  },
+  "limitations": [
+    "unavailable: QEMU AddressSanitizer allocator initialization fails before reader execution; native ARM ASan/UBSan is the required sanitizer gate",
+    "Bounded format limits documented in README.md; no general format-conformance or scientific-validation claim."
+  ],
+  "rollback_directory": "/scion-volumes/fpocket-repair-rollback-20261007-v2",
+  "evidence_archive": ".dde-local/fpocket-validation/repair-evidence.tar.gz",
+  "evidence_archive_sha256": "9608bb28c0117950390277d365c9fe77abada79d3127c4e6606a581aa1de1592",
+  "evidence_archive_bytes": 100982072
+}

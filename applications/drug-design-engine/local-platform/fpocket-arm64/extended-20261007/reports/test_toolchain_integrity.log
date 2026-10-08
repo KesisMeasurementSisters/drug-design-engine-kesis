@@ -1,0 +1,70 @@
+.............FFF                                                         [100%]
+=================================== FAILURES ===================================
+________________ TestCLIDirtyWarning.test_no_warning_when_clean ________________
+
+self = <tests.test_toolchain_integrity.TestCLIDirtyWarning testMethod=test_no_warning_when_clean>
+_mock = <MagicMock name='check_integrity' id='281473401216720'>
+
+    @mock.patch(
+        "dde.cli.check_integrity",
+        return_value=toolchain.ToolchainState("v0.3.0", False, []),
+    )
+    def test_no_warning_when_clean(self, _mock):
+        """No warning when source is clean."""
+        from click.testing import CliRunner
+    
+        from dde.cli import cli
+    
+>       runner = CliRunner(mix_stderr=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py:305: TypeError
+___________________ TestCLIDirtyWarning.test_warning_emitted ___________________
+
+self = <tests.test_toolchain_integrity.TestCLIDirtyWarning testMethod=test_warning_emitted>
+_mock = <MagicMock name='check_integrity' id='281473179803024'>
+
+    @mock.patch(
+        "dde.cli.check_integrity",
+        return_value=toolchain.ToolchainState(
+            "v0.3.0-dirty", True, ["a.py", "b.py", "c.py"]
+        ),
+    )
+    def test_warning_emitted(self, _mock):
+        """The cli group callback prints a warning to stderr on dirty source."""
+        from click.testing import CliRunner
+    
+        from dde.cli import cli
+    
+>       runner = CliRunner(mix_stderr=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py:273: TypeError
+_________________ TestCLIDirtyWarning.test_warning_suppressed __________________
+
+self = <tests.test_toolchain_integrity.TestCLIDirtyWarning testMethod=test_warning_suppressed>
+_mock = <MagicMock name='check_integrity' id='281473178634384'>
+
+    @mock.patch(
+        "dde.cli.check_integrity",
+        return_value=toolchain.ToolchainState("v0.3.0-dirty", True, ["a.py"]),
+    )
+    def test_warning_suppressed(self, _mock):
+        """DDE_NO_DIRTY_WARNING=1 suppresses the stderr warning."""
+        from click.testing import CliRunner
+    
+        from dde.cli import cli
+    
+>       runner = CliRunner(mix_stderr=False)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py:289: TypeError
+- generated xml file: /scion-volumes/fpocket-validation/extended-20261007/dde-modules-readable/test_toolchain_integrity.xml -
+=========================== short test summary info ============================
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py::TestCLIDirtyWarning::test_no_warning_when_clean
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py::TestCLIDirtyWarning::test_warning_emitted
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py::TestCLIDirtyWarning::test_warning_suppressed
+3 failed, 13 passed in 0.12s

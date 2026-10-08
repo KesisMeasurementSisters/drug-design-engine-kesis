@@ -1,0 +1,380 @@
+[
+  {
+    "module": "test_af3_ergonomics.py",
+    "exit": 0,
+    "seconds": 0.23,
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_analysis_classification.py",
+    "exit": 0,
+    "seconds": 0.2,
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_analysis_source_normalization.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_artifact_dirs.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_artifact_register.py",
+    "exit": 0,
+    "seconds": 0.3,
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_bootstrap_preflight.py",
+    "exit": 1,
+    "seconds": 8.92,
+    "tests": 15,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_cbioportal.py",
+    "exit": 0,
+    "seconds": 0.26,
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_cli_option_conformance.py",
+    "exit": 0,
+    "seconds": 0.28,
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_clinvar_stratify.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_compound_overwrite.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_conservation_coverage.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_coscientist_subcommands.py",
+    "exit": 0,
+    "seconds": 0.2,
+    "tests": 41,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_cross_wo_consumes.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_docking_altloc.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_doctor_project.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_envstamp.py",
+    "exit": 0,
+    "seconds": 0.17,
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_genetics_indeterminate.py",
+    "exit": 0,
+    "seconds": 0.25,
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_http_pacing.py",
+    "exit": 0,
+    "seconds": 0.21,
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_http_security.py",
+    "exit": 0,
+    "seconds": 0.2,
+    "tests": 17,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_http_size_guard.py",
+    "exit": 0,
+    "seconds": 0.21,
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_hypex_port.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_hypex_toolchain.py",
+    "exit": 0,
+    "seconds": 8.64,
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_hypex_vendoring.py",
+    "exit": 1,
+    "seconds": 0.19,
+    "tests": 6,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_init_project.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_liability_checkpoint.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_mpo_normalization.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 29,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_mpo_selectivity.py",
+    "exit": 0,
+    "seconds": 0.17,
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_ncbi_api_key.py",
+    "exit": 0,
+    "seconds": 0.21,
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_normalize_deliverables.py",
+    "exit": 1,
+    "seconds": 0.18,
+    "tests": 14,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_ortholog_search.py",
+    "exit": 0,
+    "seconds": 0.18,
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_pocket_peptide_occlusion.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_pubchem_fetch.py",
+    "exit": 1,
+    "seconds": 0.28,
+    "tests": 25,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_qps_registry.py",
+    "exit": 0,
+    "seconds": 0.77,
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_similar_async.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_structure_interface.py",
+    "exit": 0,
+    "seconds": 0.25,
+    "tests": 16,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_surface_accessibility.py",
+    "exit": 0,
+    "seconds": 0.25,
+    "tests": 42,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_toolchain_integrity.py",
+    "exit": 1,
+    "seconds": 0.32,
+    "tests": 16,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_topical_dermal.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_tox_margins_dose_context.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_verb_aliases.py",
+    "exit": 0,
+    "seconds": 0.21,
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_volatile_stamp_warning.py",
+    "exit": 0,
+    "seconds": 0.19,
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  {
+    "module": "test_workorder_accept_all.py",
+    "exit": 0,
+    "seconds": 0.21,
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+]

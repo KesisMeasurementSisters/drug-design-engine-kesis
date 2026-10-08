@@ -1,0 +1,161 @@
+{
+  "checks": [
+    {
+      "name": "environment-identity",
+      "passed": true,
+      "detail": {
+        "tools_home": "/scion-volumes/tools",
+        "env_version": "sha256:2a2ff32fc86403d253260c6c461b9acde960968433c7684fc9b9871425b415a1",
+        "live_env_version": "sha256:2a2ff32fc86403d253260c6c461b9acde960968433c7684fc9b9871425b415a1",
+        "provisioned": true,
+        "drifted": false,
+        "counts": {
+          "packages": 83,
+          "binaries": 7
+        },
+        "host_requirements": {
+          "added": [],
+          "removed": [],
+          "changed": false,
+          "before_count": 17,
+          "after_count": 17
+        }
+      }
+    },
+    {
+      "name": "1UYD.pdb",
+      "passed": true,
+      "detail": {
+        "outputs": {
+          "pockets": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/1UYD.pockets.json",
+          "fpocket_tree": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/1UYD_fpocket",
+          "sidecar": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/1UYD.pockets.meta.json"
+        },
+        "analysis": {
+          "assessment": {
+            "verdict": "druggable-pocket-present",
+            "statement": "Best pocket scores 0.855 (druggable) across 13 detected pocket(s).",
+            "advisories": [
+              "Volumes are Monte Carlo estimates; differences under 5% between runs are noise, not change."
+            ],
+            "relayed_run_warnings": [
+              "Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket exposes no seed. Repeated runs on one input differ by a few percent, and two runs inside the same second are identical because the seed has one-second resolution. Do not read a volume difference below the declared tolerance as a change."
+            ]
+          },
+          "metrics": {
+            "n_pockets": 13,
+            "best_pocket": {
+              "rank": 1,
+              "druggability_score": 0.855,
+              "score": 0.664,
+              "volume": 1441.686,
+              "n_alpha_spheres": 143.0,
+              "centre_of_mass_max_sphere_distance": 21.512
+            },
+            "site": null,
+            "volume_estimate_tolerance": 0.05
+          },
+          "mandatory_relays": [
+            {
+              "code": "fpocket.druggability_is_not_affinity",
+              "message": "0.855 is cavity shape in 1UYD.pdb; not an affinity, not a potency, not evidence a compound binds."
+            }
+          ],
+          "threshold_set": "pocket@1.0",
+          "outputs": {
+            "analysis": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/1UYD.pocket.analysis.json"
+          },
+          "paths": [
+            "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/1UYD.pocket.analysis.json"
+          ]
+        },
+        "env_version": "sha256:2a2ff32fc86403d253260c6c461b9acde960968433c7684fc9b9871425b415a1"
+      }
+    },
+    {
+      "name": "3VI4.cif",
+      "passed": true,
+      "detail": {
+        "outputs": {
+          "pockets": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/3VI4.pockets.json",
+          "fpocket_tree": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/3VI4_fpocket",
+          "sidecar": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/3VI4.pockets.meta.json"
+        },
+        "analysis": {
+          "assessment": {
+            "verdict": "druggable-pocket-present",
+            "statement": "Best pocket scores 0.850 (druggable) across 240 detected pocket(s).",
+            "advisories": [
+              "Volumes are Monte Carlo estimates; differences under 5% between runs are noise, not change."
+            ],
+            "relayed_run_warnings": [
+              "Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket exposes no seed. Repeated runs on one input differ by a few percent, and two runs inside the same second are identical because the seed has one-second resolution. Do not read a volume difference below the declared tolerance as a change."
+            ]
+          },
+          "metrics": {
+            "n_pockets": 240,
+            "best_pocket": {
+              "rank": 1,
+              "druggability_score": 0.85,
+              "score": 0.198,
+              "volume": 531.285,
+              "n_alpha_spheres": 91.0,
+              "centre_of_mass_max_sphere_distance": 16.457
+            },
+            "site": null,
+            "volume_estimate_tolerance": 0.05
+          },
+          "mandatory_relays": [
+            {
+              "code": "fpocket.druggability_is_not_affinity",
+              "message": "0.850 is cavity shape in 3VI4.cif; not an affinity, not a potency, not evidence a compound binds."
+            }
+          ],
+          "threshold_set": "pocket@1.0",
+          "outputs": {
+            "analysis": "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/3VI4.pocket.analysis.json"
+          },
+          "paths": [
+            "/scion-volumes/fpocket-validation/scion-user-project/raw/structures/3VI4.pocket.analysis.json"
+          ]
+        },
+        "env_version": "sha256:2a2ff32fc86403d253260c6c461b9acde960968433c7684fc9b9871425b415a1"
+      }
+    },
+    {
+      "name": "invalid-invalid.txt",
+      "passed": true,
+      "detail": {
+        "exit": 2,
+        "stderr": "error: invalid.txt is not a structure fpocket reads\n  detail: expected .pdb, .ent, .cif or .mmcif\n  remedy: pass the coordinate file, not its sidecar or analysis record\n"
+      }
+    },
+    {
+      "name": "invalid-empty.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 3,
+        "stderr": "error: fpocket produced no result for empty.pdb\n  detail: ! File '/tmp/dde-fpocket-dchrljpn/empty.pdb' contains no atoms...\n! File '/tmp/dde-fpocket-dchrljpn/empty.pdb' contains no atoms...\n! Structure reading failed!\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\n"
+      }
+    },
+    {
+      "name": "invalid-truncated.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 3,
+        "stderr": "error: fpocket produced no result for truncated.pdb\n  detail: ! File '/tmp/dde-fpocket-pfjps9fh/truncated.pdb' contains no atoms...\n! File '/tmp/dde-fpocket-pfjps9fh/truncated.pdb' contains no atoms...\n! Structure reading failed!\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\n"
+      }
+    },
+    {
+      "name": "existing-pocket-tests",
+      "passed": true,
+      "detail": "......................\n----------------------------------------------------------------------\nRan 22 tests in 0.002s\n\nOK\n"
+    }
+  ],
+  "runtime": {
+    "uid": 1000,
+    "gid": 1000,
+    "machine": "aarch64"
+  },
+  "passed": true
+}

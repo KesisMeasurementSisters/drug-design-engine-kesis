@@ -1,0 +1,34 @@
+{
+  "fpocket_version": "4.2.2",
+  "molfile_commit": "5f817f263b89e8420174bb4bf0d0875a6ebe6136",
+  "abi": 18,
+  "probe_timeout_seconds": 30,
+  "structure_timeout_seconds": 120,
+  "volume_repetitions": 10,
+  "volume_median_relative_tolerance": 0.05,
+  "deterministic_comparison": "Complete file sets and complete ordered lines; exact equality except lines containing 'olume', matching upstream exclusions. All excluded lines are retained and checked for non-finite numbers.",
+  "default_pdb": ["1UYD", "3LKF", "1ATP", "4URL", "5WA6", "7TAA"],
+  "default_cif": ["3VI4", "5RGF", "6TL9"],
+  "options": [
+    {"name":"drop-chain", "stem":"2P0R", "ext":"pdb", "args":["-c","D"]},
+    {"name":"drop-chain-long", "stem":"2P0R", "ext":"pdb", "args":["--drop_chains","D"]},
+    {"name":"keep-chains", "stem":"2P0R", "ext":"pdb", "args":["-k","A,B,C,E"]},
+    {"name":"explicit", "stem":"1UYD", "ext":"pdb", "args":["-r","1224:PU8:A"], "reference_subdir":"explicit"},
+    {"name":"chain-as-ligand", "stem":"2P0R_mod", "ext":"pdb", "args":["-a","D"]},
+    {"name":"both-formats", "stem":"6X3P", "ext":"cif", "args":["-w","both"]},
+    {"name":"cif-ligand", "stem":"1QNH", "ext":"cif", "args":["-a","C,D"]}
+  ],
+  "changed_parameters": [["-m","2.8","-M","7.4"],["-e","b","-C","c"],["-D","3.6"]],
+  "parm7_expected": {
+    "natoms": 3,
+    "names": ["O", "H1", "H2"],
+    "types": ["OW", "HW", "HW"],
+    "resnames": ["WAT", "WAT", "WAT"],
+    "resids": [1,1,1],
+    "atomicnumbers": [8,1,1],
+    "masses": [15.9994,1.008,1.008],
+    "charges": [-0.834,0.417,0.417],
+    "bonds": [[1,2],[1,3]],
+    "coordinates": null
+  }
+}

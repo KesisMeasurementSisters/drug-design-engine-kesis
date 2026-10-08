@@ -1,0 +1,95 @@
+{
+  "status": "failed_extended_validation_release_withdrawn",
+  "dde_commit": "45f7f26b10592183956cbb35d11b02c0651e6d24",
+  "binary_sha256": "497ab782ee2d35b676caaaa6010355347ac0e6aff0a42c53b18a715d0ae18960",
+  "network_disabled_for_dde_tests": true,
+  "production_environment": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "counts": {
+    "dde_tests": 692,
+    "dde_failures": 8,
+    "dde_skipped": 0,
+    "reader_edges_each_architecture": 23,
+    "reader_failures_arm": 11,
+    "reader_failures_intel": 8,
+    "bundled_cif_cases": 20,
+    "bundled_cif_passed": 19,
+    "additional_structures_compared": 10,
+    "additional_structures_matched": 10,
+    "workflow_cases": 21,
+    "workflow_initial_failures": 9,
+    "workflow_confirmed_failures": 8,
+    "workflow_expected_reanalysis_refusal": 1,
+    "concurrent_isolated_calculations": 4
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "blocking",
+      "finding": "Heap buffer overflow reading a 15-character author chain ID from a valid three-atom CIF. Gemmi independently reads all atoms and the full chain identifier.",
+      "evidence": "reports/asan-chain-overflow.log",
+      "cause": "getNextWord writes into parser->chain_auth allocated as numberAtoms * CHAIN_SIZE (CHAIN_SIZE=4), without respecting the destination allocation.",
+      "intel_scope": "Original Intel non-instrumented probe returns successfully; that does not establish its memory safety. This overflow is confirmed in the pinned ARM source build, not proven architecture-exclusive."
+    },
+    {
+      "id": "F2",
+      "severity": "blocking",
+      "finding": "ABI18 path truncates label chain IDs to two characters; AAA, AAB, AAC collide as AA. Intel ABI20 reader preserves tested label identifiers.",
+      "evidence": "reports/reader-edges-arm.json"
+    },
+    {
+      "id": "F3",
+      "severity": "high",
+      "finding": "Real DDE pocket run accepts invalid and non-finite PDB coordinate fields and emits success artifacts.",
+      "evidence": "reports/workflow-edges.json"
+    },
+    {
+      "id": "F4",
+      "severity": "high",
+      "finding": "Both readers accept truncated topology content or out-of-range bonds; malformed parm7 missing FORMAT hangs until the 30-second timeout kills it.",
+      "evidence": "reports/reader-edges-intel.json"
+    },
+    {
+      "id": "F5",
+      "severity": "medium",
+      "finding": "Space, quote, and semicolon filenames fail; .ent, .mmcif, and uppercase .PDB pass DDE extension validation but fail in fpocket.",
+      "evidence": "reports/workflow-edges.json"
+    },
+    {
+      "id": "F6",
+      "severity": "medium",
+      "finding": "Quoted CIF atom names retain quote characters; missing CIF coordinates are converted into numeric output. These also occur with the original Intel reader.",
+      "evidence": "reports/reader-edges-intel.json"
+    },
+    {
+      "id": "F7",
+      "severity": "baseline-test-incompatibility",
+      "finding": "Eight unchanged DDE tests fail: one bootstrap environment assumption, one installer text assertion, two normalization contract expectations, one PubChem slug expectation, and three obsolete Click mix_stderr test calls.",
+      "evidence": "reports/dde-modules.json"
+    }
+  ],
+  "harness_notes": [
+    "Initial unittest discovery lacked pytest and mixed modules with global stubs; final count is isolated pytest modules, not that unsuccessful attempt.",
+    "Test-only pytest dependencies were installed outside the DDE venv; per-container SELinux labels required a separate network-disabled diagnostic container with label isolation disabled only for that container.",
+    "The initial same-project workflow expected automatic analysis replacement. DDE correctly refused; a separate test confirmed preservation and successful explicit alternate output. This is protective behaviour, not a product defect.",
+    "Non-finite reader values cause the existing probe to throw intentionally; its abort is not evidence of a library-originated crash.",
+    "Bundled 1UYD_wrote.cif is rejected by both ARM and Intel for bad element indices; remaining 19 bundled CIF reader checks pass.",
+    "Comment-decorated AMBER topology is rejected by both readers; format-support limitation recorded without claiming standards conformance."
+  ],
+  "test_only_dependencies": {
+    "pytest": "8.4.2",
+    "pluggy": "1.6.0",
+    "iniconfig": "2.3.1",
+    "packaging": "26.3",
+    "pygments": "2.21.0"
+  },
+  "preservation": {
+    "existing_tools_hashes_unchanged": 6,
+    "existing_learning_files_hashes_unchanged": 28,
+    "model_auth_unchanged": true,
+    "paid_cloud_used": false
+  },
+  "evidence_archive": ".dde-local/fpocket-validation/extended-20261007/evidence.tar.gz",
+  "evidence_sha256": "2a2b90c201c892648a4a91f76c05a0b392c8d270136c0ad461d78b8200ea7a9e",
+  "dde_and_molfile_source_changed": false,
+  "provisioning_change": "Reject a release when REVOKED.json exists"
+}

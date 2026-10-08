@@ -1,0 +1,251 @@
+[
+  {
+    "name": "filename-simple.pdb",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.664,
+          "volume": 1456.598,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "923e978e1d570f854d0d5f96d515f70d6fdac25216de586fe8c97a266e803b0c",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-0/raw/structures/simple.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-0/raw/structures/simple_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-0/raw/structures/simple.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "filename-space name.pdb",
+    "passed": false,
+    "error": "(3, 'error: fpocket produced no result for space name.pdb\\n  detail: ! The file /tmp/dde-fpocket-xkke1k93/space name_out/space name_VMD.sh could not be opened!\\n! The file /tmp/dde-fpocket-xkke1k93/space name_out/space name_PYMOL.sh could not be opened!\\n! The file /tmp/dde-fpocket-xkke1k93/space name_out/space name_out.pdb could not be opened!\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n')"
+  },
+  {
+    "name": "filename-quote'name.pdb",
+    "passed": false,
+    "error": "(3, \"error: fpocket produced no result for quote'name.pdb\\n  detail: sh: 1: Syntax error: Unterminated quoted string\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n\")"
+  },
+  {
+    "name": "filename-unicode_\u00e9.pdb",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.664,
+          "volume": 1427.138,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "923e978e1d570f854d0d5f96d515f70d6fdac25216de586fe8c97a266e803b0c",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-3/raw/structures/unicode_\u00e9.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-3/raw/structures/unicode_\u00e9_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-3/raw/structures/unicode_\u00e9.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "filename-semi;colon.pdb",
+    "passed": false,
+    "error": "(3, 'error: fpocket produced no result for semi;colon.pdb\\n  detail: sh: 1: colon_out: not found\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n')"
+  },
+  {
+    "name": "filename--leading.pdb",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.664,
+          "volume": 1475.873,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "923e978e1d570f854d0d5f96d515f70d6fdac25216de586fe8c97a266e803b0c",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-5/raw/structures/-leading.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-5/raw/structures/-leading_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-5/raw/structures/-leading.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "filename-upper.PDB",
+    "passed": false,
+    "error": "(3, 'error: fpocket produced no result for upper.PDB\\n  detail: ! Structure reading failed!\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n')"
+  },
+  {
+    "name": "filename-alias.ent",
+    "passed": false,
+    "error": "(3, 'error: fpocket produced no result for alias.ent\\n  detail: ! Structure reading failed!\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n')"
+  },
+  {
+    "name": "filename-alias.mmcif",
+    "passed": false,
+    "error": "(3, 'error: fpocket produced no result for alias.mmcif\\n  detail: ! Structure reading failed!\\n  remedy: check the file is a parseable structure with protein atoms; fpocket exits 0 on some malformed inputs without writing output, so a missing info.txt is treated as a failure here\\n')"
+  },
+  {
+    "name": "filename-standard.cif",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.669,
+          "volume": 1443.141,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "d5e78cfccaaefa3363a1a24a3cb2cefa139ec8013462153f46d49e84eb93efc8",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-9/raw/structures/standard.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-9/raw/structures/standard_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/filename-9/raw/structures/standard.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "read-only-input",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.664,
+          "volume": 1430.048,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "923e978e1d570f854d0d5f96d515f70d6fdac25216de586fe8c97a266e803b0c",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/readonly/raw/structures/readonly.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/readonly/raw/structures/readonly_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/readonly/raw/structures/readonly.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "crlf-pdb",
+    "passed": true,
+    "detail": {
+      "pockets": 13,
+      "metrics": {
+        "n_pockets": 13,
+        "best_pocket": {
+          "rank": 1,
+          "druggability_score": 0.855,
+          "score": 0.664,
+          "volume": 1430.048,
+          "n_alpha_spheres": 143.0,
+          "centre_of_mass_max_sphere_distance": 21.512
+        },
+        "site": null,
+        "volume_estimate_tolerance": 0.05
+      },
+      "source_sha256": "4addbe7b76557074410eaf890242e4e1c1fa177e1116ca0d78764db16fd2055a",
+      "outputs": {
+        "pockets": "/scion-volumes/fpocket-validation/extended-20261007/workflows/crlf/raw/structures/crlf.pockets.json",
+        "fpocket_tree": "/scion-volumes/fpocket-validation/extended-20261007/workflows/crlf/raw/structures/crlf_fpocket",
+        "sidecar": "/scion-volumes/fpocket-validation/extended-20261007/workflows/crlf/raw/structures/crlf.pockets.meta.json"
+      }
+    }
+  },
+  {
+    "name": "reject-empty.pdb",
+    "passed": true,
+    "detail": {
+      "exit": 3
+    }
+  },
+  {
+    "name": "reject-truncated.pdb",
+    "passed": true,
+    "detail": {
+      "exit": 3
+    }
+  },
+  {
+    "name": "reject-invalid-coordinate.pdb",
+    "passed": false,
+    "error": "Malformed structure accepted"
+  },
+  {
+    "name": "reject-nan-coordinate.pdb",
+    "passed": false,
+    "error": "Malformed structure accepted"
+  },
+  {
+    "name": "reject-wrong.txt",
+    "passed": true,
+    "detail": {
+      "exit": 2
+    }
+  },
+  {
+    "name": "reject-missing-path",
+    "passed": true,
+    "detail": {
+      "exit": 3
+    }
+  },
+  {
+    "name": "reject-unwritable-output",
+    "passed": true,
+    "detail": {
+      "exit": 1
+    }
+  },
+  {
+    "name": "four-concurrent-isolated-runs",
+    "passed": true,
+    "detail": {
+      "independent_projects": 4,
+      "pockets_each": [
+        13,
+        13,
+        13,
+        13
+      ]
+    }
+  },
+  {
+    "name": "repeat-in-same-project",
+    "passed": false,
+    "error": "error: same.pocket.analysis.json already holds a different analysis\n  detail: the existing record was written by unattributed at 2026-10-07T02:42:42Z\n  remedy: write this verdict somewhere else with `--out raw/reanalysis/<date>-<agent>` and compare the two, or pass `--overwrite` if replacing the earlier record is what you mean. Two verdicts that disagree are evidence; one of them silently replaced is not\n"
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "checks": {
+    "doctor_ok": true,
+    "environment_matches": true,
+    "learning_unchanged": true,
+    "other_tools_unchanged": true,
+    "binary_matches": true,
+    "agent_run_and_analysis": true,
+    "other_tools_smokes": true,
+    "source/commands/pocket.py": true,
+    "source/core/pocket_runtime.py": true,
+    "agent_input_unchanged": true
+  },
+  "binary_sha256": "d6a779e6e4932805fa775200f17d23e8dbbfe63dc145848b3570b6fc7c156cb0",
+  "release_manifest_sha256": "787ed1cb7edaaf070bef0bb4b84ba1cd6f126e0712ac33db3c88a3b7aa51b5b9",
+  "environment_version": "sha256:1e9d67baf4c5b750d099d55666a896512bc61abd04d52057aa48eb216e08a20b",
+  "protected_learning_files": 28,
+  "protected_tool_binaries": 6,
+  "agent": {
+    "run_exit": 0,
+    "analyze_exit": 0,
+    "n_pockets": 13,
+    "best_pocket": {
+      "rank": 1,
+      "druggability_score": 0.855,
+      "score": 0.664,
+      "volume": 1433.322,
+      "n_alpha_spheres": 143.0,
+      "centre_of_mass_max_sphere_distance": 21.512
+    },
+    "outputs": {
+      "pockets": "/scion-volumes/fpocket-review-fixes-agent-20261007/raw/structures/1UYD.pockets.json",
+      "fpocket_tree": "/scion-volumes/fpocket-review-fixes-agent-20261007/raw/structures/1UYD_fpocket",
+      "sidecar": "/scion-volumes/fpocket-review-fixes-agent-20261007/raw/structures/1UYD.pockets.meta.json"
+    }
+  },
+  "rollback": "/scion-volumes/fpocket-review-fixes-rollback-20261007-v2",
+  "release": "/scion-volumes/fpocket-arm64/repair-reviewed-20261007/release",
+  "working_environment_enablement": "enabled",
+  "provenance_checks": {
+    "environment": true,
+    "binary": true,
+    "interpreter": true,
+    "source": true,
+    "runtime": true,
+    "input": true
+  },
+  "dde_tests": 724,
+  "dde_modules": 44,
+  "missing_dependency_skips": 0,
+  "reader_boundary_cases_per_build": 67,
+  "reader_column_cases_per_build": 6,
+  "mutation_cases": 20000,
+  "native_clean_builds": 2,
+  "intel_science_checks": 39,
+  "volume_tolerance": 0.05,
+  "maximum_median_volume_differences": {
+    "patched_intel": 0.014674683219107067,
+    "arm_a": 0.015584211093339503,
+    "arm_b": 0.017673974858824076
+  },
+  "intel_sanitizers": "unavailable: QEMU allocator startup failure before reader execution; native ARM ASan/UBSan passed",
+  "agent_harness": "antigravity",
+  "agent_model": "Gemini 3.8 Flash",
+  "agent_thinking": "high",
+  "earlier_reviewed_release_remains_revoked": true,
+  "evidence_archives": {
+    "pre-review-fixes-20261007.tar.gz": "68eddf40a06b177713a0b5a4352df93976d88394961602ed6f6c694bdcf9fa39",
+    "review-fixes-final-arm-evidence-v2.tar.gz": "693c447034305bf7acd24e0f6a1e0916619327f8af76577654b8d349b72cfe3c"
+  }
+}

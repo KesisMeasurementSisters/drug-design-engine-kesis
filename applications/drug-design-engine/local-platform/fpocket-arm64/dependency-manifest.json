@@ -1,0 +1,46 @@
+{
+  "fpocket_version": "4.2.2",
+  "architecture": "AArch64",
+  "candidate_abi": 18,
+  "reference_abi": 20,
+  "binary_sha256": "497ab782ee2d35b676caaaa6010355347ac0e6aff0a42c53b18a715d0ae18960",
+  "library_sha256": "c7433e63d2d132a8da6c40634e1f2f38febf639174734a2cc62fafb80e3fde0a",
+  "fpocket_source_sha256": "4042125e7243e03465200bee787e55a54c16c1a10908718af75275c46bfafaad",
+  "molfile_source_sha256": "5af0805b7fb106652895e4132f9fe0d11e02ef85042b65f700e69ffe94bc316c",
+  "molfile_commit": "5f817f263b89e8420174bb4bf0d0875a6ebe6136",
+  "compiler": "g++ (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "fpocket_cflags": "-W -Wextra -Wwrite-strings -Wstrict-prototypes -DM_OS_LINUX -DMNO_MEM_DEBUG -O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -std=gnu99 -Iplugins/include -Iplugins/LINUXAMD64/molfile -ffp-contract=off",
+  "source_archives": {
+    "fpocket": {
+      "url": "https://github.com/Discngine/fpocket/archive/refs/tags/4.2.2.tar.gz",
+      "sha256": "4042125e7243e03465200bee787e55a54c16c1a10908718af75275c46bfafaad"
+    },
+    "molfile": {
+      "url": "https://github.com/Discngine/molfile_plugin/archive/5f817f263b89e8420174bb4bf0d0875a6ebe6136.tar.gz",
+      "sha256": "5af0805b7fb106652895e4132f9fe0d11e02ef85042b65f700e69ffe94bc316c"
+    }
+  },
+  "interface_headers": "fpocket 4.2.2 plugins/include; ABI18; no header or algorithm patches",
+  "reader_build_flags": "g++ -O2 -std=c++11 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -DSTATIC_PLUGIN -DVMDPLUGIN=molfile_{reader}plugin; fpocket headers first",
+  "reader_objects": [
+    "pdbx.o",
+    "parm7.o"
+  ],
+  "test_runtime": {
+    "python": "3.11.2",
+    "gemmi": "0.7.5",
+    "sanitizers": [
+      "AddressSanitizer",
+      "UndefinedBehaviorSanitizer"
+    ]
+  },
+  "build_dependencies": [
+    "GCC/G++ 12.2.0",
+    "GNU make",
+    "binutils (ar, nm, readelf, objcopy)",
+    "fpocket bundled Qhull"
+  ],
+  "prebuild_input_lock": "source-lock.json",
+  "amendments": "test-amendments.json",
+  "patches": []
+}

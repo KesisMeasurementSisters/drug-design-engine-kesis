@@ -1,0 +1,427 @@
+{
+  "passed": true,
+  "scientific_report_sha256": "70b00fa3bc996b59185b9655c6b04123c7ac54cb166512cedcc30f01797fba93",
+  "reader_report_sha256": "24a3a1e00c7cdda715c58018b3896b973e6d27f9128f2533ed95823249086f91",
+  "superseded_checks": [
+    "reader-3VI4.cif",
+    "reader-5RGF.cif",
+    "reader-6TL9.cif",
+    "reader-water-missing.parm7",
+    "reader-water.parm7"
+  ],
+  "reason": "Reference probe corrected to original bundled ABI20; candidate remains ABI18",
+  "scientific_checks": [
+    {
+      "name": "candidate-present",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "architecture-static",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-1UYD",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-3LKF",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-1ATP",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-4URL",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-5WA6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-7TAA",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-3VI4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-5RGF",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-6TL9",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-drop-chain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-drop-chain-long",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-keep-chains",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-chain-as-ligand",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-both-formats",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-cif-ligand",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "volume-repetitions",
+      "passed": true,
+      "detail": {
+        "times": [
+          1791339553,
+          1791339557,
+          1791339560,
+          1791339563,
+          1791339568,
+          1791339571,
+          1791339574,
+          1791339577,
+          1791339580,
+          1791339583
+        ],
+        "samples": [
+          [
+            1449.324,
+            425.192,
+            770.171,
+            448.892,
+            275.934,
+            237.957,
+            257.593,
+            276.492,
+            262.424,
+            187.949,
+            326.268,
+            318.73,
+            253.388
+          ],
+          [
+            1448.233,
+            425.656,
+            793.606,
+            446.617,
+            273.855,
+            237.628,
+            248.951,
+            283.168,
+            259.964,
+            189.067,
+            329.985,
+            313.885,
+            262.315
+          ],
+          [
+            1439.868,
+            426.003,
+            800.02,
+            451.641,
+            268.353,
+            246.138,
+            253.272,
+            286.324,
+            264.404,
+            186.175,
+            325.466,
+            315.615,
+            256.879
+          ],
+          [
+            1480.238,
+            420.439,
+            782.505,
+            442.162,
+            278.148,
+            246.632,
+            262.402,
+            285.656,
+            263.024,
+            190.647,
+            328.017,
+            308.763,
+            254.876
+          ],
+          [
+            1459.871,
+            416.73,
+            780.038,
+            436.096,
+            271.842,
+            242.02,
+            252.436,
+            283.532,
+            259.484,
+            185.365,
+            329.547,
+            307.932,
+            255.906
+          ],
+          [
+            1494.786,
+            423.453,
+            779.051,
+            434.106,
+            261.51,
+            241.581,
+            255.293,
+            283.168,
+            257.563,
+            187.139,
+            323.863,
+            316.03,
+            252.244
+          ],
+          [
+            1437.322,
+            427.163,
+            773.378,
+            446.048,
+            276.001,
+            239.495,
+            248.394,
+            283.653,
+            262.244,
+            187.293,
+            325.175,
+            318.314,
+            258.595
+          ],
+          [
+            1474.419,
+            417.194,
+            786.452,
+            443.489,
+            274.257,
+            241.087,
+            259.336,
+            284.017,
+            260.744,
+            184.363,
+            325.102,
+            313.469,
+            266.836
+          ],
+          [
+            1430.048,
+            421.83,
+            786.452,
+            442.731,
+            280.362,
+            242.46,
+            260.66,
+            283.35,
+            265.785,
+            187.948,
+            332.317,
+            311.67,
+            257.794
+          ],
+          [
+            1459.144,
+            426.351,
+            780.532,
+            448.134,
+            275.532,
+            239.001,
+            257.175,
+            279.83,
+            267.165,
+            193.809,
+            334.649,
+            315.269,
+            257.794
+          ]
+        ],
+        "medians": [
+          1454.234,
+          424.3225,
+          781.5185,
+          444.7685,
+          274.8945,
+          241.334,
+          256.23400000000004,
+          283.44100000000003,
+          262.334,
+          187.6205,
+          327.1425,
+          314.577,
+          257.3365
+        ]
+      }
+    },
+    {
+      "name": "invalid-empty.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 1,
+        "stdout": "***** POCKET HUNTING BEGINS ***** \n",
+        "stderr": "! File '/validation/reference-results/invalid-empty.pdb/empty.pdb' contains no atoms...\n! File '/validation/reference-results/invalid-empty.pdb/empty.pdb' contains no atoms...\n! Structure reading failed!\n"
+      }
+    },
+    {
+      "name": "invalid-truncated.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 1,
+        "stdout": "***** POCKET HUNTING BEGINS ***** \n",
+        "stderr": "! File '/validation/reference-results/invalid-truncated.pdb/truncated.pdb' contains no atoms...\n! File '/validation/reference-results/invalid-truncated.pdb/truncated.pdb' contains no atoms...\n! Structure reading failed!\n"
+      }
+    },
+    {
+      "name": "missing-input",
+      "passed": true,
+      "detail": {
+        "exit": 1
+      }
+    }
+  ],
+  "reader_checks": [
+    {
+      "name": "water.parm7",
+      "passed": true
+    },
+    {
+      "name": "water-missing.parm7",
+      "passed": true
+    },
+    {
+      "name": "3VI4.cif",
+      "passed": true
+    },
+    {
+      "name": "5RGF.cif",
+      "passed": true
+    },
+    {
+      "name": "6TL9.cif",
+      "passed": true
+    }
+  ]
+}

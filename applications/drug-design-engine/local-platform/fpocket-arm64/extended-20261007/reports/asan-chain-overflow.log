@@ -1,0 +1,55 @@
+
+=================================================================
+==574==ERROR: AddressSanitizer: heap-buffer-overflow on address 0xffff95a007bc at pc 0xaaaad536c934 bp 0xfffffa8cf770 sp 0xfffffa8cf788
+WRITE of size 1 at 0xffff95a007bc thread T0
+    #0 0xaaaad536c930 in getNextWord /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:426
+    #1 0xaaaad5373768 in parseStructure /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:965
+    #2 0xaaaad53766dc in read_pdbx_structure /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:2123
+    #3 0xaaaad5365598 in main /host-repo/applications/drug-design-engine/local-platform/fpocket-arm64/probe.cpp:44
+    #4 0xffff98767740  (/lib/aarch64-linux-gnu/libc.so.6+0x27740)
+    #5 0xffff98767814 in __libc_start_main (/lib/aarch64-linux-gnu/libc.so.6+0x27814)
+    #6 0xaaaad5364b2c in _start (/scion-volumes/fpocket-validation/arm-unfused-repeat/probe-sanitized+0x34b2c)
+
+0xffff95a007bc is located 0 bytes to the right of 12-byte region [0xffff95a007b0,0xffff95a007bc)
+allocated by thread T0 here:
+    #0 0xffff9933c2b4 in operator new[](unsigned long) ../../../../src/libsanitizer/asan/asan_new_delete.cpp:98
+    #1 0xaaaad5379ee0 in create_pdbxParser /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:272
+    #2 0xaaaad537a1a8 in open_pdbx_read /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:2099
+    #3 0xaaaad536523c in main /host-repo/applications/drug-design-engine/local-platform/fpocket-arm64/probe.cpp:40
+    #4 0xffff98767740  (/lib/aarch64-linux-gnu/libc.so.6+0x27740)
+    #5 0xffff98767814 in __libc_start_main (/lib/aarch64-linux-gnu/libc.so.6+0x27814)
+    #6 0xaaaad5364b2c in _start (/scion-volumes/fpocket-validation/arm-unfused-repeat/probe-sanitized+0x34b2c)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /scion-volumes/fpocket-validation/arm-unfused-repeat/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C:426 in getNextWord
+Shadow bytes around the buggy address:
+  0x200ff2b400a0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b400b0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b400c0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b400d0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b400e0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+=>0x200ff2b400f0: fa fa 00 04 fa fa 00[04]fa fa fa fa fa fa fa fa
+  0x200ff2b40100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b40110: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b40120: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b40130: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x200ff2b40140: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==574==ABORTING

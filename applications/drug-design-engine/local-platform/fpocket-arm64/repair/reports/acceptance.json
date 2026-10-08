@@ -1,0 +1,438 @@
+{
+  "pre_enablement_passed": true,
+  "fpocket_version": "4.2.2",
+  "candidate_abi": 18,
+  "architecture": "AArch64",
+  "binary_sha256": "99394e525e4a93f9d95dddc4a7d7ddcb4e10d4a4a5a650c26792fbf28bbf9c65",
+  "library_sha256": "16b32687ae75e893044093889e16a11692df0412d93a0f2240130955fa72249d",
+  "runtime_elf_sha256": "8fb072808fdb624598bf7e0638614c30ec8513a8ada3eb9702d5a88c87775c6a",
+  "molfile_commit": "5f817f263b89e8420174bb4bf0d0875a6ebe6136",
+  "source_archive_hashes": {
+    "fpocket": "4042125e7243e03465200bee787e55a54c16c1a10908718af75275c46bfafaad",
+    "molfile": "5af0805b7fb106652895e4132f9fe0d11e02ef85042b65f700e69ffe94bc316c"
+  },
+  "compiler": "g++ (Debian 12.2.0-14+deb12u1) 12.2.0\nCopyright (C) 2022 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "flags": "-W -Wextra -Wwrite-strings -Wstrict-prototypes -DM_OS_LINUX -DMNO_MEM_DEBUG -O2 -fstack-protector-strong -D_FORTIFY_SOURCE=2 -std=gnu99 -Iplugins/include -Iplugins/LINUXAMD64/molfile -ffp-contract=off\n",
+  "patches": {
+    "ReadPARM7.h.patch": "2c48c040c77044cf49e6c1f74c0ed8f578628ffa09c4bbd337e42d2cb5b8962c",
+    "fpout.c.patch": "f6e6f507ee3522bc8a25ab3b9ee7b2fdb69af7ce166a5490b14aeaa4732860f3",
+    "parm7plugin.C.patch": "f30a3e1965ac64d424ef33b2875ad50dd63d5a45e8bb3a060faf96c40c888993",
+    "pdbxplugin.C.patch": "0eae70d8480ecf2d2f03aaf3a3b353f0dd36e2cdd5e5e534c8cd7d12968baa50",
+    "write_visu.c.patch": "34f87f54f39f63338bc5700df2d4ba04ec66cb076aa3874ee28c16177e947889"
+  },
+  "reader_validation_sha256": "b7f99d2cb74fcd7a54ce4bb1b1934a3e2da0d336328bc9482c8b9edb3397b54b",
+  "dde_source_files": {
+    "commands/pocket.py": "42910fe19a485b1241933be681147dd52d0705cf80c060ee99f9bbfb71a832a7",
+    "core/pocket_runtime.py": "b3af4bb7ce93a3e9de4114c315993c4f92b42e24000f95d711c3e0f07d34499c"
+  },
+  "additional_intel_sanitizer_status": "unavailable: QEMU AddressSanitizer allocator initialization fails before reader execution; native ARM ASan/UBSan is the required sanitizer gate",
+  "reports": {
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/science/report.json": {
+      "sha256": "6614321c811b917ed00666bcf787e57642f35b18a388735bc22a2182a5fe0410",
+      "checks": 45
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/boundaries/report.json": {
+      "sha256": "145e61ef71bb18f70f6146d7924a00319f89bcfff174d0c27d87da6d7ac2f362",
+      "checks": 62
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/columns/report.json": {
+      "sha256": "a03d088cdeadd3af6d37b78f18ab3ab5c2395afae763c17e0401e4d44366196c",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/all-cif/report.json": {
+      "sha256": "fb36f568dae66302e24300886d0c3d54b6695dcc7e406a7a14185dfe6227bf6f",
+      "checks": 20
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/additional/report.json": {
+      "sha256": "8a49c3a51836a8f26ab5d2a7d5137b6de50aac71c38c6272c88a13127f421a3a",
+      "checks": 10
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/sanitizers/report.json": {
+      "sha256": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+      "checks": 5
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/repeat-cif.log": {
+      "sha256": "91f88ec81b2e1e1f5b738f67dba1680aa8d357b479a483153966a289984ee284",
+      "reader_cycles": 100
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-a/repeat-parm7.log": {
+      "sha256": "2d91f6ecf0cfd8fb88b5c6f466c079a9b72271cd3835382043d07f0caa75b660",
+      "reader_cycles": 100
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/science/report.json": {
+      "sha256": "89643619971d291be3bcee92aeba99cc8acd3d445b69696a3902ecd562d023ef",
+      "checks": 45
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/boundaries/report.json": {
+      "sha256": "2b48cfcd29fd649b3886ecfe24b817f143ebf2b9b9dfedec05383507db6367db",
+      "checks": 62
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/columns/report.json": {
+      "sha256": "92d521182bb1994630253916759f3a276ba929d97fad8ae649613cea0c6094db",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/all-cif/report.json": {
+      "sha256": "fb36f568dae66302e24300886d0c3d54b6695dcc7e406a7a14185dfe6227bf6f",
+      "checks": 20
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/additional/report.json": {
+      "sha256": "8a49c3a51836a8f26ab5d2a7d5137b6de50aac71c38c6272c88a13127f421a3a",
+      "checks": 10
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/sanitizers/report.json": {
+      "sha256": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+      "checks": 5
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/repeat-cif.log": {
+      "sha256": "91f88ec81b2e1e1f5b738f67dba1680aa8d357b479a483153966a289984ee284",
+      "reader_cycles": 100
+    },
+    "/scion-volumes/fpocket-validation/repair/accept-final-b/repeat-parm7.log": {
+      "sha256": "2d91f6ecf0cfd8fb88b5c6f466c079a9b72271cd3835382043d07f0caa75b660",
+      "reader_cycles": 100
+    },
+    "mutations": {
+      "sha256": "fbac49f301b90c3a8421ad91de2194395c37dbca24e626613432251b9f061191",
+      "cases": 20000
+    },
+    "dde": {
+      "sha256": "2120322e4a7b38862ae1c797b37bcf434e272666b7b73cb0203b3f5af57731f1",
+      "tests": 710
+    },
+    "/scion-volumes/fpocket-validation/repair/verified-boundaries-a/report.json": {
+      "sha256": "74f193a7999884b25641ef7e1967a373d3c04bc41588fc84173eb4a75d6f2cc7",
+      "checks": 62
+    },
+    "/scion-volumes/fpocket-validation/repair/verified-boundaries-b/report.json": {
+      "sha256": "0dbe204d9693a1f60547150d11f59054deba43714711aab0cb8409d0053d6f85",
+      "checks": 62
+    },
+    "/scion-volumes/fpocket-validation/repair/verified-columns-a/report.json": {
+      "sha256": "5cdaa0fb7afd3a62b0ce21affaddd2edae141331339671e6c9f7b7a1fe589224",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/repair/verified-columns-b/report.json": {
+      "sha256": "d93fdcbb2456b082d8770de64e6321ccd214592b23f7d2a5bfdbd38c46b7ca2d",
+      "checks": 6
+    },
+    "/scion-volumes/fpocket-validation/repair/scion-release.json": {
+      "sha256": "7e29c0dcfcc58df0717420d03370ff7f7fcb1aff3947783b32b3283e6fa7c638",
+      "checks": 7
+    },
+    "/scion-volumes/fpocket-validation/repair/workflow-final/report.json": {
+      "sha256": "282869f0c5ec5caa84515b0925fc897b6c86d2fd5c1aa872315cc4e7c46104a8",
+      "checks": 21
+    },
+    "/scion-volumes/fpocket-validation/repair/identity-final/report.json": {
+      "sha256": "fd6e2cefa3a2a48348ca25fb9d526b42847a4261f11c94b93b805972cc24d0e4",
+      "checks": 0
+    },
+    "/scion-volumes/fpocket-validation/repair/other-tool-smokes-02/report.json": {
+      "sha256": "4fbbbd3056156dfd8cfac720d293fbdf16c88a06e54898c8d4b122aaaf01d2a0",
+      "checks": 4
+    },
+    "/host-repo/.dde-local/fpocket-validation/repair-intel-final/science/report.json": {
+      "sha256": "c124a66e73bf5d3924c39851331d1d3e352e035ee910e4dd9192fc769d9205c7",
+      "checks": 39
+    },
+    "/host-repo/.dde-local/fpocket-validation/repair-intel-final/boundaries/report.json": {
+      "sha256": "9811dd0ba17a35e265b4f0f3b6961655364bf25be4e80abe73b4fbab5de51391",
+      "checks": 62
+    },
+    "/host-repo/.dde-local/fpocket-validation/repair-intel-final/columns/report.json": {
+      "sha256": "8656626a83f506feb793d2b440bc5ea55595e55941bd6a9d33876fd2bab4f742",
+      "checks": 6
+    }
+  },
+  "volume_variability": {
+    "original_intel": {
+      "medians": [
+        1454.234,
+        424.3225,
+        781.5185,
+        444.7685,
+        274.8945,
+        241.334,
+        256.23400000000004,
+        283.44100000000003,
+        262.334,
+        187.6205,
+        327.1425,
+        314.577,
+        257.3365
+      ],
+      "ranges": [
+        [
+          1430.048,
+          1494.786
+        ],
+        [
+          416.73,
+          427.163
+        ],
+        [
+          770.171,
+          800.02
+        ],
+        [
+          434.106,
+          451.641
+        ],
+        [
+          261.51,
+          280.362
+        ],
+        [
+          237.628,
+          246.632
+        ],
+        [
+          248.394,
+          262.402
+        ],
+        [
+          276.492,
+          286.324
+        ],
+        [
+          257.563,
+          267.165
+        ],
+        [
+          184.363,
+          193.809
+        ],
+        [
+          323.863,
+          334.649
+        ],
+        [
+          307.932,
+          318.73
+        ],
+        [
+          252.244,
+          266.836
+        ]
+      ]
+    },
+    "patched_intel": {
+      "medians": [
+        1445.505,
+        422.9315,
+        778.188,
+        445.4325,
+        276.5385,
+        243.091,
+        255.607,
+        284.8365,
+        260.414,
+        187.7175,
+        327.06949999999995,
+        313.8845,
+        257.10749999999996
+      ],
+      "ranges": [
+        [
+          1411.863,
+          1471.146
+        ],
+        [
+          408.152,
+          432.727
+        ],
+        [
+          765.73,
+          790.399
+        ],
+        [
+          436.76,
+          457.043
+        ],
+        [
+          269.226,
+          281.771
+        ],
+        [
+          238.946,
+          246.358
+        ],
+        [
+          249.578,
+          261.705
+        ],
+        [
+          278.252,
+          290.268
+        ],
+        [
+          254.563,
+          269.745
+        ],
+        [
+          186.638,
+          195.544
+        ],
+        [
+          324.227,
+          337.126
+        ],
+        [
+          308.97,
+          320.252
+        ],
+        [
+          250.012,
+          266.607
+        ]
+      ],
+      "maximum_relative_median_difference": 0.0073189140561269826
+    },
+    "arm_a": {
+      "medians": [
+        1454.416,
+        426.69899999999996,
+        773.994,
+        447.0435,
+        272.64700000000005,
+        245.5895,
+        253.795,
+        282.8945,
+        263.264,
+        188.912,
+        327.0335,
+        315.373,
+        258.65250000000003
+      ],
+      "ranges": [
+        [
+          1436.958,
+          1479.511
+        ],
+        [
+          418.932,
+          430.292
+        ],
+        [
+          760.303,
+          807.174
+        ],
+        [
+          436.949,
+          452.588
+        ],
+        [
+          267.146,
+          284.589
+        ],
+        [
+          241.691,
+          248.609
+        ],
+        [
+          248.394,
+          261.357
+        ],
+        [
+          278.92,
+          287.052
+        ],
+        [
+          257.323,
+          269.085
+        ],
+        [
+          186.175,
+          192.266
+        ],
+        [
+          317.377,
+          341.426
+        ],
+        [
+          308.209,
+          320.46
+        ],
+        [
+          251.843,
+          263.345
+        ]
+      ],
+      "maximum_relative_median_difference": 0.017633238582213794
+    },
+    "arm_b": {
+      "medians": [
+        1442.0504999999998,
+        421.30899999999997,
+        781.025,
+        440.0775,
+        277.142,
+        242.542,
+        252.61,
+        284.8065,
+        260.204,
+        189.1825,
+        330.09349999999995,
+        313.8845,
+        258.9105
+      ],
+      "ranges": [
+        [
+          1412.955,
+          1472.237
+        ],
+        [
+          412.209,
+          432.727
+        ],
+        [
+          770.664,
+          808.654
+        ],
+        [
+          437.802,
+          453.347
+        ],
+        [
+          269.964,
+          280.161
+        ],
+        [
+          235.926,
+          245.37
+        ],
+        [
+          249.23,
+          258.36
+        ],
+        [
+          279.162,
+          290.026
+        ],
+        [
+          252.462,
+          263.984
+        ],
+        [
+          183.245,
+          192.498
+        ],
+        [
+          326.122,
+          334.138
+        ],
+        [
+          309.524,
+          323.921
+        ],
+        [
+          253.96,
+          262.773
+        ]
+      ],
+      "maximum_relative_median_difference": 0.01414332211962512
+    }
+  },
+  "volume_tolerance": 0.05,
+  "working_environment_enablement": "pending"
+}

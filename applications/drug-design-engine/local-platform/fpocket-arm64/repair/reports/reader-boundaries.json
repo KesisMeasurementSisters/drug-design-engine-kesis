@@ -1,0 +1,498 @@
+[
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "minimal",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "chain-two",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "chain-three",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "chain-fifteen",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "chain-collision",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "quoted-atom",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "reordered-columns",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "optional-omitted",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "negative-residue",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "no-final-newline",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "missing-coordinate",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "nonfinite-coordinate",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "empty",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "missing-loop",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "truncated-row",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "water",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "water-comments",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "water-crlf",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-empty",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-truncated-pointers",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-truncated-atoms",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-missing-format",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "water-out-of-range-bond",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "label_asym_id1",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "label_asym_id14",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "label_asym_id15",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "label_asym_id16",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "label_asym_id64",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "label_asym_id1024",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "auth_asym_id1",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "auth_asym_id14",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "auth_asym_id15",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "auth_asym_id16",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "auth_asym_id64",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "auth_asym_id1024",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_x?",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_xdot",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_xnan",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_xinf",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "Cartn_x1e999",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_x1dot2junk",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_y?",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_ydot",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_ynan",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_yinf",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_y1e999",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_y1dot2junk",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_z?",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_zdot",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_znan",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_zinf",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "Cartn_z1e999",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "Cartn_z1dot2junk",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "overlong-atom",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "overlong-residue",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "overlong-insertion",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "negative-respointer",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "zero-respointer",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "nonmultiple-bond",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "negative-bond",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "duplicate-section",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "missing-atoms",
+    "valid_input": false,
+    "passed": true
+  }
+]

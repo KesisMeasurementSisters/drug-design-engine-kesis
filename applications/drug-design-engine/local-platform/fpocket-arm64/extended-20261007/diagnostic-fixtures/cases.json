@@ -1,0 +1,125 @@
+[
+  {
+    "name": "label-only-long",
+    "file": "label-only-long.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "ABCDEFGHIJKLMNO",
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "ABCDEFGHIJKLMNO",
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "ABCDEFGHIJKLMNO",
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "author-only-long",
+    "file": "author-only-long.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "author-four",
+    "file": "author-four.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "resid": 16,
+        "chain": "A",
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  }
+]

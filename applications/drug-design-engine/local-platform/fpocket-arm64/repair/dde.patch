@@ -1,0 +1,1211 @@
+diff --git a/applications/drug-design-engine/tools/dde/commands/pocket.py b/applications/drug-design-engine/tools/dde/commands/pocket.py
+index ebe19dd..5b088a5 100644
+--- a/applications/drug-design-engine/tools/dde/commands/pocket.py
++++ b/applications/drug-design-engine/tools/dde/commands/pocket.py
+@@ -66,6 +66,10 @@ from ..core import provenance
+ from ..core.errors import ArtifactError, DependencyError, UsageError
+ from ..core.output import Emitter
+ from ..core.structures import detect_structure_format
++from ..core.pocket_runtime import (
++    atom_rows, publication, residue_records, run_bounded,
++    validate_input, validate_pockets, validate_vertices,
++)
+ 
+ TOOL = "fpocket"
+ ARTIFACT_CLASS = "structures"
+@@ -202,82 +206,12 @@ def _parse_info(text: str) -> list[dict[str, Any]]:
+ 
+ def _parse_residues_pdb(text: str) -> list[dict[str, Any]]:
+     """Parse residues from a PDB-format pocket atom file (fixed columns)."""
+-    seen: dict[tuple[str, int], dict[str, Any]] = {}
+-    for line in text.splitlines():
+-        if not line.startswith(("ATOM", "HETATM")):
+-            continue
+-        try:
+-            resname = line[17:20].strip()
+-            chain = line[21].strip() or "_"
+-            resnum = int(line[22:26])
+-        except (ValueError, IndexError):
+-            continue
+-        seen.setdefault(
+-            (chain, resnum), {"chain": chain, "resnum": resnum, "resname": resname}
+-        )
+-    return [seen[key] for key in sorted(seen)]
++    return residue_records(text, "pdb")
+ 
+ 
+ def _parse_residues_cif(text: str) -> list[dict[str, Any]]:
+-    """Parse residues from an mmCIF-format pocket atom file.
+-
+-    fpocket writes CIF pocket files when the input is CIF.  The column
+-    order is declared by ``_atom_site.*`` header lines preceding the
+-    data rows, so we read the header to find ``label_comp_id`` (residue
+-    name), ``auth_asym_id`` (chain — falls back to ``label_asym_id``),
+-    and ``auth_seq_id`` (residue number — falls back to ``label_seq_id``).
+-    """
+-    lines = text.splitlines()
+-    # Collect column names from the _atom_site.* header block.
+-    columns: list[str] = []
+-    data_start = 0
+-    in_atom_site = False
+-    for i, line in enumerate(lines):
+-        stripped = line.strip()
+-        if stripped.startswith("_atom_site."):
+-            in_atom_site = True
+-            columns.append(stripped.split(".")[1])
+-        elif in_atom_site:
+-            # First non-header line after _atom_site block → data starts.
+-            data_start = i
+-            break
+-
+-    if not columns:
+-        return []
+-
+-    # Determine column indices for the fields we need.  Prefer auth_*
+-    # variants (what the depositor called the chain/residue) over label_*
+-    # (what the mmCIF archive renumbered them to), because fpocket's
+-    # info.txt and PDB output both use auth numbering.
+-    def _col(preferred: str, fallback: str) -> int | None:
+-        if preferred in columns:
+-            return columns.index(preferred)
+-        if fallback in columns:
+-            return columns.index(fallback)
+-        return None
+-
+-    col_resname = _col("label_comp_id", "label_comp_id")
+-    col_chain = _col("auth_asym_id", "label_asym_id")
+-    col_resnum = _col("auth_seq_id", "label_seq_id")
+-
+-    if col_resname is None or col_chain is None or col_resnum is None:
+-        return []
+-
+-    seen: dict[tuple[str, int], dict[str, Any]] = {}
+-    for line in lines[data_start:]:
+-        if not line.startswith(("ATOM", "HETATM")):
+-            continue
+-        fields = line.split()
+-        try:
+-            resname = fields[col_resname]
+-            chain = fields[col_chain] or "_"
+-            resnum = int(fields[col_resnum])
+-        except (ValueError, IndexError):
+-            continue
+-        seen.setdefault(
+-            (chain, resnum), {"chain": chain, "resnum": resnum, "resname": resname}
+-        )
+-    return [seen[key] for key in sorted(seen)]
++    """Preserve author/label identities and insertion codes with a CIF parser."""
++    return residue_records(text, "cif")
+ 
+ 
+ def _find_pocket_atm(pockets_dir: Path, rank: int) -> Path | None:
+@@ -323,55 +257,10 @@ def _detect_non_protein_chains(structure_path: Path) -> tuple[bool, list[str]]:
+     amino acid residues — i.e., it is entirely composed of ligands,
+     nucleic acids, ions, or other non-protein entities.
+     """
+-    text = structure_path.read_text(encoding="utf-8", errors="replace")[:500_000]
+     fmt = detect_structure_format(structure_path)
+-
+-    # Collect residue names per chain.
+     chain_residues: dict[str, set[str]] = {}
+-
+-    if fmt == "cif":
+-        lines = text.splitlines()
+-        columns: list[str] = []
+-        data_start = 0
+-        in_atom_site = False
+-        for i, line in enumerate(lines):
+-            stripped = line.strip()
+-            if stripped.startswith("_atom_site."):
+-                in_atom_site = True
+-                columns.append(stripped.split(".")[1])
+-            elif in_atom_site:
+-                data_start = i
+-                break
+-
+-        col_comp = (
+-            columns.index("label_comp_id") if "label_comp_id" in columns else None
+-        )
+-        col_chain = None
+-        for name in ("auth_asym_id", "label_asym_id"):
+-            if name in columns:
+-                col_chain = columns.index(name)
+-                break
+-
+-        if col_comp is not None and col_chain is not None:
+-            for line in lines[data_start:]:
+-                if not line.startswith(("ATOM", "HETATM")):
+-                    continue
+-                fields = line.split()
+-                try:
+-                    resname = fields[col_comp]
+-                    chain = fields[col_chain]
+-                except IndexError:
+-                    continue
+-                chain_residues.setdefault(chain, set()).add(resname)
+-    else:
+-        # PDB format — fixed-column layout.
+-        for line in text.splitlines():
+-            if not line.startswith(("ATOM  ", "HETATM")):
+-                continue
+-            resname = line[17:20].strip()
+-            chain = line[21:22].strip() or "_"
+-            if resname:
+-                chain_residues.setdefault(chain, set()).add(resname)
++    for r in residue_records(structure_path.read_text(encoding="utf-8"), fmt):
++        chain_residues.setdefault(r["chain"], set()).add(r["resname"])
+ 
+     # A chain is non-protein if none of its residues are standard
+     # amino acids, after excluding waters.
+@@ -405,69 +294,12 @@ def _detect_short_chains(
+ 
+         [{"chain": "B", "residues": 12, "note": "Possible peptide ligand"}]
+     """
+-    text = structure_path.read_text(encoding="utf-8", errors="replace")[:500_000]
+     fmt = detect_structure_format(structure_path)
+-
+-    # Collect unique residue identifiers per chain.
+-    chain_residues: dict[str, set[tuple[str, int]]] = {}
+-
+-    if fmt == "cif":
+-        lines = text.splitlines()
+-        columns: list[str] = []
+-        data_start = 0
+-        in_atom_site = False
+-        for i, line in enumerate(lines):
+-            stripped = line.strip()
+-            if stripped.startswith("_atom_site."):
+-                in_atom_site = True
+-                columns.append(stripped.split(".")[1])
+-            elif in_atom_site:
+-                data_start = i
+-                break
+-
+-        col_comp = (
+-            columns.index("label_comp_id") if "label_comp_id" in columns else None
+-        )
+-        col_chain = None
+-        for name in ("auth_asym_id", "label_asym_id"):
+-            if name in columns:
+-                col_chain = columns.index(name)
+-                break
+-        col_resnum = None
+-        for name in ("auth_seq_id", "label_seq_id"):
+-            if name in columns:
+-                col_resnum = columns.index(name)
+-                break
+-
+-        if col_comp is not None and col_chain is not None and col_resnum is not None:
+-            for line in lines[data_start:]:
+-                if not line.startswith(("ATOM", "HETATM")):
+-                    continue
+-                fields = line.split()
+-                try:
+-                    resname = fields[col_comp]
+-                    chain = fields[col_chain]
+-                    resnum = int(fields[col_resnum])
+-                except (IndexError, ValueError):
+-                    continue
+-                # Only count standard amino acid residues toward
+-                # chain length — ligands and waters are not chain
+-                # residues for this purpose.
+-                if resname in _STANDARD_AMINO_ACIDS:
+-                    chain_residues.setdefault(chain, set()).add((resname, resnum))
+-    else:
+-        # PDB format — fixed-column layout.
+-        for line in text.splitlines():
+-            if not line.startswith(("ATOM  ", "HETATM")):
+-                continue
+-            resname = line[17:20].strip()
+-            chain = line[21:22].strip() or "_"
+-            try:
+-                resnum = int(line[22:26])
+-            except (ValueError, IndexError):
+-                continue
+-            if resname in _STANDARD_AMINO_ACIDS:
+-                chain_residues.setdefault(chain, set()).add((resname, resnum))
++    chain_residues: dict[str, set[tuple]] = {}
++    for r in residue_records(structure_path.read_text(encoding="utf-8"), fmt):
++        if r["resname"] in _STANDARD_AMINO_ACIDS:
++            chain_residues.setdefault(r["chain"], set()).add((
++                r["resnum"], r.get("insertion_code", ""), r.get("label_chain"), r.get("label_resnum")))
+ 
+     short_chains: list[dict[str, Any]] = []
+     for chain, residues in sorted(chain_residues.items()):
+@@ -499,47 +331,21 @@ def _strip_chains(
+         {"stripped_chains": ["B", "C"], "removed_atom_count": 142}
+     """
+     text = structure_path.read_text(encoding="utf-8", errors="replace")
+-    fmt = structure_path.suffix.lower()
+-
++    fmt = detect_structure_format(structure_path)
+     kept_lines: list[str] = []
+     removed_atom_count = 0
+ 
+-    if fmt in (".cif", ".mmcif"):
+-        lines = text.splitlines(keepends=True)
+-        columns: list[str] = []
+-        data_start = 0
+-        in_atom_site = False
+-        for i, line in enumerate(lines):
+-            stripped = line.strip()
+-            if stripped.startswith("_atom_site."):
+-                in_atom_site = True
+-                columns.append(stripped.split(".")[1])
+-            elif in_atom_site:
+-                data_start = i
+-                break
+-
+-        col_chain = None
+-        for name in ("auth_asym_id", "label_asym_id"):
+-            if name in columns:
+-                col_chain = columns.index(name)
+-                break
+-
+-        kept_lines.extend(lines[:data_start])
+-
+-        for line in lines[data_start:]:
+-            if not line.startswith(("ATOM", "HETATM")):
+-                kept_lines.append(line)
+-                continue
+-            if col_chain is not None:
+-                fields = line.split()
+-                try:
+-                    chain_id = fields[col_chain]
+-                except IndexError:
+-                    chain_id = ""
+-                if chain_id in chains_to_strip:
+-                    removed_atom_count += 1
+-                    continue
+-            kept_lines.append(line)
++    if fmt == "cif":
++        import gemmi
++        document = gemmi.cif.read_string(text)
++        block = document.sole_block()
++        category = block.get_mmcif_category("_atom_site.", raw=True)
++        rows = list(atom_rows(text, "cif"))
++        keep = [i for i, row in enumerate(rows)
++                if (row.get("auth_asym_id") or row.get("label_asym_id") or "_") not in chains_to_strip]
++        removed_atom_count = len(rows) - len(keep)
++        block.set_mmcif_category("_atom_site.", {k: [v[i] for i in keep] for k, v in category.items()}, raw=True)
++        kept_lines = [document.as_string()]
+     else:
+         # PDB format.
+         for line in text.splitlines(keepends=True):
+@@ -623,246 +429,272 @@ def run(
+             remedy="pass the coordinate file, not its sidecar or analysis record",
+         )
+ 
++    validate_input(source)
+     project = state.project()
+     target_dir = project.artifact_dir(ARTIFACT_CLASS, out)
+     stem = source.stem
+ 
+-    experimental, evidence = _is_experimental(source)
++    final_dir = target_dir
++    with publication(final_dir, stem) as target_dir:
++        experimental, evidence = _is_experimental(source)
+ 
+-    # --- detect non-protein chains before fpocket invocation ---
+-    has_non_protein, non_protein_chains = _detect_non_protein_chains(source)
++        # --- detect non-protein chains before fpocket invocation ---
++        has_non_protein, non_protein_chains = _detect_non_protein_chains(source)
+ 
+-    # --- detect short chains (possible peptide ligands) ---
+-    short_chains = _detect_short_chains(source, threshold=peptide_threshold)
++        # --- detect short chains (possible peptide ligands) ---
++        short_chains = _detect_short_chains(source, threshold=peptide_threshold)
+ 
+-    # --- determine chains to strip ---
+-    chains_to_strip: set[str] = set()
+-    if strip_peptides and short_chains:
+-        chains_to_strip.update(sc["chain"] for sc in short_chains)
+-    if ignore_chain:
+-        chains_to_strip.update(ignore_chain)
++        # --- determine chains to strip ---
++        chains_to_strip: set[str] = set()
++        if strip_peptides and short_chains:
++            chains_to_strip.update(sc["chain"] for sc in short_chains)
++        if ignore_chain:
++            chains_to_strip.update(ignore_chain)
+ 
+-    sidecar_params: dict[str, Any] = {
+-        "structure": source.name,
+-        "fpocket_defaults": True,
+-        "peptide_threshold": peptide_threshold,
+-    }
+-    if strip_peptides:
+-        sidecar_params["strip_peptides"] = True
+-    if ignore_chain:
+-        sidecar_params["ignore_chain"] = list(ignore_chain)
+-
+-    sidecar = provenance.Sidecar(
+-        tool=TOOL,
+-        subcommand="run",
+-        endpoint=None,
+-        parameters=sidecar_params,
+-    )
+-    sidecar.note("structure_sha256", provenance.sha256_file(source))
+-    sidecar.note("experimental_structure", experimental)
+-    sidecar.note("structure_origin_evidence", evidence)
+-
+-    # --- optionally strip chains before fpocket ---
+-    strip_info: dict[str, Any] | None = None
+-    _strip_tmpdir: str | None = None
+-    effective_source = source
+-    if chains_to_strip:
+-        _strip_tmpdir = tempfile.mkdtemp(prefix="dde-strip-pocket-")
+-        stripped_path = Path(_strip_tmpdir) / source.name
+-        strip_info = _strip_chains(source, chains_to_strip, stripped_path)
+-        effective_source = stripped_path
+-
+-    try:
+-        with tempfile.TemporaryDirectory(prefix="dde-fpocket-") as tmp:
+-            work = Path(tmp) / effective_source.name
+-            shutil.copyfile(effective_source, work)
+-            completed = subprocess.run(
+-                [binary, "-f", str(work)],
+-                capture_output=True,
+-                text=True,
+-                cwd=tmp,
+-                check=False,
+-            )
+-            produced = Path(tmp) / f"{work.stem}_out"
+-            info = produced / f"{work.stem}_info.txt"
+-            if completed.returncode != 0 or not info.is_file():
+-                raise ArtifactError(
+-                    f"fpocket produced no result for {source.name}",
+-                    detail=(
+-                        completed.stderr or completed.stdout or "no output"
+-                    ).strip()[:400],
+-                    remedy="check the file is a parseable structure with protein atoms; "
+-                    "fpocket exits 0 on some malformed inputs without writing output, "
+-                    "so a missing info.txt is treated as a failure here",
+-                )
+-
+-            pockets = _parse_info(info.read_text(encoding="utf-8", errors="replace"))
+-            empty_residue_pockets: list[int] = []
+-            for entry in pockets:
+-                atm = _find_pocket_atm(produced / "pockets", entry["rank"])
+-                if atm is not None:
+-                    entry["residues"] = _parse_residues(atm)
+-                    if not entry["residues"]:
+-                        empty_residue_pockets.append(entry["rank"])
+-                else:
+-                    empty_residue_pockets.append(entry["rank"])
+-                    entry["residues"] = []
+-
+-            # Every real pocket has lining residues — an empty list means the
+-            # parser failed to extract them, not that the pocket is unlinded.
+-            if empty_residue_pockets:
+-                ranks = ", ".join(str(r) for r in empty_residue_pockets)
+-                raise ArtifactError(
+-                    f"fpocket detected pockets but residue extraction failed "
+-                    f"for pocket(s) {ranks} in {source.name}",
+-                    detail="every pocket has lining residues; an empty residue "
+-                    "list is a parsing failure, not a legitimate finding of "
+-                    "'no residues line this pocket'. The pocket atom file may "
+-                    "be missing, empty, or in an unrecognised format.",
+-                    remedy="check the pocket atom files in the fpocket output "
+-                    "directory; if the format has changed, _parse_residues "
+-                    "needs updating",
+-                )
+-
+-            # fpocket's own tree, kept whole.
+-            tree = target_dir / f"{stem}_fpocket"
+-            if tree.exists():
+-                shutil.rmtree(tree)
+-            shutil.copytree(produced, tree)
+-    finally:
+-        if _strip_tmpdir:
+-            shutil.rmtree(_strip_tmpdir, ignore_errors=True)
+-
+-    record: dict[str, Any] = {
+-        "tool": TOOL,
+-        "structure": source.name,
+-        "structure_sha256": provenance.sha256_file(source),
+-        "experimental_structure": experimental,
+-        "structure_origin_evidence": evidence,
+-        "n_pockets": len(pockets),
+-        "pockets": pockets,
+-        "fpocket_output_dir": tree.name,
+-    }
+-
+-    # --- non-protein chain context ---
+-    if has_non_protein:
+-        record["input_contains_non_protein_chains"] = True
+-        record["non_protein_chains"] = non_protein_chains
+-        record["note"] = (
+-            "Pocket scores computed with non-protein atoms present. "
+-            "Scores may differ from protein-only analysis."
++        sidecar_params: dict[str, Any] = {
++            "structure": source.name,
++            "fpocket_defaults": True,
++            "peptide_threshold": peptide_threshold,
++        }
++        if strip_peptides:
++            sidecar_params["strip_peptides"] = True
++        if ignore_chain:
++            sidecar_params["ignore_chain"] = list(ignore_chain)
++
++        sidecar = provenance.Sidecar(
++            tool=TOOL,
++            subcommand="run",
++            endpoint=None,
++            parameters=sidecar_params,
+         )
++        original_sha256 = provenance.sha256_file(source)
++        sidecar.note("structure_sha256", original_sha256)
++        sidecar.note("fpocket_binary_sha256", provenance.sha256_file(Path(binary)))
++        sidecar.note("dde_pocket_source_sha256", provenance.sha256_file(Path(__file__)))
++        sidecar.note("dde_pocket_runtime_sha256", provenance.sha256_file(
++            Path(__file__).parents[1] / "core" / "pocket_runtime.py"))
++        sidecar.note("experimental_structure", experimental)
++        sidecar.note("structure_origin_evidence", evidence)
++
++        # --- optionally strip chains before fpocket ---
++        strip_info: dict[str, Any] | None = None
++        _strip_tmpdir: str | None = None
++        effective_source = source
++        if chains_to_strip:
++            _strip_tmpdir = tempfile.mkdtemp(prefix="dde-strip-pocket-")
++            stripped_path = Path(_strip_tmpdir) / source.name
++            strip_info = _strip_chains(source, chains_to_strip, stripped_path)
++            effective_source = stripped_path
+ 
+-    # --- short chain context ---
+-    # Short chains that were NOT stripped are recorded so downstream
+-    # consumers know the pocket score may be affected by peptide
+-    # occlusion.
+-    retained_short_chains = [
+-        sc for sc in short_chains if sc["chain"] not in chains_to_strip
+-    ]
+-    if retained_short_chains:
+-        record["short_chains_retained"] = retained_short_chains
+-
+-    # --- stripped chain context ---
+-    if strip_info is not None:
+-        record["stripped_chains"] = strip_info["stripped_chains"]
+-        record["stripped_atom_count"] = strip_info["removed_atom_count"]
+-
+-    record_path = target_dir / f"{stem}.pockets.json"
+-    record_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+-
+-    sidecar.note("n_pockets", len(pockets))
+-    sidecar.add_output(record_path)
+-    sidecar.note("fpocket_output_dir", tree.name)
+-
+-    if short_chains:
+-        sidecar.note("short_chains_detected", short_chains)
+-    if strip_info is not None:
+-        sidecar.note("stripped_chains", strip_info["stripped_chains"])
+-        sidecar.note("stripped_atom_count", strip_info["removed_atom_count"])
+-
+-    if has_non_protein:
+-        sidecar.note("non_protein_chains", non_protein_chains)
+-        chains_str = ", ".join(non_protein_chains)
+-        sidecar.warn(
+-            f"Pocket analysis was run on a structure containing non-protein "
+-            f"chains ({chains_str}). Drug scores may be inflated relative to "
+-            "apo-structure scoring. Compare with protein-only analysis for "
+-            "accurate druggability assessment.",
+-            code="fpocket.ligand_present_in_input",
+-        )
++        try:
++            with tempfile.TemporaryDirectory(prefix="dde-fpocket-") as tmp:
++                fmt = validate_input(effective_source)
++                work = Path(tmp) / ("input." + fmt)
++                shutil.copyfile(effective_source, work)
++                sidecar.note("effective_structure_sha256", provenance.sha256_file(work))
++                completed = run_bounded([binary, "-f", str(work)], Path(tmp))
++                produced = Path(tmp) / f"{work.stem}_out"
++                info = produced / f"{work.stem}_info.txt"
++                if completed.returncode != 0 or not info.is_file():
++                    raise ArtifactError(
++                        f"fpocket produced no result for {source.name}",
++                        detail=(
++                            completed.stderr or completed.stdout or "no output"
++                        ).strip()[:400],
++                        remedy="check the file is a parseable structure with protein atoms; "
++                        "fpocket exits 0 on some malformed inputs without writing output, "
++                        "so a missing info.txt is treated as a failure here",
++                    )
++
++                suffix = "_cif" if fmt == "cif" else ""
++                required_files = ["input_info.txt", f"input_out.{fmt}", "input_pockets.pqr",
++                                  f"input{suffix}.pml", f"input{suffix}.tcl",
++                                  f"input{suffix}_PYMOL.sh", f"input{suffix}_VMD.sh"]
++                if any(not (produced / name).is_file() or (produced / name).stat().st_size == 0
++                       for name in required_files):
++                    raise ArtifactError("incomplete fpocket output tree")
++                pockets = _parse_info(info.read_text(encoding="utf-8", errors="replace"))
++                validate_pockets(pockets, _DESCRIPTORS.values())
++                empty_residue_pockets: list[int] = []
++                for entry in pockets:
++                    vertices = produced / "pockets" / f"pocket{entry['rank']}_vert.pqr"
++                    if not vertices.is_file():
++                        raise ArtifactError("missing pocket vertex file")
++                    vertex_rows = [x for x in vertices.read_text().splitlines() if x.startswith(("ATOM", "HETATM"))]
++                    validate_vertices(vertex_rows, entry.get("n_alpha_spheres"))
++                    atm = _find_pocket_atm(produced / "pockets", entry["rank"])
++                    if atm is not None:
++                        entry["residues"] = _parse_residues(atm)
++                        if not entry["residues"]:
++                            empty_residue_pockets.append(entry["rank"])
++                    else:
++                        empty_residue_pockets.append(entry["rank"])
++                        entry["residues"] = []
++
++                # Every real pocket has lining residues — an empty list means the
++                # parser failed to extract them, not that the pocket is unlinded.
++                if empty_residue_pockets:
++                    ranks = ", ".join(str(r) for r in empty_residue_pockets)
++                    raise ArtifactError(
++                        f"fpocket detected pockets but residue extraction failed "
++                        f"for pocket(s) {ranks} in {source.name}",
++                        detail="every pocket has lining residues; an empty residue "
++                        "list is a parsing failure, not a legitimate finding of "
++                        "'no residues line this pocket'. The pocket atom file may "
++                        "be missing, empty, or in an unrecognised format.",
++                        remedy="check the pocket atom files in the fpocket output "
++                        "directory; if the format has changed, _parse_residues "
++                        "needs updating",
++                    )
++
++                # fpocket's own tree, kept whole.
++                tree = target_dir / f"{stem}_fpocket"
++                shutil.copytree(produced, tree)
++        finally:
++            if _strip_tmpdir:
++                shutil.rmtree(_strip_tmpdir, ignore_errors=True)
++
++        if provenance.sha256_file(source) != original_sha256:
++            raise ArtifactError("input changed during pocket calculation")
++
++        record: dict[str, Any] = {
++            "tool": TOOL,
++            "publication_version": 1,
++            "structure": source.name,
++            "structure_sha256": provenance.sha256_file(source),
++            "experimental_structure": experimental,
++            "structure_origin_evidence": evidence,
++            "n_pockets": len(pockets),
++            "pockets": pockets,
++            "fpocket_output_dir": tree.name,
++        }
+ 
+-    # --- SAFETY-CRITICAL: peptide occlusion relay (#133 Item 2) ---
+-    # When short chains are retained AND any pocket scores below the
+-    # druggability threshold, fire a mandatory relay.  A 0.004 score on
+-    # a druggable target kills programs — the fix makes it impossible
+-    # to report a confident low score without flagging potential
+-    # occlusion.
+-    if retained_short_chains and pockets:
+-        low_scoring_pockets = [
+-            p
+-            for p in pockets
+-            if (p.get("druggability_score") or 0.0) < _LOW_DRUGGABILITY_THRESHOLD
+-        ]
+-        if low_scoring_pockets:
+-            chains_str = ", ".join(sc["chain"] for sc in retained_short_chains)
+-            residue_counts = ", ".join(
+-                f"{sc['chain']}({sc['residues']} residues)"
+-                for sc in retained_short_chains
+-            )
+-            worst = min(
+-                low_scoring_pockets, key=lambda p: p.get("druggability_score") or 0.0
+-            )
+-            worst_score = worst.get("druggability_score") or 0.0
+-            sidecar.warn(
+-                f"Pocket {worst.get('rank', '?')} scored {worst_score:.3f} "
+-                f"but the input structure contains short chain(s) {chains_str} "
+-                f"({residue_counts}) that may be peptidic ligands occluding "
+-                "the binding site. Rerun on an apo or small-molecule-bound "
+-                "conformation before concluding the target is undruggable.",
+-                code="fpocket.possible_peptide_occlusion",
++        # --- non-protein chain context ---
++        if has_non_protein:
++            record["input_contains_non_protein_chains"] = True
++            record["non_protein_chains"] = non_protein_chains
++            record["note"] = (
++                "Pocket scores computed with non-protein atoms present. "
++                "Scores may differ from protein-only analysis."
+             )
+ 
+-    # --- Item 3: Low-score advisory on holo structures ---
+-    # When the structure contains ANY non-receptor content (ligands,
+-    # peptides, cofactors, non-protein chains, or retained short chains)
+-    # AND produces a low druggability score, fire a general advisory.
+-    has_non_receptor_content = has_non_protein or bool(retained_short_chains)
+-    if has_non_receptor_content and pockets:
+-        low_scoring = [
+-            p
+-            for p in pockets
+-            if (p.get("druggability_score") or 0.0) < _LOW_DRUGGABILITY_THRESHOLD
++        # --- short chain context ---
++        # Short chains that were NOT stripped are recorded so downstream
++        # consumers know the pocket score may be affected by peptide
++        # occlusion.
++        retained_short_chains = [
++            sc for sc in short_chains if sc["chain"] not in chains_to_strip
+         ]
+-        if low_scoring:
+-            worst = min(low_scoring, key=lambda p: p.get("druggability_score") or 0.0)
+-            worst_score = worst.get("druggability_score") or 0.0
++        if retained_short_chains:
++            record["short_chains_retained"] = retained_short_chains
++
++        # --- stripped chain context ---
++        if strip_info is not None:
++            record["stripped_chains"] = strip_info["stripped_chains"]
++            record["stripped_atom_count"] = strip_info["removed_atom_count"]
++
++        record_path = target_dir / f"{stem}.pockets.json"
++        record_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
++
++        sidecar.note("n_pockets", len(pockets))
++        sidecar.add_output(record_path)
++        sidecar.note("fpocket_output_hashes", {
++            str(p.relative_to(tree)): provenance.sha256_file(p)
++            for p in sorted(tree.rglob("*")) if p.is_file()
++        })
++        sidecar.note("fpocket_output_dir", tree.name)
++
++        if short_chains:
++            sidecar.note("short_chains_detected", short_chains)
++        if strip_info is not None:
++            sidecar.note("stripped_chains", strip_info["stripped_chains"])
++            sidecar.note("stripped_atom_count", strip_info["removed_atom_count"])
++
++        if has_non_protein:
++            sidecar.note("non_protein_chains", non_protein_chains)
++            chains_str = ", ".join(non_protein_chains)
+             sidecar.warn(
+-                f"Low druggability score ({worst_score:.3f}) computed on a "
+-                "structure containing non-receptor chain(s). Pocket scores are "
+-                "conformation-dependent; assess druggability from an apo or "
+-                "alternate-conformation structure before concluding "
+-                "undruggability.",
+-                code="fpocket.low_score_holo_structure",
++                f"Pocket analysis was run on a structure containing non-protein "
++                f"chains ({chains_str}). Drug scores may be inflated relative to "
++                "apo-structure scoring. Compare with protein-only analysis for "
++                "accurate druggability assessment.",
++                code="fpocket.ligand_present_in_input",
+             )
+ 
+-    sidecar.warn(
+-        "Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket "
+-        "exposes no seed. Repeated runs on one input differ by a few percent, "
+-        "and two runs inside the same second are identical because the seed has "
+-        "one-second resolution. Do not read a volume difference below the "
+-        "declared tolerance as a change.",
+-    )
+-    if not experimental:
++        # --- SAFETY-CRITICAL: peptide occlusion relay (#133 Item 2) ---
++        # When short chains are retained AND any pocket scores below the
++        # druggability threshold, fire a mandatory relay.  A 0.004 score on
++        # a druggable target kills programs — the fix makes it impossible
++        # to report a confident low score without flagging potential
++        # occlusion.
++        if retained_short_chains and pockets:
++            low_scoring_pockets = [
++                p
++                for p in pockets
++                if (p.get("druggability_score") or 0.0) < _LOW_DRUGGABILITY_THRESHOLD
++            ]
++            if low_scoring_pockets:
++                chains_str = ", ".join(sc["chain"] for sc in retained_short_chains)
++                residue_counts = ", ".join(
++                    f"{sc['chain']}({sc['residues']} residues)"
++                    for sc in retained_short_chains
++                )
++                worst = min(
++                    low_scoring_pockets, key=lambda p: p.get("druggability_score") or 0.0
++                )
++                worst_score = worst.get("druggability_score") or 0.0
++                sidecar.warn(
++                    f"Pocket {worst.get('rank', '?')} scored {worst_score:.3f} "
++                    f"but the input structure contains short chain(s) {chains_str} "
++                    f"({residue_counts}) that may be peptidic ligands occluding "
++                    "the binding site. Rerun on an apo or small-molecule-bound "
++                    "conformation before concluding the target is undruggable.",
++                    code="fpocket.possible_peptide_occlusion",
++                )
++
++        # --- Item 3: Low-score advisory on holo structures ---
++        # When the structure contains ANY non-receptor content (ligands,
++        # peptides, cofactors, non-protein chains, or retained short chains)
++        # AND produces a low druggability score, fire a general advisory.
++        has_non_receptor_content = has_non_protein or bool(retained_short_chains)
++        if has_non_receptor_content and pockets:
++            low_scoring = [
++                p
++                for p in pockets
++                if (p.get("druggability_score") or 0.0) < _LOW_DRUGGABILITY_THRESHOLD
++            ]
++            if low_scoring:
++                worst = min(low_scoring, key=lambda p: p.get("druggability_score") or 0.0)
++                worst_score = worst.get("druggability_score") or 0.0
++                sidecar.warn(
++                    f"Low druggability score ({worst_score:.3f}) computed on a "
++                    "structure containing non-receptor chain(s). Pocket scores are "
++                    "conformation-dependent; assess druggability from an apo or "
++                    "alternate-conformation structure before concluding "
++                    "undruggability.",
++                    code="fpocket.low_score_holo_structure",
++                )
++
+         sidecar.warn(
+-            f"{source.name} is not established as an experimental structure "
+-            f"({evidence}). Druggability scores are conformation-dependent and "
+-            "were trained on crystal structures; a low score on a predicted or "
+-            "modelled conformation is not evidence that the site is undruggable.",
+-            code="fpocket.conformation_dependent",
++            "Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket "
++            "exposes no seed. Repeated runs on one input differ by a few percent, "
++            "and two runs inside the same second are identical because the seed has "
++            "one-second resolution. Do not read a volume difference below the "
++            "declared tolerance as a change.",
+         )
++        if not experimental:
++            sidecar.warn(
++                f"{source.name} is not established as an experimental structure "
++                f"({evidence}). Druggability scores are conformation-dependent and "
++                "were trained on crystal structures; a low score on a predicted or "
++                "modelled conformation is not evidence that the site is undruggable.",
++                code="fpocket.conformation_dependent",
++            )
+ 
+-    meta_path = sidecar.write(target_dir / f"{stem}.pockets.meta.json")
++        meta_path = sidecar.write(target_dir / f"{stem}.pockets.meta.json")
++    record_path = final_dir / record_path.name
++    tree = final_dir / tree.name
++    meta_path = final_dir / meta_path.name
+ 
+     emit = Emitter(as_json=as_json, quiet=quiet)
+     emit.data("n_pockets", len(pockets))
+@@ -946,6 +778,9 @@ def analyze(
+     """Judge tractability from a pockets record. Reads disk, never the network."""
+     source = resolve_artifact(state, path, "pockets record")
+     doc = provenance.read_json(source, "pockets record")
++    commit_marker = source.with_name(source.name.replace(".pockets.json", ".pockets.meta.json"))
++    if doc.get("publication_version") == 1 and not commit_marker.is_file():
++        raise ArtifactError("pocket bundle is incomplete: missing completion sidecar")
+     thresholds = load_thresholds(state, THRESHOLD_SET, {"druggable_dscore": druggable})
+ 
+     pockets = doc.get("pockets") or []
+@@ -956,6 +791,16 @@ def analyze(
+     upstream_warnings: list[str] = []
+     if meta_path.is_file():
+         meta = provenance.read_json(meta_path, "provenance sidecar")
++        if doc.get("publication_version") == 1:
++            declared = [x for x in meta.get("outputs", []) if x.get("path") == source.name]
++            if len(declared) != 1 or declared[0].get("sha256") != provenance.sha256_file(source):
++                raise ArtifactError("pocket record does not match completion sidecar")
++            tree = source.parent / doc["fpocket_output_dir"]
++            expected = meta.get("fpocket_output_hashes", {})
++            actual = {str(p.relative_to(tree)): provenance.sha256_file(p)
++                      for p in tree.rglob("*") if p.is_file()}
++            if not expected or actual != expected:
++                raise ArtifactError("pocket output tree is incomplete or changed")
+         relays = meta.get("mandatory_relays", []) or []
+         upstream_warnings = meta.get("warnings", []) or []
+ 
+diff --git a/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py b/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py
+index 440c25d..bd1bc76 100644
+--- a/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py
++++ b/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py
+@@ -220,17 +220,19 @@ class TestPreflightPassesCleanSystem(unittest.TestCase):
+         ]
+         return all(checks)
+ 
+-    def test_exits_zero_when_ready(self):
+-        """If all prerequisites are present, preflight should exit 0."""
+-        if not self._all_prerequisites_present():
+-            self.skipTest("Prerequisites not fully present on this system")
++    def test_verdict_matches_all_reported_checks(self):
++        """Python.h and gcc alone do not establish platform/network readiness."""
+         r = _run(["--no-remediate"])
+-        self.assertIn(
+-            r.returncode,
+-            (0, 2),
+-            f"Expected exit 0 or 2, got {r.returncode}.\n"
+-            f"stdout:\n{r.stdout}\nstderr:\n{r.stderr}",
+-        )
++        combined = r.stdout + r.stderr
++        if "MISSING" in combined:
++            self.assertEqual(r.returncode, 1, combined)
++        elif "not Debian-family" in combined or "cannot identify" in combined:
++            self.assertEqual(r.returncode, 2, combined)
++        else:
++            self.assertEqual(r.returncode, 0, combined)
++        if os.uname().machine != "x86_64":
++            self.assertIn("not x86_64", combined)
++            self.assertEqual(r.returncode, 1)
+ 
+ 
+ # ---------------------------------------------------------------------------
+diff --git a/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py b/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py
+index e332dcf..68b5b59 100644
+--- a/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py
++++ b/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py
+@@ -52,7 +52,7 @@ def test_prox_dependencies_have_an_independent_install_transaction() -> None:
+     requirements = (TOOLS / "requirements-hypex.txt").read_text()
+     for dependency in ("scipy", "scikit-learn", "networkx"):
+         assert dependency in requirements
+-    assert 'pip install -r "${SCRIPT_DIR}/requirements-hypex.txt"' in INSTALL
++    assert 'pip install --require-hashes -r "${SCRIPT_DIR}/requirements-hypex.txt"' in INSTALL
+ 
+ 
+ def test_generated_environment_activates_configured_venv() -> None:
+diff --git a/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py b/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py
+index cf1b07e..29b44d0 100644
+--- a/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py
++++ b/applications/drug-design-engine/tools/tests/test_normalize_deliverables.py
+@@ -143,10 +143,11 @@ def test_normalize_layer_0_classes_wins_over_layer_0():
+ 
+ 
+ def test_normalize_non_list_layer_0_classes_unchanged():
+-    """Non-list layer_0_classes values are left unchanged (guard works)."""
++    """Invalid values remain in the canonical field for downstream validation."""
+     deliverables = {"layer_0_classes": "single-string"}
+     result = normalize_deliverables(deliverables)
+-    assert result["layer_0_classes"] == "single-string"
++    assert result["required_classes"] == "single-string"
++    assert result["layer_0_classes"] == []
+ 
+ 
+ def test_normalize_plain_string_lists_unchanged():
+@@ -165,7 +166,8 @@ def test_normalize_returns_new_dict():
+     original = {"layer_0_classes": ["docking"]}
+     result = normalize_deliverables(original)
+     assert result is not original
+-    assert result == original
++    assert original == {"layer_0_classes": ["docking"]}
++    assert result == {"layer_0_classes": ["docking"], "required_classes": ["docking"]}
+ 
+ 
+ # ---------------------------------------------------------------------------
+diff --git a/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py b/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py
+index bbcb0c8..f5c1289 100644
+--- a/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py
++++ b/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py
+@@ -462,7 +462,7 @@ class TestFetchInvalidCID(unittest.TestCase):
+ 
+ 
+ class TestFetchSlugOverride(unittest.TestCase):
+-    """--name option overrides the output filename slug."""
++    """--name selects a readable prefix; CID remains for collision avoidance."""
+ 
+     def test_custom_slug(self):
+         resp = _make_http_response(_property_response(cid=2244))
+@@ -474,12 +474,12 @@ class TestFetchSlugOverride(unittest.TestCase):
+         self.assertEqual(exit_code, 0, f"exit {exit_code}:\n{output}")
+ 
+         self.assertIn(
+-            "aspirin.pubchem-compound.artifact.json",
++            "aspirin-2244.pubchem-compound.artifact.json",
+             files,
+             "custom-slug artifact not written",
+         )
+         self.assertIn(
+-            "aspirin.pubchem-compound.meta.json",
++            "aspirin-2244.pubchem-compound.meta.json",
+             files,
+             "custom-slug sidecar not written",
+         )
+diff --git a/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py b/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py
+index 583f10d..e82ec40 100644
+--- a/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py
++++ b/applications/drug-design-engine/tools/tests/test_toolchain_integrity.py
+@@ -270,9 +270,9 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
+ 
+         from dde.cli import cli
+ 
+-        runner = CliRunner(mix_stderr=False)
+-        env = {k: v for k, v in os.environ.items() if k != "DDE_NO_DIRTY_WARNING"}
+-        result = runner.invoke(cli, ["--version"], env=env)
++        runner = CliRunner()
++        env = dict(os.environ, DDE_NO_DIRTY_WARNING=None)
++        result = runner.invoke(cli, ["pocket", "--help"], env=env)
+         self.assertIn("uncommitted modifications", result.stderr)
+         self.assertIn("3 files", result.stderr)
+ 
+@@ -286,10 +286,10 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
+ 
+         from dde.cli import cli
+ 
+-        runner = CliRunner(mix_stderr=False)
++        runner = CliRunner()
+         env = dict(os.environ)
+         env["DDE_NO_DIRTY_WARNING"] = "1"
+-        result = runner.invoke(cli, ["--version"], env=env)
++        result = runner.invoke(cli, ["pocket", "--help"], env=env)
+         self.assertNotIn("uncommitted modifications", result.stderr)
+ 
+     @mock.patch(
+@@ -302,8 +302,8 @@ class TestCLIDirtyWarning(_ResetCacheMixin, unittest.TestCase):
+ 
+         from dde.cli import cli
+ 
+-        runner = CliRunner(mix_stderr=False)
+-        result = runner.invoke(cli, ["--version"])
++        runner = CliRunner()
++        result = runner.invoke(cli, ["pocket", "--help"])
+         self.assertNotIn("uncommitted modifications", result.stderr)
+ 
+ 
+--- /dev/null
++++ b/applications/drug-design-engine/tools/dde/core/pocket_runtime.py
+@@ -0,0 +1,166 @@
++"""Bounded fpocket execution and failure-safe publication of new result bundles."""
++from __future__ import annotations
++from contextlib import contextmanager
++import fcntl
++import math
++import re
++import json
++import os
++from pathlib import Path
++import signal
++import subprocess
++import tempfile
++import uuid
++from .errors import ArtifactError
++from .structures import detect_structure_format
++
++MAX_INPUT_BYTES = 128 * 1024 * 1024
++
++def atom_rows(text: str, fmt: str):
++    """Decode source identifiers without splitting quoted CIF strings."""
++    if fmt == 'cif':
++        import gemmi
++        try:
++            block = gemmi.cif.read_string(text).sole_block()
++            table = block.find_mmcif_category('_atom_site.')
++            if not table: raise ValueError('missing atom_site loop')
++            names = [x.split('.', 1)[1] for x in table.tags]
++            for row in table:
++                yield {key: (None if row[i] in ('.', '?') else gemmi.cif.as_string(row[i]))
++                       for i, key in enumerate(names)}
++        except (ValueError, RuntimeError) as exc:
++            raise ArtifactError('invalid mmCIF structure', detail=str(exc)) from exc
++    else:
++        for line in text.splitlines():
++            if line.startswith(('ATOM  ', 'HETATM')):
++                if len(line) < 54: raise ArtifactError('truncated PDB atom record')
++                yield {'group_PDB': line[:6].strip(), 'label_atom_id': line[12:16].strip(),
++                       'label_comp_id': line[17:20].strip(), 'auth_asym_id': line[21:22].strip(),
++                       'auth_seq_id': line[22:26].strip(), 'pdbx_PDB_ins_code': line[26:27].strip(),
++                       'Cartn_x': line[30:38].strip(), 'Cartn_y': line[38:46].strip(),
++                       'Cartn_z': line[46:54].strip()}
++
++def validate_input(path: Path) -> str:
++    try:
++        if path.stat().st_size > MAX_INPUT_BYTES: raise ValueError('input exceeds 128 MiB')
++        fmt = detect_structure_format(path)
++        text = path.read_text(encoding='utf-8')
++        if '\0' in text: raise ValueError('NUL byte')
++        count = 0
++        for row in atom_rows(text, fmt):
++            for key in ('Cartn_x', 'Cartn_y', 'Cartn_z'):
++                token = row[key]
++                if not isinstance(token, str) or not re.fullmatch(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?", token):
++                    raise ValueError("invalid coordinate token")
++                value = float(token)
++                if not math.isfinite(value) or abs(value) > 1e15: raise ValueError('invalid coordinate')
++            for key, limit in (('label_atom_id',4),('label_comp_id',7),('auth_asym_id',15),
++                               ('label_asym_id',15),('pdbx_PDB_ins_code',1)):
++                value = row.get(key)
++                if value is not None and len(value.encode('utf-8')) > limit:
++                    raise ValueError(f'{key} exceeds supported capacity')
++            count += 1
++            if count > 1_000_000: raise ValueError('input exceeds one million atoms')
++        if not count: raise ValueError('no atom records')
++        return fmt
++    except (OSError, UnicodeError, ValueError, TypeError, KeyError) as exc:
++        raise ArtifactError('invalid structure for fpocket', detail=str(exc)) from exc
++
++def residue_records(text: str, fmt: str):
++    seen = {}
++    for row in atom_rows(text, fmt):
++        chain = row.get('auth_asym_id') or row.get('label_asym_id') or '_'
++        seq = row.get('auth_seq_id') or row.get('label_seq_id')
++        try: number = int(seq)
++        except (ValueError, TypeError) as exc:
++            raise ArtifactError('missing or invalid residue number') from exc
++        ins = row.get('pdbx_PDB_ins_code') or ''
++        record = {'chain':chain,'resnum':number,'resname':row.get('label_comp_id')}
++        if ins: record['insertion_code'] = ins
++        # Retain both namespaces when they differ; old unambiguous records keep their shape.
++        label = row.get('label_asym_id')
++        label_seq = row.get('label_seq_id')
++        if label and (label != chain or (label_seq is not None and label_seq != str(number))):
++            record.update(label_chain=label, label_resnum=int(label_seq) if label_seq is not None else None)
++        key = (chain, number, ins, label or '', label_seq or '', record['resname'] or '')
++        seen[key] = record
++    return [seen[k] for k in sorted(seen)]
++
++def run_bounded(args, cwd: Path, timeout: float = 120):
++    # Files bound RAM usage; RLIMIT_FSIZE bounds diagnostic disk usage as well.
++    import resource
++    def limits(): resource.setrlimit(resource.RLIMIT_FSIZE, (64*1024*1024, 64*1024*1024))
++    with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
++        child = subprocess.Popen(args, cwd=cwd, stdout=stdout, stderr=stderr,
++                                 start_new_session=True, preexec_fn=limits)
++        try: child.wait(timeout=timeout)
++        except BaseException as exc:
++            try: os.killpg(child.pid, signal.SIGKILL)
++            except ProcessLookupError: pass
++            child.wait()
++            if isinstance(exc, subprocess.TimeoutExpired):
++                raise ArtifactError('fpocket timed out', detail=f'limit: {timeout} seconds') from exc
++            raise
++        def tail(f):
++            f.seek(0, 2);f.seek(max(0, f.tell()-65536));return f.read().decode('utf-8',errors='replace')
++        return subprocess.CompletedProcess(args, child.returncode, tail(stdout), tail(stderr))
++
++def validate_pockets(pockets, required_fields=("score", "druggability_score", "volume")):
++    if not pockets or [p.get('rank') for p in pockets] != list(range(1,len(pockets)+1)):
++        raise ArtifactError('empty or incomplete fpocket descriptor output')
++    for pocket in pockets:
++        for required in required_fields:
++            value=pocket.get(required)
++            if not isinstance(value,(int,float)) or not math.isfinite(value):
++                raise ArtifactError('missing or non-finite fpocket descriptor',detail=required)
++        for key,value in pocket.items():
++            if isinstance(value,float) and not math.isfinite(value):
++                raise ArtifactError('non-finite fpocket descriptor',detail=key)
++
++@contextmanager
++def publication(destination: Path, stem: str):
++    """Lock the namespace; never overwrite. Commit marker is published last.
++
++    A crashed writer leaves an uncommitted bundle which readers refuse. An ordinary
++    exception moves staged/published new files into a retained diagnostic directory.
++    Lock files are deliberately retained to avoid lock-inode replacement races.
++    """
++    lock_path=destination/f'.{stem}.pocket.lock'
++    fd=os.open(lock_path,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
++    stage=None; moved=[]
++    names=[f'{stem}_fpocket', f'{stem}.pockets.json', f'{stem}.pockets.meta.json']
++    try:
++        fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
++        if any(os.path.lexists(destination/name) for name in names):
++            raise ArtifactError('pocket results already exist',remedy='choose a new destination with --out')
++        stage=Path(tempfile.mkdtemp(prefix=f'.{stem}.pending-',dir=destination))
++        yield stage
++        if not all((stage/name).exists() for name in names):
++            raise ArtifactError('incomplete pocket bundle cannot be published')
++        for name in names:
++            if os.path.lexists(destination/name): raise ArtifactError('publication collision')
++            os.rename(stage/name,destination/name);moved.append(name)
++        stage.rmdir();stage=None
++    except BlockingIOError as exc:
++        raise ArtifactError('another pocket run owns this destination',remedy='choose --out or wait for that run') from exc
++    except BaseException as exc:
++        if stage is not None:
++            (stage / "failure.json").write_text(json.dumps({"error": str(exc), "detail": getattr(exc, "detail", None)}, indent=2) + "\n")
++            for name in reversed(moved):os.rename(destination/name,stage/name)
++            stage.rename(destination/f'.{stem}.failed-{uuid.uuid4().hex}')
++        raise
++    finally:
++        os.close(fd)
++
++def validate_vertices(rows, expected):
++    if len(rows) != expected:
++        raise ArtifactError('incomplete pocket vertex records')
++    for row in rows:
++        # fpocket's writer uses adjacent %8.3f coordinates; splitting on spaces
++        # fails for neighbouring negative values. Charge/radius follow fixed gaps.
++        tail = row[-41:]
++        try:
++            values = [float(tail[a:b]) for a,b in ((0,8),(8,16),(16,24),(26,32),(35,41))]
++            if not all(math.isfinite(v) for v in values): raise ValueError('non-finite vertex')
++        except ValueError as exc:
++            raise ArtifactError('invalid fpocket vertex record',detail=str(exc)) from exc
+--- /dev/null
++++ b/applications/drug-design-engine/tools/tests/test_pocket_runtime.py
+@@ -0,0 +1,81 @@
++"""Regression contracts for the local fpocket repair; independent synthetic cases."""
++import json
++import math
++import sys
++from pathlib import Path
++import pytest
++from dde.core.errors import ArtifactError
++from dde.core.pocket_runtime import validate_input, run_bounded, validate_pockets, publication
++
++PDB=f"ATOM  {1:5d}  CA  ALA A{145:4d}A   {12.:8.3f}{13.:8.3f}{14.:8.3f}  1.00 20.00           C  \n"
++
++@pytest.mark.parametrize('token',['     nan','     inf',' INVALID','        ','  1_0.00','   １２.０ '])
++def test_bad_coordinate(tmp_path,token):
++    p=tmp_path/'bad.pdb';p.write_text(PDB[:30]+token+PDB[38:])
++    with pytest.raises(ArtifactError):validate_input(p)
++
++def test_valid_alias(tmp_path):
++    p=tmp_path/'space; name.ENT';p.write_text(PDB)
++    assert validate_input(p)=='pdb'
++
++def test_bounded_child(tmp_path):
++    with pytest.raises(ArtifactError,match='timed out'):
++        run_bounded([sys.executable,'-c','import time; time.sleep(10)'],tmp_path,timeout=.05)
++
++@pytest.mark.parametrize('pockets',[[],[{'rank':1,'score':float('nan')}],[{'rank':2,'score':.5}]])
++def test_invalid_result(pockets):
++    with pytest.raises(ArtifactError):validate_pockets(pockets)
++
++def test_no_clobber(tmp_path):
++    (tmp_path/'a.pockets.json').write_text('original')
++    with pytest.raises(ArtifactError):
++        with publication(tmp_path,'a'):pass
++    assert (tmp_path/'a.pockets.json').read_text()=='original'
++
++def test_publication_exception(tmp_path):
++    with pytest.raises(RuntimeError):
++        with publication(tmp_path,'a') as stage:
++            (stage/'a.pockets.json').write_text('{}');raise RuntimeError('injected')
++    assert not (tmp_path/'a.pockets.json').exists()
++    assert list(tmp_path.glob('.a.failed-*'))
++
++def test_publication_complete(tmp_path):
++    with publication(tmp_path,'a') as stage:
++        (stage/'a_fpocket').mkdir();(stage/'a.pockets.json').write_text('{}')
++        (stage/'a.pockets.meta.json').write_text('{}')
++    assert (tmp_path/'a.pockets.meta.json').is_file()
++    assert (tmp_path/'a_fpocket').is_dir()
++
++def test_insertion_codes_distinct():
++    from dde.core.pocket_runtime import residue_records
++    a=PDB;b=PDB[:26]+'B'+PDB[27:]
++    records=residue_records(a+b,'pdb')
++    assert len(records)==2
++    assert {r['insertion_code'] for r in records}=={'A','B'}
++
++def test_rollback_partial_publication(tmp_path,monkeypatch):
++    import os
++    real=os.rename
++    def fail(src,dst):
++        if Path(dst)==tmp_path/'a.pockets.json':raise OSError('injected disk failure')
++        return real(src,dst)
++    monkeypatch.setattr(os,'rename',fail)
++    with pytest.raises(OSError):
++        with publication(tmp_path,'a') as stage:
++            (stage/'a_fpocket').mkdir();(stage/'a.pockets.json').write_text('{}')
++            (stage/'a.pockets.meta.json').write_text('{}')
++    assert not (tmp_path/'a_fpocket').exists()
++    assert not (tmp_path/'a.pockets.meta.json').exists()
++    assert len(list(tmp_path.glob('.a.failed-*')))==1
++
++def test_same_destination_lock(tmp_path):
++    with pytest.raises(RuntimeError):
++        with publication(tmp_path,'a'):
++            with pytest.raises(ArtifactError,match='another pocket run'):
++                with publication(tmp_path,'a'):pass
++            raise RuntimeError('abort outer test')
++
++def test_adjacent_negative_pqr_coordinates():
++    from dde.core.pocket_runtime import validate_vertices
++    row='ATOM      8    O STP    77      -6.783 -39.303-102.796    0.00     3.96'
++    validate_vertices([row],1)

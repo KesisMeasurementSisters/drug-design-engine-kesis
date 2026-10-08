@@ -1,0 +1,28 @@
+[
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "label-only-long",
+    "valid_input": true,
+    "passed": false,
+    "error": "('chain', 'AB', 'ABCDEFGHIJKLMNO')"
+  },
+  {
+    "exit": 1,
+    "timeout": false,
+    "seconds": 0.013,
+    "name": "author-only-long",
+    "valid_input": true,
+    "passed": false,
+    "error": "memory-safety failure"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "author-four",
+    "valid_input": true,
+    "passed": true
+  }
+]

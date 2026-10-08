@@ -1,0 +1,18 @@
+{
+  "run_exit": 0,
+  "analyze_exit": 0,
+  "n_pockets": 13,
+  "best_pocket": {
+    "rank": 1,
+    "druggability_score": 0.855,
+    "score": 0.664,
+    "volume": 1476.965,
+    "n_alpha_spheres": 143.0,
+    "centre_of_mass_max_sphere_distance": 21.512
+  },
+  "outputs": {
+    "pockets": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD.pockets.json",
+    "fpocket_tree": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD_fpocket",
+    "sidecar": "/scion-volumes/fpocket-repair-agent-20261007/raw/structures/1UYD.pockets.meta.json"
+  }
+}

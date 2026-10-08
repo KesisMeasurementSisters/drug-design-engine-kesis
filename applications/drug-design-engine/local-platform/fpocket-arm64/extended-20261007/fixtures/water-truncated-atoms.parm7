@@ -1,0 +1,13 @@
+%VERSION  VERSION_STAMP = V0001.000  DATE = 01/01/00  00:00:00
+%FLAG TITLE
+%FORMAT(20a4)
+Explicit three-atom water reader fixture; not a simulation parameter set
+%FLAG POINTERS
+%FORMAT(10I8)
+       3       2       2       0       0       0       0       0       0       0
+       0       1       0       0       0       1       0       0       2       0
+       0       0       0       0       0       0       0       0       3       0
+       0
+%FLAG ATOM_NAME
+%FORMAT(20a4)
+O   

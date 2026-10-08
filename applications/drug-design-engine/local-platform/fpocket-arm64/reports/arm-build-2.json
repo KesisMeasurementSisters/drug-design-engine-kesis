@@ -1,0 +1,422 @@
+{
+  "contract_sha256": "4fa6ae386f0b7c9be4f76efad0e23a0ba1b6016f7f52e6de65ffca9988627cda",
+  "harness_sha256": "9df57eb6391eba33244a9f09ba24cec1ec524ea4b06a24ca0b5d05f7b51216ea",
+  "checks": [
+    {
+      "name": "candidate-present",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "architecture-static",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader-water.parm7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader-water-missing.parm7",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader-3VI4.cif",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader-5RGF.cif",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader-6TL9.cif",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-1UYD",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-3LKF",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-1ATP",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-4URL",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-5WA6",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-7TAA",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-3VI4",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-5RGF",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-6TL9",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-drop-chain",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-drop-chain-long",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-keep-chains",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-explicit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-chain-as-ligand",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-both-formats",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reference-cif-ligand",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1UYD-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-3LKF-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-1ATP-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-4URL-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-5WA6-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-0",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "changed-7TAA-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "volume-repetitions",
+      "passed": true,
+      "detail": {
+        "times": [
+          1791339749,
+          1791339750,
+          1791339751,
+          1791339752,
+          1791339753,
+          1791339754,
+          1791339755,
+          1791339756,
+          1791339757,
+          1791339758
+        ],
+        "samples": [
+          [
+            1470.418,
+            417.078,
+            783.985,
+            443.394,
+            277.209,
+            254.539,
+            261.357,
+            285.717,
+            268.845,
+            186.638,
+            325.539,
+            315.269,
+            251.557
+          ],
+          [
+            1439.504,
+            424.381,
+            779.792,
+            450.124,
+            281.167,
+            238.616,
+            252.227,
+            287.962,
+            256.603,
+            190.454,
+            319.927,
+            310.908,
+            267.007
+          ],
+          [
+            1436.231,
+            420.323,
+            753.889,
+            442.92,
+            273.586,
+            249.048,
+            253.76,
+            282.379,
+            258.583,
+            188.874,
+            322.187,
+            316.238,
+            255.048
+          ],
+          [
+            1407.863,
+            425.076,
+            772.637,
+            449.081,
+            276.203,
+            242.405,
+            249.927,
+            282.561,
+            260.444,
+            190.879,
+            323.717,
+            312.708,
+            254.876
+          ],
+          [
+            1458.053,
+            427.858,
+            759.809,
+            443.868,
+            274.257,
+            244.985,
+            247.418,
+            283.593,
+            261.884,
+            186.368,
+            335.45,
+            311.531,
+            257.737
+          ],
+          [
+            1442.05,
+            418.932,
+            777.324,
+            445.764,
+            277.343,
+            239.714,
+            252.924,
+            285.656,
+            259.724,
+            186.715,
+            336.689,
+            314.3,
+            261.8
+          ],
+          [
+            1419.137,
+            435.509,
+            774.364,
+            444.153,
+            287.675,
+            242.46,
+            259.196,
+            283.107,
+            256.243,
+            189.568,
+            325.466,
+            316.446,
+            258.367
+          ],
+          [
+            1439.141,
+            433.77,
+            793.606,
+            448.418,
+            278.685,
+            244.656,
+            253.969,
+            276.31,
+            266.145,
+            187.563,
+            333.92,
+            318.73,
+            259.454
+          ],
+          [
+            1447.869,
+            427.974,
+            768.937,
+            451.451,
+            272.312,
+            241.087,
+            257.106,
+            284.382,
+            260.024,
+            188.951,
+            333.41,
+            313.954,
+            263.974
+          ],
+          [
+            1396.225,
+            429.713,
+            785.959,
+            449.082,
+            276.471,
+            244.162,
+            259.406,
+            278.677,
+            259.003,
+            190.069,
+            328.964,
+            314.715,
+            262.487
+          ]
+        ],
+        "medians": [
+          1439.3225,
+          426.467,
+          775.844,
+          447.091,
+          276.84000000000003,
+          243.311,
+          253.8645,
+          283.35,
+          259.874,
+          188.9125,
+          327.25149999999996,
+          314.5075,
+          258.9105
+        ]
+      }
+    },
+    {
+      "name": "invalid-empty.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 1,
+        "stdout": "***** POCKET HUNTING BEGINS ***** \n",
+        "stderr": "! File '/scion-volumes/fpocket-validation/arm-unfused-repeat-results/invalid-empty.pdb/empty.pdb' contains no atoms...\n! File '/scion-volumes/fpocket-validation/arm-unfused-repeat-results/invalid-empty.pdb/empty.pdb' contains no atoms...\n! Structure reading failed!\n"
+      }
+    },
+    {
+      "name": "invalid-truncated.pdb",
+      "passed": true,
+      "detail": {
+        "exit": 1,
+        "stdout": "***** POCKET HUNTING BEGINS ***** \n",
+        "stderr": "! File '/scion-volumes/fpocket-validation/arm-unfused-repeat-results/invalid-truncated.pdb/truncated.pdb' contains no atoms...\n! File '/scion-volumes/fpocket-validation/arm-unfused-repeat-results/invalid-truncated.pdb/truncated.pdb' contains no atoms...\n! Structure reading failed!\n"
+      }
+    },
+    {
+      "name": "missing-input",
+      "passed": true,
+      "detail": {
+        "exit": 1
+      }
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,47 @@
+--- a/fpocket-4.2.2/src/write_visu.c
++++ b/fpocket-4.2.2/src/write_visu.c
+@@ -1,3 +1,4 @@
++#include <sys/stat.h>
+ #include "../headers/write_visu.h"
+ /*
+  * Copyright <2012> <Vincent Le Guilloux,Peter Schmidtke, Pierre Tuffery>
+@@ -112,7 +113,8 @@
+ 
+ 			/* Make tcl script executable, and Write tcl script */
+ 			sprintf(sys_cmd, "chmod +x %s", fout);
+-			status = system(sys_cmd);
++			status = chmod(fout, 0755);
++            if (status != 0) { perror("visualization permissions"); }
+ 
+ 			fprintf(f_tcl, "proc highlighting { colorId representation id selection } {\n");
+ 			fprintf(f_tcl, "   puts \"highlighting $id\"\n");
+@@ -182,7 +184,8 @@
+ 
+ 			/* Make tcl script executable, and Write tcl script */
+ 			sprintf(sys_cmd, "chmod +x %s", fout);
+-			status = system(sys_cmd);
++			status = chmod(fout, 0755);
++            if (status != 0) { perror("visualization permissions"); }
+ 
+ 			fprintf(f_tcl, "proc highlighting { colorId representation id selection } {\n");
+ 			fprintf(f_tcl, "   puts \"highlighting $id\"\n");
+@@ -263,7 +266,8 @@
+ 			fclose(f);
+ 
+ 			sprintf(sys_cmd, "chmod +x %s", fout);
+-			status = system(sys_cmd);
++			status = chmod(fout, 0755);
++            if (status != 0) { perror("visualization permissions"); }
+ 			/* Write pml script */
+ 			fprintf(f_pml, "from pymol import cmd,stored\n");
+ 			fprintf(f_pml, "load %s\n", pdb_out_name);
+@@ -319,7 +323,8 @@
+ 			fclose(f);
+ 
+ 			sprintf(sys_cmd, "chmod +x %s", fout);
+-			status = system(sys_cmd);
++			status = chmod(fout, 0755);
++            if (status != 0) { perror("visualization permissions"); }
+ 			/* Write pml script */
+ 			fprintf(f_pml, "from pymol import cmd,stored\n");
+ 			fprintf(f_pml, "load %s\n", pdb_out_name);

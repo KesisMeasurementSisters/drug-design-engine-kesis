@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "vina",
+      "passed": true,
+      "detail": {
+        "score": -12.513
+      }
+    },
+    {
+      "name": "muscle",
+      "passed": true,
+      "detail": {
+        "sequences": 4
+      }
+    },
+    {
+      "name": "compound",
+      "passed": true,
+      "detail": {
+        "canonical_smiles": "CCO",
+        "descriptors": {
+          "molecular_weight": 46.07,
+          "logp": -0.0,
+          "tpsa": 20.23,
+          "hba": 1,
+          "hbd": 1,
+          "rotatable_bonds": 0,
+          "aromatic_rings": 0,
+          "heavy_atom_count": 3
+        },
+        "outputs": {
+          "descriptors": "/scion-volumes/fpocket-agent-verification/raw/compounds/ethanol-fpocket-regression.descriptors.json",
+          "sidecar": "/scion-volumes/fpocket-agent-verification/raw/compounds/ethanol-fpocket-regression.descriptors.meta.json"
+        },
+        "paths": [
+          "/scion-volumes/fpocket-agent-verification/raw/compounds/ethanol-fpocket-regression.descriptors.json",
+          "/scion-volumes/fpocket-agent-verification/raw/compounds/ethanol-fpocket-regression.descriptors.meta.json"
+        ]
+      }
+    },
+    {
+      "name": "hypex",
+      "passed": true,
+      "detail": {
+        "init_exit": 0,
+        "status_exit": 0
+      }
+    }
+  ]
+}

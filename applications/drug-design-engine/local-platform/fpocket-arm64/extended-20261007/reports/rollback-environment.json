@@ -1,0 +1,18 @@
+{
+  "tools_home": "/scion-volumes/tools",
+  "env_version": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "live_env_version": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "provisioned": true,
+  "drifted": false,
+  "counts": {
+    "packages": 83,
+    "binaries": 6
+  },
+  "host_requirements": {
+    "added": [],
+    "removed": [],
+    "changed": false,
+    "before_count": 17,
+    "after_count": 17
+  }
+}

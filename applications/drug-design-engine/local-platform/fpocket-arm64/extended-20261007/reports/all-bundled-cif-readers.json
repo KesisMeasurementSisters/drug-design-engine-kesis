@@ -1,0 +1,160 @@
+[
+  {
+    "fixture": "123abc.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 8702
+    },
+    "fixture_sha256": "44de4b5bdc47aeceba4bcc4f13e36608102a7a5623dfa258e90c1c42ad89d553"
+  },
+  {
+    "fixture": "1QNH.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 2988
+    },
+    "fixture_sha256": "61db3534bd683de13545d9622466da09cf965de3d840a8dd6ced69b798567e85"
+  },
+  {
+    "fixture": "1UYD.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 1950
+    },
+    "fixture_sha256": "d5e78cfccaaefa3363a1a24a3cb2cefa139ec8013462153f46d49e84eb93efc8"
+  },
+  {
+    "fixture": "1UYD_wrote.cif",
+    "passed": false,
+    "error": "[PosixPath('/scion-volumes/fpocket-validation/arm-unfused-repeat/probe-sanitized'), 'pdbx', PosixPath('/scion-volumes/fpocket-validation/arm-unfused-repeat/fpocket-4.2.2/data/sample/1UYD_wrote.cif')]: exit 67\npdbxplugin) encountered 593 bad element indices!\npdbxplugin) Error while trying to parse pdbx structure\n\n",
+    "fixture_sha256": "2051417b2dad6ea83bfb65fdbeddd2d1b5e1b39efe23a479518e0e07c597a9cf"
+  },
+  {
+    "fixture": "1g50.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 6109
+    },
+    "fixture_sha256": "b70bffeb6faea0c8fc97d1a5a4b09d99dc17bb7a581460bf91e231a5ae40de59"
+  },
+  {
+    "fixture": "1orc.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 559
+    },
+    "fixture_sha256": "8d6797d78683b1b4d2f548d5223c9e5e3e7ddb387233e35128316382b2bfd748"
+  },
+  {
+    "fixture": "1ttv.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 31896
+    },
+    "fixture_sha256": "b86c43b9a645c156e6a20429d22a93c0783d98e70ec02bbde8859cd21adc0b07"
+  },
+  {
+    "fixture": "2P0R.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 5437
+    },
+    "fixture_sha256": "58437a533dd2909ccead993a9eaef42903c701454bdd2f94b6bd73eeb6f5bb75"
+  },
+  {
+    "fixture": "2P0R_mod.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 5437
+    },
+    "fixture_sha256": "dfdeeacf54a064cded4d198e45a38b1b4ef32f7d5cca236c2a68ea399e3a8980"
+  },
+  {
+    "fixture": "2P0R_wrote.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 5437
+    },
+    "fixture_sha256": "02ca492c6915ad611cdbcea12735b41a1fe5c90dbd7a11280e3c87a196c5a2b8"
+  },
+  {
+    "fixture": "3VI4.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 22882
+    },
+    "fixture_sha256": "cb6b960f9423033367a88da2cd47cbf1408746596e11d224694486280f17079f"
+  },
+  {
+    "fixture": "4bdf.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 2258
+    },
+    "fixture_sha256": "706965379ca49ad7fc4828a4ac695497f36d2c4b7f54e8a631d6b2d13e18974a"
+  },
+  {
+    "fixture": "4gfo.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 2427
+    },
+    "fixture_sha256": "6e2a56025799abbc8e881664e5980e1f34fd216bcda40484dcf9680561624469"
+  },
+  {
+    "fixture": "4gfo_customized.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 2427
+    },
+    "fixture_sha256": "d280350ae269c897ad2e6b5751c35aa6f6e1ecb8b54a0a2b48ce6cd9f20b94c2"
+  },
+  {
+    "fixture": "5RGF.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 10845
+    },
+    "fixture_sha256": "38d7ce49b2734621be12f5c6724c1ef941b83699fb1bf52eb70bf64a62f9e639"
+  },
+  {
+    "fixture": "6TL9.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 8628
+    },
+    "fixture_sha256": "4eb2d7ce747af054dc484aad723946eebe403535d3f7b5b60a5da70f88b6a739"
+  },
+  {
+    "fixture": "6X3P.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 2509
+    },
+    "fixture_sha256": "48333f81e7bb15a28ff23945251d7fcefa0a4964c9d487bbcb31f7e2a8ad094f"
+  },
+  {
+    "fixture": "6a5k.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 4115
+    },
+    "fixture_sha256": "b9624ddc27d688220311ff264851de4bee47d0437b0a245b969bf0a083849453"
+  },
+  {
+    "fixture": "6cs2.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 27858
+    },
+    "fixture_sha256": "aa68bf59420e413d96931940eb6858567b2257059b418fe573693cee8ecdcedb"
+  },
+  {
+    "fixture": "7z9t.cif",
+    "passed": true,
+    "detail": {
+      "atoms": 5835
+    },
+    "fixture_sha256": "6524b5a09425d0dab7e42586a9faa6be0544bebebd0b0a019adbc67be3731d80"
+  }
+]

@@ -1,0 +1,197 @@
+[
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.011,
+    "name": "minimal",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "chain-two",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "chain-three",
+    "valid_input": true,
+    "passed": false,
+    "error": "('chain', 'AB', 'ABC')"
+  },
+  {
+    "exit": 1,
+    "timeout": false,
+    "seconds": 0.013,
+    "name": "chain-fifteen",
+    "valid_input": true,
+    "passed": false,
+    "error": "memory-safety failure"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "chain-collision",
+    "valid_input": true,
+    "passed": false,
+    "error": "('chain', 'AA', 'AAA')"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "quoted-atom",
+    "valid_input": true,
+    "passed": false,
+    "error": "('name', \"'CA'\", 'CA')"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "reordered-columns",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "optional-omitted",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "negative-residue",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "no-final-newline",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "missing-coordinate",
+    "valid_input": false,
+    "passed": false,
+    "error": "invalid input accepted or crashed"
+  },
+  {
+    "exit": -6,
+    "timeout": false,
+    "seconds": 0.048,
+    "name": "nonfinite-coordinate",
+    "valid_input": false,
+    "passed": false,
+    "error": "invalid input accepted or crashed"
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "empty",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "missing-loop",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "truncated-row",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "water",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "water-comments",
+    "valid_input": true,
+    "passed": false,
+    "error": "valid input rejected or crashed"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-crlf",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "water-empty",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.003,
+    "name": "water-truncated-pointers",
+    "valid_input": false,
+    "passed": false,
+    "error": "invalid input accepted or crashed"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.004,
+    "name": "water-truncated-atoms",
+    "valid_input": false,
+    "passed": false,
+    "error": "invalid input accepted or crashed"
+  },
+  {
+    "exit": -9,
+    "timeout": true,
+    "seconds": 30.002,
+    "name": "water-missing-format",
+    "valid_input": false,
+    "passed": false,
+    "error": "timeout"
+  },
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "water-out-of-range-bond",
+    "valid_input": false,
+    "passed": false,
+    "error": "invalid input accepted or crashed"
+  }
+]

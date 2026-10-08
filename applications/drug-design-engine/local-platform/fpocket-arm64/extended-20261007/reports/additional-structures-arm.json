@@ -1,0 +1,82 @@
+[
+  {
+    "fixture": "1UYD.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 33
+    },
+    "fixture_sha256": "d5e78cfccaaefa3363a1a24a3cb2cefa139ec8013462153f46d49e84eb93efc8"
+  },
+  {
+    "fixture": "1g50.pdb",
+    "passed": true,
+    "detail": {
+      "output_files": 129
+    },
+    "fixture_sha256": "8fc359127347ff21879d8637ef83260d9efcf47d3b36a4d102a01d077eed845e"
+  },
+  {
+    "fixture": "1g50.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 129
+    },
+    "fixture_sha256": "b70bffeb6faea0c8fc97d1a5a4b09d99dc17bb7a581460bf91e231a5ae40de59"
+  },
+  {
+    "fixture": "1orc.pdb",
+    "passed": true,
+    "detail": {
+      "output_files": 15
+    },
+    "fixture_sha256": "e2013c93090b162f9bc37d11cb939aed2d78f2202019936ff6d95b28c81fee54"
+  },
+  {
+    "fixture": "1orc.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 15
+    },
+    "fixture_sha256": "8d6797d78683b1b4d2f548d5223c9e5e3e7ddb387233e35128316382b2bfd748"
+  },
+  {
+    "fixture": "4bdf.pdb",
+    "passed": true,
+    "detail": {
+      "output_files": 43
+    },
+    "fixture_sha256": "3acab6eec6bc86034ae696cd4c5331c7c242f6270e55e62e1bca8103b57239af"
+  },
+  {
+    "fixture": "4bdf.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 43
+    },
+    "fixture_sha256": "706965379ca49ad7fc4828a4ac695497f36d2c4b7f54e8a631d6b2d13e18974a"
+  },
+  {
+    "fixture": "4gfo.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 51
+    },
+    "fixture_sha256": "6e2a56025799abbc8e881664e5980e1f34fd216bcda40484dcf9680561624469"
+  },
+  {
+    "fixture": "6a5k.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 83
+    },
+    "fixture_sha256": "b9624ddc27d688220311ff264851de4bee47d0437b0a245b969bf0a083849453"
+  },
+  {
+    "fixture": "7z9t.cif",
+    "passed": true,
+    "detail": {
+      "output_files": 107
+    },
+    "fixture_sha256": "6524b5a09425d0dab7e42586a9faa6be0544bebebd0b0a019adbc67be3731d80"
+  }
+]

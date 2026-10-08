@@ -1,0 +1,28 @@
+data_edge
+#
+loop_
+_atom_site.pdbx_PDB_model_num
+_atom_site.auth_atom_id
+_atom_site.auth_asym_id
+_atom_site.auth_comp_id
+_atom_site.auth_seq_id
+_atom_site.pdbx_formal_charge
+_atom_site.B_iso_or_equiv
+_atom_site.occupancy
+_atom_site.Cartn_z
+_atom_site.Cartn_y
+_atom_site.Cartn_x
+_atom_site.pdbx_PDB_ins_code
+_atom_site.label_seq_id
+_atom_site.label_entity_id
+_atom_site.label_asym_id
+_atom_site.label_comp_id
+_atom_site.label_alt_id
+_atom_site.label_atom_id
+_atom_site.type_symbol
+_atom_site.id
+_atom_site.group_PDB
+1 N A GLU 16 ? 52.44 1.00 39.441 28.442 6.484 ? 16 1 A GLU . N N 1 ATOM
+1 CA A GLU 16 ? 52.69 1.00 38.611 28.546 7.718 ? 16 1 A GLU . CA C 2 ATOM
+1 C A GLU 16 ? 50.43 1.00 37.277 27.706 7.625 ? 16 1 A GLU . C C 3 ATOM
+#

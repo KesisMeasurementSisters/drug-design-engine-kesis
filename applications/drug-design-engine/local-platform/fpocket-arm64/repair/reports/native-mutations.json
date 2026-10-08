@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "reader": "pdbx",
+      "seed": 420218,
+      "cases": 10000,
+      "failures": []
+    },
+    {
+      "reader": "parm7",
+      "seed": 420219,
+      "cases": 10000,
+      "failures": []
+    }
+  ],
+  "seconds": 85.17102983800032
+}

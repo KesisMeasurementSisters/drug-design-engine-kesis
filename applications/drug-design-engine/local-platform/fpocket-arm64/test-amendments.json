@@ -1,0 +1,31 @@
+[
+  {
+    "change": "Trim trailing padding only for semantic AMBER identifier assertions; keep raw cross-architecture comparisons exact",
+    "reason": "AMBER identifiers are fixed-width fields. Both the original bundled Intel library and candidate return identical padded names, types, and residue names.",
+    "evidence": "ARM water probe preserves fixed-width names. Earlier Intel comparison claim was premature: the full Intel probe rejected ABI20 before reading; this is corrected by the explicit reference-only ABI20 probe, with raw fields still compared exactly.",
+    "scientific_tolerances_changed": false,
+    "original_contract_and_prebuild_hashes": "source-lock.json",
+    "confirmation": "Corrected original Intel ABI20 probe subsequently passed water.parm7 and water-missing.parm7; all raw reader fields match ARM exactly."
+  },
+  {
+    "change": "Require full raw line counts before excluding variable volume lines; record the active harness hash in each test report",
+    "reason": "Test-code review found that excluding volume lines before counting could miss a deleted volume record. Added a failing-then-passing regression test before scientific reference comparisons.",
+    "scientific_tolerances_changed": false
+  },
+  {
+    "change": "Intel reference probe expects bundled ABI20; ARM probe still strictly requires ABI18. Compare all reader data exactly, excluding the separately asserted ABI metadata.",
+    "reason": "Diagnostic registration reports original Intel archive parm7 ABI20. fpocket headers and pinned molfile source headers have identical molfile layouts; only vmdplugin ABI constant differs. Do not upgrade candidate ABI.",
+    "scientific_tolerances_changed": false
+  },
+  {
+    "change": "ARM build adds -ffp-contract=off to fpocket C compilation; O2, hardening, Qhull recipe, ABI18, algorithm source and reference comparisons remain unchanged.",
+    "reason": "Original ARM build changes deterministic surface areas, scores and ranking. Recompiling only asa.c without contraction did not resolve it; recompiling all fpocket C objects without contraction reproduces the complete 1UYD reference exactly (except previously excluded volumes).",
+    "evidence": "diagnostic-no-fma and diagnostic-no-fma-all directories retain builds and outputs; full clean builds and full validation required next.",
+    "scientific_tolerances_changed": false
+  },
+  {
+    "change": "DDE integration checks now compare sidecar stamps with the live, undrifted environment and check output ownership.",
+    "reason": "Test review tightened environment identity and actual-user permissions beyond checking a sha256 prefix; both clean builds subsequently passed these checks under Scion uid/gid1000.",
+    "scientific_tolerances_changed": false
+  }
+]

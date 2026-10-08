@@ -1,0 +1,568 @@
+{
+  "cli_version": "0.3.0",
+  "env_version": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "ok": true,
+  "checks": [
+    {
+      "name": "python",
+      "status": "ok",
+      "detail": "3.11.2 (py3.11-aarch64)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "toolchain integrity",
+      "status": "ok",
+      "detail": "clean (45f7f26)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "tools environment",
+      "status": "ok",
+      "detail": "/scion-volumes/tools @ sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "environment stamp",
+      "status": "ok",
+      "detail": "sha256:677188299102\u2026 matches the live environment",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "environment source",
+      "status": "ok",
+      "detail": "provisioned from 45f7f26b1059, reachable on origin/HEAD",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "project root",
+      "status": "ok",
+      "detail": "/scion-volumes/learning (resolved from DDE_PROJECT environment variable)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "environment partition",
+      "status": "ok",
+      "detail": "10 artifact(s), one environment",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package click",
+      "status": "ok",
+      "detail": "CLI framework",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package requests",
+      "status": "ok",
+      "detail": "HTTP client for AFDB and other REST sources",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package numpy",
+      "status": "ok",
+      "detail": "decoding AlphaGenome tensors",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package zstandard",
+      "status": "ok",
+      "detail": "decompressing AlphaGenome tensor chunks",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package yaml",
+      "status": "ok",
+      "detail": "program threshold overrides (.dde/thresholds.yaml)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package google.cloud.aiplatform",
+      "status": "ok",
+      "detail": "AlphaFold 3 and AlphaGenome Vertex endpoints",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package alphagenome",
+      "status": "warn",
+      "detail": "not installed \u2014 AlphaGenome pip backend (ISM) unavailable",
+      "remedy": "install it if the corresponding subcommands are needed",
+      "kind": "capability"
+    },
+    {
+      "name": "package rdkit.Chem",
+      "status": "ok",
+      "detail": "compound validation, descriptors and structural alerts",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "package meeko",
+      "status": "ok",
+      "detail": "PDBQT preparation for docking (mk_prepare_receptor.py, mk_prepare_ligand.py)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary gcloud",
+      "status": "ok",
+      "detail": "/usr/bin/gcloud",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary fpocket",
+      "status": "warn",
+      "detail": "not found \u2014 pocket detection \u2014 `dde pocket run` cannot answer tractability",
+      "remedy": "re-provision with `tools/install.sh --binaries-only`",
+      "kind": "capability"
+    },
+    {
+      "name": "binary vina",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/bin/vina",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary hypex",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/bin/hypex",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary elo",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/bin/elo",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary prox",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/bin/prox",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary mk_prepare_receptor.py",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/.venv/bin/mk_prepare_receptor.py",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "binary mk_prepare_ligand.py",
+      "status": "ok",
+      "detail": "/scion-volumes/tools/.venv/bin/mk_prepare_ligand.py",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "credential ALPHAGENOME_API_KEY",
+      "status": "warn",
+      "detail": "not set and ADC resolution failed \u2014 neither auth path available",
+      "remedy": "set ALPHAGENOME_API_KEY for the pip backend, or configure ADC for the Vertex backend (gcloud auth application-default login, workload identity, etc.)",
+      "kind": "capability"
+    },
+    {
+      "name": "credential NCBI_API_KEY",
+      "status": "warn",
+      "detail": "not set \u2014 NCBI E-utilities queries are limited to 3 QPS; with the key the limit rises to 10",
+      "remedy": "set NCBI_API_KEY (https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/)",
+      "kind": "housekeeping"
+    },
+    {
+      "name": "credential GCP",
+      "status": "warn",
+      "detail": "GOOGLE_APPLICATION_CREDENTIALS not set and ADC resolution failed: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.",
+      "remedy": "set GOOGLE_APPLICATION_CREDENTIALS or configure ADC (gcloud auth application-default login, workload identity, etc.)",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds admet-endpoints@1.0",
+      "status": "ok",
+      "detail": "13 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds af3@1.0",
+      "status": "ok",
+      "detail": "6 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds alphafold@1.0",
+      "status": "ok",
+      "detail": "10 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds alphagenome-ism@0.1-draft",
+      "status": "warn",
+      "detail": "unresolved: motif_significance, position_importance",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds alphagenome-variant-effect@1.0",
+      "status": "ok",
+      "detail": "5 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds assay-activity@1.0",
+      "status": "warn",
+      "detail": "unresolved: activity_cutoff_inhibition, activity_cutoff_fold_change, hill_slope_min, hill_slope_max, r_squared_floor",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds assay-screen-quality@1.0",
+      "status": "ok",
+      "detail": "2 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds cbioportal-search@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds citation-verification@1.0",
+      "status": "warn",
+      "detail": "unresolved: max_suspect_citations",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds compound-alerts@1.0",
+      "status": "ok",
+      "detail": "3 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds compound-descriptors@1.0",
+      "status": "ok",
+      "detail": "6 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds compound-sa-score@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds compreg@1.0",
+      "status": "ok",
+      "detail": "0 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds conservation-scores@1.0",
+      "status": "ok",
+      "detail": "2 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds coscientist@1.1",
+      "status": "ok",
+      "detail": "4 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds dice-expression@1.0",
+      "status": "warn",
+      "detail": "unresolved: expressed_tpm, high_expression_tpm, low_expression_tpm",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds docking-scores@1.0",
+      "status": "warn",
+      "detail": "unresolved: weak_binding_energy",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds expression@1.0",
+      "status": "warn",
+      "detail": "unresolved: low_confidence_ntpm",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds expression-single-cell@1.0",
+      "status": "warn",
+      "detail": "unresolved: low_confidence_ncpm",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds gnomad-constraint@1.0",
+      "status": "warn",
+      "detail": "unresolved: loeuf_unreliable_min_expected_lof",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds gtex-expression@1.0",
+      "status": "warn",
+      "detail": "unresolved: expressed_tpm, high_expression_tpm, low_expression_tpm",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds homology@1.0",
+      "status": "ok",
+      "detail": "5 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds hypex@1.0",
+      "status": "warn",
+      "detail": "unresolved: elo_decisive_gap, max_suspect_citations, min_safety_score",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds hypothesis-set@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds litref@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds mmp-cliffs@1.0",
+      "status": "ok",
+      "detail": "2 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds pk-parameters@1.0",
+      "status": "warn",
+      "detail": "unresolved: therapeutic_exposure_adequacy",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds pocket@1.0",
+      "status": "ok",
+      "detail": "5 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds preprint-search@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds pubchem-annotation@1.0",
+      "status": "ok",
+      "detail": "0 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds screening-prefilter@1.0",
+      "status": "ok",
+      "detail": "6 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds selectivity-margins@1.0",
+      "status": "ok",
+      "detail": "2 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds similar-search@1.0",
+      "status": "warn",
+      "detail": "unresolved: novelty_threshold",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds surface@1.0",
+      "status": "ok",
+      "detail": "5 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "thresholds tox-safety-package@1.0",
+      "status": "warn",
+      "detail": "unresolved: noael_exposure_margin",
+      "remedy": "analyses depending on these will refuse to produce a verdict until the values are established from a cited source",
+      "kind": "capability"
+    },
+    {
+      "name": "thresholds trials@1.0",
+      "status": "ok",
+      "detail": "1 declared",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "HTTP pacing",
+      "status": "ok",
+      "detail": "shared \u2014 cross-container coordination active (/scion-volumes/scratchpad/pace)",
+      "remedy": "",
+      "kind": "capability"
+    },
+    {
+      "name": "gwas catalog api",
+      "status": "warn",
+      "detail": "https://www.ebi.ac.uk/gwas/rest/api returned HTTP 410",
+      "remedy": "the GWAS Catalog REST API may be degraded; --source gwas-catalog queries will likely fail",
+      "kind": "caveat"
+    },
+    {
+      "name": "disignatlas endpoint",
+      "status": "ok",
+      "detail": "https://www.inbirg.com/disignatlas/ reachable (HTTP 200)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "askcos api",
+      "status": "ok",
+      "detail": "askcos.mit.edu reachable (retrosynthesis endpoint available)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "hypothesis strategy: sponsor",
+      "status": "ok",
+      "detail": "always available (dde hypothesis adopt --origin sponsor)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "hypothesis strategy: charter",
+      "status": "ok",
+      "detail": "always available (dde hypothesis adopt --origin charter)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "hypothesis strategy: co-scientist",
+      "status": "ok",
+      "detail": "available (dde coscientist ingest \u2014 requires an export file)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "hypothesis strategy: hypex",
+      "status": "ok",
+      "detail": "available (hypex tools + DDE ingest/analyze; requires templates and a lease)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "phase-2 contract",
+      "status": "ok",
+      "detail": "51 of 51 phase-2 command(s) latched offline, redirectable and non-clobbering (admet analyze, allen analyze, allen analyze-donors, alphafold analyze, alphafold analyze-plddt, alphafold analyze-prediction, alphagenome analyze, alphagenome analyze-ism, assay analyze, cbioportal analyze, cellxgene analyze, cite analyze, compound analyze, compreg analyze, conservation analyze, coscientist analyze, dice analyze, differentiation assess, disco analyze, disignatlas analyze, docking analyze, expression analyze, expression analyze-single-cell, faers analyze, genetics analyze, geo analyze, gtex analyze, gwas analyze, homology analyze, hypex analyze, hypothesis analyze, litref analyze, manufacturing assess-stage0, mmp analyze, patent analyze, pathway analyze, phenotype analyze, pk analyze, pocket analyze, ppi analyze, preprint analyze, pubchem analyze-annotation, pubmed analyze, pubmed-bq analyze, retro analyze, scp analyze, selectivity analyze, similar analyze, spatialdb analyze, tox analyze, trials analyze)",
+      "remedy": "",
+      "kind": "caveat"
+    },
+    {
+      "name": "alphagenome quantiles",
+      "status": "warn",
+      "detail": "quantile scores come back for some output types and not others \u2014 RNA_SEQ carries them, CAGE/ATAC/DNASE/PROCAP do not \u2014 so one variant can yield a significance-tested verdict on one assay and a magnitude-only one on another",
+      "remedy": "read quantile_scores_available per block, never once per run; a verdict ending _unconfirmed had no significance test behind it. RETIRES WHEN: the API returns quantiles for CAGE/ATAC/DNASE/PROCAP, which is observable \u2014 re-check by scoring one variant per output type and looking for quantile_scores in each block (not runnable here: ALPHAGENOME_API_KEY is unset and ADC does not resolve, so this test belongs to whoever holds credentials)",
+      "kind": "caveat"
+    },
+    {
+      "name": "alphagenome requests",
+      "status": "warn",
+      "detail": "the endpoint answers a malformed request with 502 rather than 400 \u2014 a missing organism, an unset interval strand, an interval that is not exactly 16384/131072/524288/1048576 bp, or an oversized default scorer set all look identical to a backend outage",
+      "remedy": "a persistent 502 is more likely a rejected request than a busy endpoint; check the request before waiting out a retry budget. RETIRES WHEN: a deliberately malformed request comes back 400 (not runnable here: ALPHAGENOME_API_KEY is unset and ADC does not resolve, so this test belongs to whoever holds credentials)",
+      "kind": "caveat"
+    },
+    {
+      "name": "af3 concurrency",
+      "status": "warn",
+      "detail": "the AF3 endpoint is single-flight; this CLI serialises callers only within one container",
+      "remedy": "parallel specialists in separate containers can still collide with 429s; a cross-container lease broker is not yet implemented. RETIRES WHEN: that broker ships, or the endpoint stops being single-flight \u2014 ours to build, not upstream's to fix",
+      "kind": "caveat"
+    },
+    {
+      "name": "hpa silent column drop",
+      "status": "warn",
+      "detail": "the Human Protein Atlas API drops unrecognised tissue column codes without an error, returning a narrower response instead of a 400",
+      "remedy": "`dde expression` validates all 50 columns and exits 3 if any is missing; if that fires, re-validate the tissue list \u2014 do not read the gap as absent expression. RETIRES WHEN: a request with one bogus column code comes back 400 instead of a narrower 200",
+      "kind": "caveat"
+    },
+    {
+      "name": "hpa release pinning",
+      "status": "warn",
+      "detail": "HPA exposes no release version through the API, in the body or the headers; it is scraped from /about/download",
+      "remedy": "provenance is anchored on the payload SHA-256 in the sidecar, not on the release label; cite the digest when the label is absent. RETIRES WHEN: HPA exposes a release identifier in the API response or its headers, at which point the scrape can be dropped",
+      "kind": "caveat"
+    },
+    {
+      "name": "gnomad errors arrive as HTTP 200",
+      "status": "warn",
+      "detail": "gnomAD reports both 'Gene not found' and 'Service overloaded' in a GraphQL errors array with a 200 status, so a throttle and a missing gene are indistinguishable by status code",
+      "remedy": "`dde genetics` retries the transient set and fails loudly on the rest; never record a throttled query as a gene with no constraint data. RETIRES WHEN: gnomAD returns a non-200 for either condition",
+      "kind": "caveat"
+    }
+  ],
+  "capability_snapshot": {
+    "fpocket": "unavailable",
+    "vina": "available",
+    "hypex": "available",
+    "elo": "available",
+    "prox": "available",
+    "mk_prepare_receptor.py": "available",
+    "mk_prepare_ligand.py": "available",
+    "vertex_ai": "available",
+    "alphagenome_pip": "unavailable",
+    "rdkit": "available",
+    "meeko": "available",
+    "alphagenome_credential": "unavailable",
+    "gcp_credential": "unavailable"
+  }
+}

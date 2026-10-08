@@ -1,0 +1,78 @@
+{
+  "passed": true,
+  "description": "Existing analysis preserved; explicit alternate output succeeds. Initial workflow test incorrectly expected automatic overwrite.",
+  "records": [
+    {
+      "command": [
+        "dde",
+        "pocket",
+        "run",
+        "/scion-volumes/fpocket-validation/arm-unfused-repeat/fpocket-4.2.2/data/sample/1UYD.pdb",
+        "--json"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.34,
+      "stdout": "{\n  \"n_pockets\": 13,\n  \"experimental_structure\": true,\n  \"outputs\": {\n    \"pockets\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json\",\n    \"fpocket_tree\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD_fpocket\",\n    \"sidecar\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.meta.json\"\n  },\n  \"paths\": [\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json\",\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD_fpocket\",\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.meta.json\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dde",
+        "pocket",
+        "analyze",
+        "/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json",
+        "--json"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.121,
+      "stdout": "{\n  \"assessment\": {\n    \"verdict\": \"druggable-pocket-present\",\n    \"statement\": \"Best pocket scores 0.855 (druggable) across 13 detected pocket(s).\",\n    \"advisories\": [\n      \"Volumes are Monte Carlo estimates; differences under 5% between runs are noise, not change.\"\n    ],\n    \"relayed_run_warnings\": [\n      \"Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket exposes no seed. Repeated runs on one input differ by a few percent, and two runs inside the same second are identical because the seed has one-second resolution. Do not read a volume difference below the declared tolerance as a change.\"\n    ]\n  },\n  \"metrics\": {\n    \"n_pockets\": 13,\n    \"best_pocket\": {\n      \"rank\": 1,\n      \"druggability_score\": 0.855,\n      \"score\": 0.664,\n      \"volume\": 1405.68,\n      \"n_alpha_spheres\": 143.0,\n      \"centre_of_mass_max_sphere_distance\": 21.512\n    },\n    \"site\": null,\n    \"volume_estimate_tolerance\": 0.05\n  },\n  \"mandatory_relays\": [\n    {\n      \"code\": \"fpocket.druggability_is_not_affinity\",\n      \"message\": \"0.855 is cavity shape in 1UYD.pdb; not an affinity, not a potency, not evidence a compound binds.\"\n    }\n  ],\n  \"threshold_set\": \"pocket@1.0\",\n  \"outputs\": {\n    \"analysis\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pocket.analysis.json\"\n  },\n  \"paths\": [\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pocket.analysis.json\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dde",
+        "pocket",
+        "run",
+        "/scion-volumes/fpocket-validation/arm-unfused-repeat/fpocket-4.2.2/data/sample/1UYD.pdb",
+        "--json"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.375,
+      "stdout": "{\n  \"n_pockets\": 13,\n  \"experimental_structure\": true,\n  \"outputs\": {\n    \"pockets\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json\",\n    \"fpocket_tree\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD_fpocket\",\n    \"sidecar\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.meta.json\"\n  },\n  \"paths\": [\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json\",\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD_fpocket\",\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.meta.json\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "dde",
+        "pocket",
+        "analyze",
+        "/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json",
+        "--json"
+      ],
+      "exit": 9,
+      "timeout": false,
+      "seconds": 0.121,
+      "stdout": "",
+      "stderr": "error: 1UYD.pocket.analysis.json already holds a different analysis\n  detail: the existing record was written by unattributed at 2026-10-07T02:45:53Z\n  remedy: write this verdict somewhere else with `--out raw/reanalysis/<date>-<agent>` and compare the two, or pass `--overwrite` if replacing the earlier record is what you mean. Two verdicts that disagree are evidence; one of them silently replaced is not\n"
+    },
+    {
+      "command": [
+        "dde",
+        "pocket",
+        "analyze",
+        "/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/structures/1UYD.pockets.json",
+        "--out",
+        "raw/reanalysis/second",
+        "--json"
+      ],
+      "exit": 0,
+      "timeout": false,
+      "seconds": 0.118,
+      "stdout": "{\n  \"assessment\": {\n    \"verdict\": \"druggable-pocket-present\",\n    \"statement\": \"Best pocket scores 0.855 (druggable) across 13 detected pocket(s).\",\n    \"advisories\": [\n      \"Volumes are Monte Carlo estimates; differences under 5% between runs are noise, not change.\"\n    ],\n    \"relayed_run_warnings\": [\n      \"Pocket volume is a Monte Carlo estimate seeded from the clock; fpocket exposes no seed. Repeated runs on one input differ by a few percent, and two runs inside the same second are identical because the seed has one-second resolution. Do not read a volume difference below the declared tolerance as a change.\"\n    ]\n  },\n  \"metrics\": {\n    \"n_pockets\": 13,\n    \"best_pocket\": {\n      \"rank\": 1,\n      \"druggability_score\": 0.855,\n      \"score\": 0.664,\n      \"volume\": 1405.681,\n      \"n_alpha_spheres\": 143.0,\n      \"centre_of_mass_max_sphere_distance\": 21.512\n    },\n    \"site\": null,\n    \"volume_estimate_tolerance\": 0.05\n  },\n  \"mandatory_relays\": [\n    {\n      \"code\": \"fpocket.druggability_is_not_affinity\",\n      \"message\": \"0.855 is cavity shape in 1UYD.pdb; not an affinity, not a potency, not evidence a compound binds.\"\n    }\n  ],\n  \"threshold_set\": \"pocket@1.0\",\n  \"outputs\": {\n    \"analysis\": \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/reanalysis/second/1UYD.pocket.analysis.json\"\n  },\n  \"paths\": [\n    \"/scion-volumes/fpocket-validation/extended-20261007/reanalysis-project/raw/reanalysis/second/1UYD.pocket.analysis.json\"\n  ]\n}\n",
+      "stderr": ""
+    }
+  ]
+}

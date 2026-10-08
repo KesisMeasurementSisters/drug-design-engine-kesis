@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "water.parm7",
+      "passed": true
+    },
+    {
+      "name": "water-missing.parm7",
+      "passed": true
+    },
+    {
+      "name": "3VI4.cif",
+      "passed": true
+    },
+    {
+      "name": "5RGF.cif",
+      "passed": true
+    },
+    {
+      "name": "6TL9.cif",
+      "passed": true
+    }
+  ]
+}

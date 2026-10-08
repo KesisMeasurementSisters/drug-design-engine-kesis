@@ -1,0 +1,536 @@
+[
+  {
+    "name": "minimal",
+    "file": "minimal.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chain-two",
+    "file": "chain-two.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "AB",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "AB",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "AB",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chain-three",
+    "file": "chain-three.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "ABC",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "ABC",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "ABC",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chain-fifteen",
+    "file": "chain-fifteen.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "ABCDEFGHIJKLMNO",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "ABCDEFGHIJKLMNO",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "ABCDEFGHIJKLMNO",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "chain-collision",
+    "file": "chain-collision.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "AAA",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "AAB",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "AAC",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "quoted-atom",
+    "file": "quoted-atom.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "reordered-columns",
+    "file": "reordered-columns.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "optional-omitted",
+    "file": "optional-omitted.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "negative-residue",
+    "file": "negative-residue.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": -3,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": -3,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": -3,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "no-final-newline",
+    "file": "no-final-newline.cif",
+    "reader": "pdbx",
+    "valid": true,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          6.484,
+          28.442,
+          39.441
+        ]
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.718,
+          28.546,
+          38.611
+        ]
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": [
+          7.625,
+          27.706,
+          37.277
+        ]
+      }
+    ]
+  },
+  {
+    "name": "missing-coordinate",
+    "file": "missing-coordinate.cif",
+    "reader": "pdbx",
+    "valid": false,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      }
+    ]
+  },
+  {
+    "name": "nonfinite-coordinate",
+    "file": "nonfinite-coordinate.cif",
+    "reader": "pdbx",
+    "valid": false,
+    "atoms": [
+      {
+        "name": "N",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      },
+      {
+        "name": "CA",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      },
+      {
+        "name": "C",
+        "resname": "GLU",
+        "chain": "A",
+        "resid": 16,
+        "xyz": null
+      }
+    ]
+  },
+  {
+    "name": "empty",
+    "file": "empty.cif",
+    "reader": "pdbx",
+    "valid": false
+  },
+  {
+    "name": "missing-loop",
+    "file": "missing-loop.cif",
+    "reader": "pdbx",
+    "valid": false
+  },
+  {
+    "name": "truncated-row",
+    "file": "truncated-row.cif",
+    "reader": "pdbx",
+    "valid": false
+  },
+  {
+    "name": "water",
+    "file": "water.parm7",
+    "reader": "parm7",
+    "valid": true
+  },
+  {
+    "name": "water-comments",
+    "file": "water-comments.parm7",
+    "reader": "parm7",
+    "valid": true
+  },
+  {
+    "name": "water-crlf",
+    "file": "water-crlf.parm7",
+    "reader": "parm7",
+    "valid": true
+  },
+  {
+    "name": "water-empty",
+    "file": "water-empty.parm7",
+    "reader": "parm7",
+    "valid": false
+  },
+  {
+    "name": "water-truncated-pointers",
+    "file": "water-truncated-pointers.parm7",
+    "reader": "parm7",
+    "valid": false
+  },
+  {
+    "name": "water-truncated-atoms",
+    "file": "water-truncated-atoms.parm7",
+    "reader": "parm7",
+    "valid": false
+  },
+  {
+    "name": "water-missing-format",
+    "file": "water-missing-format.parm7",
+    "reader": "parm7",
+    "valid": false
+  },
+  {
+    "name": "water-out-of-range-bond",
+    "file": "water-out-of-range-bond.parm7",
+    "reader": "parm7",
+    "valid": false
+  }
+]

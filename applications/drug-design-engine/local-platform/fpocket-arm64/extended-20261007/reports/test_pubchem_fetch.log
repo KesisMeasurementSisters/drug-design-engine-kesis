@@ -1,0 +1,27 @@
+......................F..                                                [100%]
+=================================== FAILURES ===================================
+____________________ TestFetchSlugOverride.test_custom_slug ____________________
+
+self = <tests.test_pubchem_fetch.TestFetchSlugOverride testMethod=test_custom_slug>
+
+    def test_custom_slug(self):
+        resp = _make_http_response(_property_response(cid=2244))
+        exit_code, output, files = _run_fetch(
+            [2244],
+            [resp],
+            slug_override="aspirin",
+        )
+        self.assertEqual(exit_code, 0, f"exit {exit_code}:\n{output}")
+    
+>       self.assertIn(
+            "aspirin.pubchem-compound.artifact.json",
+            files,
+            "custom-slug artifact not written",
+        )
+E       AssertionError: 'aspirin.pubchem-compound.artifact.json' not found in {'aspirin-2244.pubchem-compound.artifact.json': {'schema': 'dde.pubchem-compound.v1', 'cid': 2244, 'canonical_smiles': 'CC(=O)OC1=CC=CC=C1C(=O)O', 'isomeric_smiles': 'CC(=O)OC1=CC=CC=C1C(=O)O', 'inchikey': 'BSYNRYMUTXBXSQ-UHFFFAOYSA-N', 'molecular_formula': 'C9H8O4', 'molecular_weight': 180.16, 'source': 'property', 'retrieved': '2026-10-07T02:39:37Z'}, 'aspirin-2244.pubchem-compound.meta.json': {'tool': 'pubchem', 'subcommand': 'fetch', 'work_order_id': None, 'cli_version': '0.3.0', 'cli_integrity': '45f7f26', 'env_version': 'sha256:befbee9638683c52ce6460c889902e26b967e05a4d30207ec1169d3dbc15f3a0', 'interpreter': 'py3.11-aarch64', 'endpoint': 'https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/2244/property/CanonicalSMILES,IsomericSMILES,InChIKey,MolecularFormula,MolecularWeight/JSON', 'parameters': {'cid': 2244}, 'timestamp': '2026-10-07T02:39:37Z', 'completed': '2026-10-07T02:39:37Z', 'outputs': [{'path': 'aspirin-2244.pubchem-compound.artifact.json', 'sha256': 'bae37491a4a43eca01ea8078839b09a7dcd7846fac5c9adb508c47f1c66862a9', 'bytes': 327}], 'warnings': [], 'mandatory_relays': [], 'source': 'property', 'canonical_smiles': 'CC(=O)OC1=CC=CC=C1C(=O)O'}} : custom-slug artifact not written
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py:476: AssertionError
+- generated xml file: /scion-volumes/fpocket-validation/extended-20261007/dde-modules-readable/test_pubchem_fetch.xml -
+=========================== short test summary info ============================
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_pubchem_fetch.py::TestFetchSlugOverride::test_custom_slug
+1 failed, 24 passed in 0.10s

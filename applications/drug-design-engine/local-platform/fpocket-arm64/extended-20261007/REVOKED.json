@@ -1,0 +1,8 @@
+{
+  "status": "revoked",
+  "reason": "Extended reader validation found an AddressSanitizer heap-buffer-overflow on a valid mmCIF with a long author chain identifier; additional semantic and input-validation failures also remain.",
+  "binary_sha256": "497ab782ee2d35b676caaaa6010355347ac0e6aff0a42c53b18a715d0ae18960",
+  "report": "extended-20261007/REPORT.md",
+  "production_state": "fpocket quarantined; installer exclusion restored; prior environment identity restored",
+  "scope": "This supersedes the original enablement decision. Original test reports remain historical evidence."
+}

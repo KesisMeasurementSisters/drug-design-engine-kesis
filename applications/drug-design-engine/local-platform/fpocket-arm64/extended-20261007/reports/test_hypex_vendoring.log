@@ -1,0 +1,16 @@
+..F...                                                                   [100%]
+=================================== FAILURES ===================================
+________ test_prox_dependencies_have_an_independent_install_transaction ________
+
+    def test_prox_dependencies_have_an_independent_install_transaction() -> None:
+        requirements = (TOOLS / "requirements-hypex.txt").read_text()
+        for dependency in ("scipy", "scikit-learn", "networkx"):
+            assert dependency in requirements
+>       assert 'pip install -r "${SCRIPT_DIR}/requirements-hypex.txt"' in INSTALL
+E       assert 'pip install -r "${SCRIPT_DIR}/requirements-hypex.txt"' in '#!/usr/bin/env bash\n# Copyright 2026 Google LLC\n#\n# Licensed under the Apache License, Version 2.0 (the "License")... *MISSING* ]]; then\n    warn "Exiting non-zero: a declared binary did not install:${BINARY_STATUS}"\n    exit 4\nfi\n'
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py:55: AssertionError
+- generated xml file: /scion-volumes/fpocket-validation/extended-20261007/dde-modules-readable/test_hypex_vendoring.xml -
+=========================== short test summary info ============================
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_hypex_vendoring.py::test_prox_dependencies_have_an_independent_install_transaction
+1 failed, 5 passed in 0.02s

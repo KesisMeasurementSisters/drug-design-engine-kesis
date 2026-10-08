@@ -1,0 +1,340 @@
+{
+  "status": "verified_and_enabled",
+  "completion_scope": "Native ARM64 fpocket pocket detection for the tested formats and DDE workflow; not experimental binding, efficacy, or general scientific validation.",
+  "dde_commit": "45f7f26b10592183956cbb35d11b02c0651e6d24",
+  "architecture": "Linux AArch64 on local M4 Pro Podman VM",
+  "binary_sha256": "497ab782ee2d35b676caaaa6010355347ac0e6aff0a42c53b18a715d0ae18960",
+  "library_sha256": "c7433e63d2d132a8da6c40634e1f2f38febf639174734a2cc62fafb80e3fde0a",
+  "environment_before": "sha256:67718829910277cc16be681e50142f22e12efc186ba8fd031b79faf9b19eee6b",
+  "environment_after": "sha256:befbee9638683c52ce6460c889902e26b967e05a4d30207ec1169d3dbc15f3a0",
+  "acceptance": {
+    "comparator_self_tests": 11,
+    "scientific_library_architecture_checks_per_clean_build": 45,
+    "clean_builds": 2,
+    "sanitizer_cases_per_build": 5,
+    "dde_scion_user_checks_per_build": 7,
+    "unchanged_dde_pocket_tests": 22,
+    "tool_regressions": 4,
+    "doctor_ok": true
+  },
+  "agent_verification": {
+    "agent": "subscription-smoke",
+    "model": "gemini-3.8-flash-high",
+    "run_exit": 0,
+    "analyze_exit": 0,
+    "pockets": 13,
+    "best_score": 0.664,
+    "best_druggability_score": 0.855,
+    "uid": 1000,
+    "gid": 1000,
+    "artifacts": ".dde-local/fpocket-validation/agent-project/raw/structures"
+  },
+  "volume_tolerance": 0.05,
+  "volume_variability": {
+    "intel": {
+      "medians": [
+        1454.234,
+        424.3225,
+        781.5185,
+        444.7685,
+        274.8945,
+        241.334,
+        256.23400000000004,
+        283.44100000000003,
+        262.334,
+        187.6205,
+        327.1425,
+        314.577,
+        257.3365
+      ],
+      "ranges": [
+        [
+          1430.048,
+          1494.786
+        ],
+        [
+          416.73,
+          427.163
+        ],
+        [
+          770.171,
+          800.02
+        ],
+        [
+          434.106,
+          451.641
+        ],
+        [
+          261.51,
+          280.362
+        ],
+        [
+          237.628,
+          246.632
+        ],
+        [
+          248.394,
+          262.402
+        ],
+        [
+          276.492,
+          286.324
+        ],
+        [
+          257.563,
+          267.165
+        ],
+        [
+          184.363,
+          193.809
+        ],
+        [
+          323.863,
+          334.649
+        ],
+        [
+          307.932,
+          318.73
+        ],
+        [
+          252.244,
+          266.836
+        ]
+      ],
+      "relative_standard_deviation": [
+        0.013421803055750943,
+        0.00854313645834652,
+        0.010783946271929846,
+        0.011833938869384532,
+        0.018589218060902628,
+        0.012213549613382894,
+        0.017670529551366596,
+        0.009508175201113842,
+        0.010718149226825482,
+        0.013732167812596587,
+        0.010205561188038883,
+        0.011000314057818322,
+        0.01580295859330245
+      ]
+    },
+    "arm": {
+      "medians": [
+        1441.3229999999999,
+        430.466,
+        786.082,
+        444.1055,
+        275.733,
+        245.7535,
+        255.5025,
+        283.41049999999996,
+        262.36400000000003,
+        186.9845,
+        326.99649999999997,
+        314.161,
+        256.65
+      ],
+      "ranges": [
+        [
+          1405.317,
+          1467.145
+        ],
+        [
+          417.889,
+          443.971
+        ],
+        [
+          760.056,
+          813.342
+        ],
+        [
+          439.793,
+          448.228
+        ],
+        [
+          268.219,
+          281.436
+        ],
+        [
+          238.287,
+          247.676
+        ],
+        [
+          248.254,
+          263.587
+        ],
+        [
+          278.92,
+          289.904
+        ],
+        [
+          253.182,
+          267.165
+        ],
+        [
+          185.365,
+          191.688
+        ],
+        [
+          317.741,
+          332.608
+        ],
+        [
+          307.171,
+          320.737
+        ],
+        [
+          251.442,
+          261.857
+        ]
+      ],
+      "relative_standard_deviation": [
+        0.014783220106875945,
+        0.01618738363782037,
+        0.019476400544898125,
+        0.0052544773138315385,
+        0.015540506340921387,
+        0.013172653025702065,
+        0.016541030517862803,
+        0.010977860229586352,
+        0.01471417012660036,
+        0.0109084852893511,
+        0.014830607834977617,
+        0.011944082743706137,
+        0.01248363002702754
+      ],
+      "maximum_relative_median_difference": 0.018312794716036692
+    },
+    "arm_repeat": {
+      "medians": [
+        1439.3225,
+        426.467,
+        775.844,
+        447.091,
+        276.84000000000003,
+        243.311,
+        253.8645,
+        283.35,
+        259.874,
+        188.9125,
+        327.25149999999996,
+        314.5075,
+        258.9105
+      ],
+      "ranges": [
+        [
+          1396.225,
+          1470.418
+        ],
+        [
+          417.078,
+          435.509
+        ],
+        [
+          753.889,
+          793.606
+        ],
+        [
+          442.92,
+          451.451
+        ],
+        [
+          272.312,
+          287.675
+        ],
+        [
+          238.616,
+          254.539
+        ],
+        [
+          247.418,
+          261.357
+        ],
+        [
+          276.31,
+          287.962
+        ],
+        [
+          256.243,
+          268.845
+        ],
+        [
+          186.368,
+          190.879
+        ],
+        [
+          319.927,
+          336.689
+        ],
+        [
+          310.908,
+          318.73
+        ],
+        [
+          251.557,
+          267.007
+        ]
+      ],
+      "relative_standard_deviation": [
+        0.014821079541948978,
+        0.01362829805694048,
+        0.014680539400658749,
+        0.006677918069468972,
+        0.015031589099356701,
+        0.018245154637012144,
+        0.016607017457540535,
+        0.01146730184807727,
+        0.014495080180722252,
+        0.008447286322045855,
+        0.01730619471395331,
+        0.007152960809957065,
+        0.01718872527709624
+      ],
+      "maximum_relative_median_difference": 0.010253851856028626
+    }
+  },
+  "repeatability": "Both complete acceptance runs pass. Reader archive hashes identical. Runtime ELF bytes identical after removing debug sections and GNU build ID; unstripped executable hashes differ because bundled Qhull embeds the absolute build path.",
+  "runtime_image_sha256_without_debug_and_build_id": "0c9c9a4e3f96610e555b514762fc0570cc42aee9edc1f89c83009b6dbfd0e594",
+  "preservation": {
+    "existing_tools_unchanged": 6,
+    "existing_learning_files_unchanged": 28,
+    "runtime_source_clean": true,
+    "model_and_authentication_changed": false,
+    "paid_cloud_services_used": false
+  },
+  "feasibility": {
+    "started_utc": "2026-10-07T02:08:28Z",
+    "first_native_executable_utc": "2026-10-07T02:08:42.818443Z",
+    "within_45_minutes": true
+  },
+  "initial_failures": [
+    "Original ABI18 assertion rejected bundled Intel ABI20 registration; reference-only expectation corrected, ARM remains ABI18.",
+    "AMBER semantic identifier check needed documented fixed-width padding handling; raw cross-architecture values remain exact.",
+    "Default ARM fused arithmetic changed SASA, scores and pocket ranking. -ffp-contract=off on fpocket C objects restores all frozen references without algorithm changes.",
+    "Initial doctor invocation omitted DDE_PROJECT; corrected invocation passed.",
+    "Initial toolbox archive could not read Scion-private directories; complete archive was created in the actual Scion user namespace."
+  ],
+  "limitations": [
+    "Only the listed fixtures and options are qualified.",
+    "Only PDBx/mmCIF and AMBER parm7 reader objects are built; no VMD or molecular dynamics application.",
+    "ABI18 source branch can truncate mmCIF chain identifiers longer than two characters; tested upstream fixtures retain exact Intel parity.",
+    "The synthetic AMBER water topology is a reader test, not a simulation parameter set.",
+    "Volume estimates remain stochastic; seed resolution is one second.",
+    "Existing unrelated doctor capability warnings remain."
+  ],
+  "rollback_backup_volume_path": "/scion-volumes/fpocket-rollback-20261007",
+  "evidence_archive": ".dde-local/fpocket-validation/validation-evidence.tar.gz",
+  "evidence_archive_sha256": "48381f6f1ea76cf7d80c659700c70c19d9babd6b9edb001d14e330098516dc81",
+  "reports": {
+    "arm-build-1.json": "e8504189cb3c2dacc8ec4a17edc1865befd9bf374e6c63438c38da34ee8fffe5",
+    "arm-build-2.json": "381ce771978b63f7dee1eaab80f734a6f4614b70f62676be39ff1827798df195",
+    "doctor.json": "4bcfcbc3344958a4891f593df155ff278bd448f75dc13142e0cf04670da3ccb1",
+    "environment.json": "1f196eac3aa078e6e60df3b068c8ead90d649de72104930809f3d6ea8f282822",
+    "intel-reference.json": "9ce0729b0a46f808374f1f4d39ef833d4d4181361c5a4438084c738765b58e19",
+    "regressions.json": "4fbbbd3056156dfd8cfac720d293fbdf16c88a06e54898c8d4b122aaaf01d2a0",
+    "sanitizers-1.json": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+    "sanitizers-2.json": "7686ec5e8249be97c6d62c0deab490650a27cc9dd79d08d7b5f3aaf21af67d0a",
+    "scion-integration-1.json": "eb216e2a783c9fccba3a079a7fe77e2a07ef598bd9b9a9ea29628e33012ab960",
+    "scion-integration-2.json": "6cc1f1de1ca4d7daf58cde0d2a80da7a9b95aecdc03c53c32c499a8a3826bac4"
+  },
+  "comparator_log_sha256": "c681e287cf3411b10bada44d9ce577ad680687a48e2ee352907104876d67fb1d"
+}

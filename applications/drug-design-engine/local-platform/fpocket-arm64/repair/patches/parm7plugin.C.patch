@@ -1,0 +1,89 @@
+--- a/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/parm7plugin.C
++++ b/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/parm7plugin.C
+@@ -1,3 +1,4 @@
++#include "reader_validation.h"
+ /***************************************************************************
+  *cr
+  *cr            (C) Copyright 1995-2016 The Board of Trustees of the
+@@ -30,7 +31,7 @@
+ static void *open_parm7_read(const char *filename, const char *,int *natoms) {
+   FILE *fd;
+   int popn = 0;
+-  if(!(fd = open_parm7_file(filename, &popn))) {
++  if(!(fd = dde_reader::parm7(filename))) {
+     fprintf(stderr, "parm7plugin) Cannot open parm file '%s'\n", filename);
+     return NULL;
+   }
+@@ -58,6 +59,9 @@
+   char buf[85];
+   char field[85];
+   char *resnames = NULL;
++  bool ok = true;
++  p->nbonds = 0;
++  memset(atoms, 0, sizeof(*atoms)*prm->Natom);
+ 
+   *optflags = MOLFILE_NOOPTIONS; /* no optional data to start with */
+ 
+@@ -70,42 +74,42 @@
+     // skip any number of lines until we get to "FORMAT". This handles
+     // the %COMMENT lines that may or may not be present
+     while (strncmp(buf, "%FORMAT", 7)) {
+-        fgets(buf, 85, file);
++        if (!fgets(buf, 85, file)) { delete [] resnames; return MOLFILE_ERROR; }
+     }
+ 
+     if (!strcmp(field, "ATOM_NAME")) {
+-      if (!parse_parm7_atoms(buf, prm->Natom, atoms, file)) break;
++      if (!parse_parm7_atoms(buf, prm->Natom, atoms, file)) { ok = false; break; }
+     } else if (!strcmp(field, "CHARGE")) {
+       *optflags |= MOLFILE_CHARGE;
+-      if (!parse_parm7_charge(buf, prm->Natom, atoms, file)) break;
++      if (!parse_parm7_charge(buf, prm->Natom, atoms, file)) { ok = false; break; }
+     } else if (!strcmp(field, "MASS")) {
+       *optflags |= MOLFILE_MASS;
+-      if (!parse_parm7_mass(buf, prm->Natom, atoms, file)) break;
++      if (!parse_parm7_mass(buf, prm->Natom, atoms, file)) { ok = false; break; }
+     } else if (!strcmp(field, "AMBER_ATOM_TYPE")) {
+-      if (!parse_parm7_atype(buf, prm->Natom, atoms, file)) break;
++      if (!parse_parm7_atype(buf, prm->Natom, atoms, file)) { ok = false; break; }
+     } else if (!strcmp(field, "ATOMIC_NUMBER")) {
+       *optflags |= MOLFILE_ATOMICNUMBER;
+-      if (!parse_parm7_atomicnumber(buf, prm->Natom, atoms, file)) break;
++      if (!parse_parm7_atomicnumber(buf, prm->Natom, atoms, file)) { ok = false; break; }
+     } else if (!strcmp(field, "RESIDUE_LABEL")) {
+       resnames = new char[4*prm->Nres];
+-      if (!parse_parm7_resnames(buf, prm->Nres, resnames, file)) break;
++      if (!parse_parm7_resnames(buf, prm->Nres, resnames, file)) { ok = false; break; }
+     } else if (!strcmp(field, "RESIDUE_POINTER")) {
+       if (!resnames) {
+         fprintf(stderr, 
+             "parm7plugin) Cannot parse RESIDUE_POINTER before RESIDUE_LABEL\n");
+-        continue;
++        delete [] resnames; return MOLFILE_ERROR;
+       }
+       if (!parse_parm7_respointers(buf, prm->Natom, atoms, 
+                                    prm->Nres, resnames, file)) 
+-        break;
++        { ok = false; break; }
+       // XXX: we could count the bonded parameters and assign bond types.
+     } else if (!strcmp(field, "BONDS_WITHOUT_HYDROGEN")) {
+       if (!parse_parm7_bonds(buf, prm->Nbona, p->from+p->nbonds,
+-            p->to+p->nbonds, file)) break;
++            p->to+p->nbonds, file)) { ok = false; break; }
+       p->nbonds += prm->Nbona;
+     } else if (!strcmp(field, "BONDS_INC_HYDROGEN")) {
+       if (!parse_parm7_bonds(buf, prm->Nbonh, p->from+p->nbonds,
+-            p->to+p->nbonds, file)) break;
++            p->to+p->nbonds, file)) { ok = false; break; }
+       p->nbonds += prm->Nbonh;
+     }
+   }
+@@ -117,7 +121,7 @@
+   }
+ 
+   delete [] resnames;
+-  return MOLFILE_SUCCESS;
++  return ok ? MOLFILE_SUCCESS : MOLFILE_ERROR;
+ }
+ 
+ static int read_parm7_bonds(void *v, int *nbonds, int **fromptr, int **toptr, 

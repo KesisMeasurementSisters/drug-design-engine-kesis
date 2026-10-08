@@ -1,0 +1,76 @@
+.........F.....                                                          [100%]
+=================================== FAILURES ===================================
+__________ TestPreflightPassesCleanSystem.test_exits_zero_when_ready ___________
+
+self = <tests.test_bootstrap_preflight.TestPreflightPassesCleanSystem testMethod=test_exits_zero_when_ready>
+
+    def test_exits_zero_when_ready(self):
+        """If all prerequisites are present, preflight should exit 0."""
+        if not self._all_prerequisites_present():
+            self.skipTest("Prerequisites not fully present on this system")
+        r = _run(["--no-remediate"])
+>       self.assertIn(
+            r.returncode,
+            (0, 2),
+            f"Expected exit 0 or 2, got {r.returncode}.\n"
+            f"stdout:\n{r.stdout}\nstderr:\n{r.stderr}",
+        )
+E       AssertionError: 1 not found in (0, 2) : Expected exit 0 or 2, got 1.
+E       stdout:
+E       
+E       [1mPlatform[0m
+E         [1;34m—[0m       Debian GNU/Linux 12 (bookworm)
+E         [1;31mMISSING[0m architecture is aarch64, not x86_64
+E         [1;34m—[0m               The vina binary is published for linux_x86_64 only, and
+E         [1;34m—[0m               fpocket's vendored molfile plugin is a prebuilt LINUXAMD64
+E         [1;34m—[0m               static archive. Neither has an arm64 path in install.sh.
+E       
+E       [1mPython[0m
+E         [1;32mok[0m      python3 3.11.2
+E         [1;32mok[0m      python3 -m venv (created a working venv with pip)
+E         [1;32mok[0m      Python.h (/usr/include/python3.11)
+E       
+E       [1mFetch and verify[0m
+E         [1;32mok[0m      curl
+E         [1;32mok[0m      tar
+E         [1;32mok[0m      sha256sum
+E         [1;32mok[0m      install
+E         [1;32mok[0m      CA certificates present
+E         [1;32mok[0m      git (2.54.0)
+E         [1;32mok[0m      go 1.26.1 (Hypex requires 1.26.1 or newer)
+E       
+E       [1mNode.js / npm (KaTeX)[0m
+E         [1;32mok[0m      node v20.20.2 (>= v18 required)
+E         [1;32mok[0m      npm 10.8.2
+E       
+E       [1mC toolchain (fpocket builds from source)[0m
+E         [1;32mok[0m      gcc
+E         [1;32mok[0m      g++
+E         [1;32mok[0m      make
+E         [1;32mok[0m      ldd
+E         [1;32mok[0m      libc.a (static libc)
+E         [1;32mok[0m      libstdc++.a (static C++ runtime, for the vendored molfile plugin)
+E       
+E       [1mPrivilege[0m
+E         [1;32mok[0m      passwordless sudo as scion
+E       
+E       [1mNetwork egress[0m
+E         [1;31mMISSING[0m pypi.org (pip packages — no CLI without it) unreachable (https://pypi.org/simple/click/)
+E         [1;31mMISSING[0m files.pythonhosted.org (wheel downloads) unreachable (https://files.pythonhosted.org/)
+E         [1;31mMISSING[0m github.com (vina release, fpocket source tarball) unreachable (https://github.com/)
+E       
+E       [1mDisk[0m
+E         [1;32mok[0m      25290 MB free at /scion-volumes/tools
+E       
+E       [1mOptional[0m
+E         [1;32mok[0m      obabel (/usr/bin/obabel)
+E       
+E       [1;31mNOT READY[0m
+E       
+E       stderr:
+
+scion-volumes/source/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py:228: AssertionError
+- generated xml file: /scion-volumes/fpocket-validation/extended-20261007/dde-modules-readable/test_bootstrap_preflight.xml -
+=========================== short test summary info ============================
+FAILED scion-volumes/source/applications/drug-design-engine/tools/tests/test_bootstrap_preflight.py::TestPreflightPassesCleanSystem::test_exits_zero_when_ready
+1 failed, 14 passed in 8.76s

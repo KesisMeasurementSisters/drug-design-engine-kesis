@@ -1,0 +1,50 @@
+[
+  {
+    "exit": 0,
+    "timeout": false,
+    "seconds": 0.006,
+    "name": "columns-31",
+    "valid_input": true,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "columns-32",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "columns-33",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "columns-63",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "overlong-row",
+    "valid_input": false,
+    "passed": true
+  },
+  {
+    "exit": 66,
+    "timeout": false,
+    "seconds": 0.005,
+    "name": "interleaved-columns",
+    "valid_input": false,
+    "passed": true
+  }
+]

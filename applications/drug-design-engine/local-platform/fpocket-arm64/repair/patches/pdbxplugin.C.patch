@@ -1,0 +1,260 @@
+--- a/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C
++++ b/molfile_plugin-5f817f263b89e8420174bb4bf0d0875a6ebe6136/vmd/plugins/molfile_plugin/src/pdbxplugin.C
+@@ -1,3 +1,4 @@
++#include "reader_validation.h"
+ /***************************************************************************
+  *cr
+  *cr            (C) Copyright 1995-2016 The Board of Trustees of the
+@@ -46,7 +47,7 @@
+ //#define PDBX_DEBUG 1
+ 
+ //used for reading author defined values needed when reading bond info
+-#define CHAIN_SIZE 4
++#define CHAIN_SIZE 16
+ #define TYPE_SIZE 8
+ #define BUFFER_SIZE 4096
+ #define COLUMN_BUFFER_SIZE 1024
+@@ -229,7 +230,7 @@
+ // class implementation 
+ //
+ static pdbxParser* create_pdbxParser(const char* filepath) {
+-  pdbxParser* parser = new pdbxParser;
++  pdbxParser* parser = new pdbxParser();
+   char buffer[BUFFER_SIZE];
+   int numberAtoms;
+   parser->xyz = NULL;
+@@ -242,7 +243,7 @@
+   parser->g_data = NULL;
+   parser->bondsTo = NULL;
+   parser->bondsFrom = NULL;
+-  parser->file = fopen(filepath, "r");
++  parser->file = dde_reader::pdbx(filepath);
+   parser->pdb_dev = false;
+   parser->n_graphics_elems = 0;
+   memset(buffer, 0, sizeof(buffer));
+@@ -278,7 +279,7 @@
+ 
+ 
+ static void delete_pdbxParser(pdbxParser* parser) {
+-  fclose(parser->file);
++  if (parser->file) fclose(parser->file);
+   if (parser->xyz != NULL) {
+     delete [] parser->xyz;
+     parser->xyz = NULL;
+@@ -318,28 +319,9 @@
+ }
+ 
+ 
+-static void skipNextWord(char * str, void * word, int& pos, int maxlen) {
+-  // Handle case if we start at end of line
+-  if (pos > maxlen) {
+-    return;
+-  }
+-  if (str[pos] == '\0' || str[pos] == '\n') {
+-    return;
+-  }
+-  // move forward until we hit non-whitespace
+-  while(str[pos] == ' ' || str[pos] == '\t') {
+-    ++pos;
+-    if (pos > maxlen) {
+-      return;
+-    }
+-  }
+-  // increment pos until we hit a whitespace
+-  while (str[pos] != ' ' && str[pos] != '\t') {
+-    pos++;
+-    if (pos > maxlen) {
+-      return;
+-    }
+-  }
++static void skipNextWord(char *str, void *, int& pos, int maxlen) {
++  while (pos < maxlen && str[pos] && isspace(static_cast<unsigned char>(str[pos]))) ++pos;
++  while (pos < maxlen && str[pos] && !isspace(static_cast<unsigned char>(str[pos]))) ++pos;
+ }
+ 
+ 
+@@ -364,77 +346,17 @@
+ }
+ 
+ 
+-static void getNextWord(char * str, void * word, int& pos, int maxstrlen, int maxwordlen) {
+-  char * w = (char*) word;
+-  int wordpos = 0;
+-  w[0] = '\0';
+-  if (pos >= maxstrlen) {
+-    return;
+-  }
+-
+-  // Handle case if we start at end of line
+-  if (str[pos] == '\0' || str[pos] == '\n') {
+-    return;
+-  }
+-
+-  // move forward until we hit non-whitespace
+-  while (str[pos] == ' ' || str[pos] == '\t') {
+-    if (++pos >= maxstrlen) {
+-      return;
+-    }
+-  }
+-
+-  // XXX records can be broken across lines, which breaks all of the
+-  //     assumptions made within this parser, we're going to have to 
+-  //     completely re-tool how parsing is done for the more general
+-  //     variants of mmCIF such as the IHM models
+-
+-  // 
+-  // XXX experimental handling of string columns
+-  // 
+-#if 0
+-  // The parser must handle mmCIF files that have
+-  // rows/records containing strings that are delimited by 
+-  // the '\'' or '"' character, where the whitespace skipping
+-  // approach breaks.  When we encounter the start of a string,
+-  // we need to then walk to the end of the string rather than
+-  // proceeding normally with whitespace skipping.
+-  if (str[pos] == '\'') {
+-    int start = pos; // record index of first '\'' char...
+-    pos++; // advance to next char 
+-
+-    // loop until we find the second '\'' char, or hit the end of the line
+-    while ((pos < maxstrlen) && (str[pos] != '\'')) {
+-      pos++;
+-    }
+-    int end = pos; // record index of second '\'' char...
+-    int len = end-start+1;
+-
+-    char colbuf[1024];
+-    memset(colbuf, 0, sizeof(colbuf));
+-    memcpy(colbuf, str+start, len);
+-//printf("getNextWord(): s: %d e: %d len: %d, \"%s\"\n", start, end, len, colbuf);
+-    strncpy(w, colbuf, maxwordlen-1);
+-    
+-    ++pos; // Increment pos to point to first char that has not been read
+-    return;
+-  }
+-#endif
+-
+-  // increment pos until we hit a whitespace
+-  while (str[pos] != ' ' && str[pos] != '\t') {
+-    w[wordpos++] = str[pos++];
+-    if (wordpos >= maxwordlen) {
+-      w[maxwordlen-1] = '\0';
+-      return;
+-    }
+-    if (pos >= maxstrlen) {
+-      w[wordpos] = '\0';
+-    }
+-  }
+-
+-  w[wordpos] = '\0';
+-  ++pos; // Increment pos to point to first char that has not been read
++static void getNextWord(char *str, void *word, int& pos, int maxstrlen, int maxwordlen) {
++  char *w = static_cast<char *>(word);
++  if (maxwordlen <= 0) throw std::runtime_error("invalid token capacity");
++  w[0] = 0;
++  while (pos < maxstrlen && str[pos] && isspace(static_cast<unsigned char>(str[pos]))) ++pos;
++  int n = 0;
++  while (pos < maxstrlen && str[pos] && !isspace(static_cast<unsigned char>(str[pos]))) {
++    if (n >= maxwordlen-1) throw std::runtime_error("token exceeds destination");
++    w[n++] = str[pos++];
++  }
++  w[n] = 0;
+ }
+ 
+ 
+@@ -954,6 +876,7 @@
+       return -1;
+     }
+ 
++    memset(atom, 0, sizeof(*atom));
+     pos = 0;
+     for (i=0; i<tableSize; ++i) {
+       if (table[i] == COLUMN_JUNK) {
+@@ -962,7 +885,19 @@
+       } else {
+         // will copy each column string into the atom struct
+         // or save the string if we need to convert it
+-        getNextWord(buffer, columns[i], pos, sizeof(buffer), COLUMN_BUFFER_SIZE);
++        size_t capacity = COLUMN_BUFFER_SIZE;
++        switch(table[i]) {
++          case COLUMN_TYPE: capacity=sizeof(atom->type); break;
++          case COLUMN_TYPE_AUTH: capacity=TYPE_SIZE; break;
++          case COLUMN_RESNAME: capacity=sizeof(atom->resname); break;
++          case COLUMN_INSERTION: capacity=sizeof(atom->insertion); break;
++          case COLUMN_CHAIN_AUTH: capacity=CHAIN_SIZE; break;
++          case COLUMN_ALT_LOC: capacity=(count ? sizeof(atom->altloc) : sizeof(altlocbuffer)); break;
++#if (vmdplugin_ABIVERSION >= 20)
++          case COLUMN_CHAIN: capacity=sizeof(atom->chain); break;
++#endif
++        }
++        getNextWord(buffer, columns[i], pos, sizeof(buffer), capacity);
+       }
+     }
+ 
+@@ -1009,17 +944,11 @@
+ 
+ // TODO: figure out what this conditional should be
+ #if (vmdplugin_ABIVERSION < 20)
+-    /* check to see if the chain length is greater than 2 */
+-    if (chainbuffer[2] != '\0' && chainbuffer[1] != '\0') {
+-      chainbuffer[2] = '\0';
+-      parseFlags |= FLAG_CHAIN_LENGTH;
+-    }
+-    atom->chain[0] = chainbuffer[0];
+-    atom->chain[1] = chainbuffer[1];
++    memcpy(atom->chain, chainbuffer, strlen(chainbuffer)+1);
+ #endif
+ 
+     // Assign these to the pdbx_data struct 
+-    if (bfactorbuffer[0] != '.' && bfactorbuffer[0] != '.') {
++    if (bfactorbuffer[0] && bfactorbuffer[0] != '.' && bfactorbuffer[0] != '?') {
+       atom->bfactor = atof(bfactorbuffer);
+       ++bfactorcount;
+       parseFlags |= FLAG_BFACTOR;
+@@ -1027,7 +956,7 @@
+       atom->bfactor = 0.0;
+     }
+ 
+-    if (occupancybuffer[0] != '.' && occupancybuffer[0] != '?') {
++    if (occupancybuffer[0] && occupancybuffer[0] != '.' && occupancybuffer[0] != '?') {
+       atom->occupancy = atof(occupancybuffer);
+       ++occupancycount;
+       parseFlags |= FLAG_OCCUPANCY;
+@@ -1035,7 +964,7 @@
+       atom->occupancy = 0.0;
+     }
+ 
+-    if (chargebuffer[0] != '.' && chargebuffer[0] != '?') {
++    if (chargebuffer[0] && chargebuffer[0] != '.' && chargebuffer[0] != '?') {
+       atom->charge = atof(chargebuffer);
+       ++chargecount;
+       parseFlags |= FLAG_CHARGE;
+@@ -1088,6 +1017,7 @@
+       strcpy(atom->chain_auth,chainAuth);
+ 
+     ++count;
++    if (count >= parser->natoms) break;
+     ++atom;
+     typeAuth += TYPE_SIZE;
+     columns[typeAuthIdx] = typeAuth;
+@@ -2101,6 +2031,7 @@
+   *natoms = data->natoms;
+   if (data->parser->error) {
+     printf("pdbxplugin) error opening file.\n");
++    delete_pdbxParser(data->parser); delete data;
+     return NULL;
+   }
+   return data;
+@@ -2120,10 +2051,11 @@
+     return MOLFILE_ERROR;
+   }
+ 
+-  if (parseStructure(atoms, optflags, data->parser)) {
++  try { if (parseStructure(atoms, optflags, data->parser)) {
+     printf("pdbxplugin) Error while trying to parse pdbx structure\n");
+     return MOLFILE_ERROR;
+   }
++  } catch (const std::exception &e) { fprintf(stderr, "pdbx: %s\n", e.what()); return MOLFILE_ERROR; }
+   //PS/ skipping this as I don't need it for fpocket & it fails now and don't know how to act upon it as reading auth chain & resid's trigger bond reading.
+   /*if (readBonds(atoms, data->parser)) {
+     *optflags |= MOLFILE_BONDSSPECIAL;
