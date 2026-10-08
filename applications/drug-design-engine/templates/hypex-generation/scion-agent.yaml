@@ -18,10 +18,10 @@ agent_instructions: agents.md
 system_prompt: system-prompt.md
 
 skills:
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/artifact-conventions"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/literature-search"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/citation-resolution"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/citation-verification"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/hypothesis-schema"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/debate-protocol"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/hypex-tool-setup"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/artifact-conventions"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/literature-search"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/citation-resolution"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/citation-verification"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/hypothesis-schema"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/debate-protocol"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/hypex-tool-setup"

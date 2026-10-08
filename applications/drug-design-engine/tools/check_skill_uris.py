@@ -131,6 +131,17 @@ _OTHER_SCHEMES = (
 #: some agents can run is not a gate. The template files are flat, so they are
 #: read line-wise instead. Parse coverage is reported so that a format change
 #: that defeats this reader shows up as zero rather than as success.
+#: The full-URL form is the only one that can address a skill below the
+#: repository root. `parseGHShorthand` hardcodes `skills/`, so a monorepo
+#: whose skills live under `applications/<app>/skills/` must use this form,
+#: and the checker maps it onto the same local directory.
+_HTTPS = re.compile(
+    r"^https://github\.com/"
+    r"(?P<owner>[A-Za-z0-9._-]+)/"
+    r"(?P<repo>[A-Za-z0-9._-]+)/tree/"
+    r"(?P<ref>[^/]+)/"
+    r"(?P<prefix>(?:[^/]+/)*?)skills/(?P<name>[^/?]+)/?$"
+)
 _URI = re.compile(r"^\s*-\s*uri:\s*[\"']?([^\"'\s]+)[\"']?")
 _OPTIONAL = re.compile(r"^\s*optional:\s*(\S+)")
 _TOPLEVEL = re.compile(r"^([a-z_]+):")
@@ -307,7 +318,12 @@ def main(argv: list[str] | None = None) -> int:
 
         for lineno, uri in uris:
             checked += 1
-            match = _GH.match(uri)
+            match = _GH.match(uri) or _HTTPS.match(uri)
+            if match and "prefix" in match.groupdict():
+                # The skills directory the URL names must be this app's own.
+                expected = str(SKILLS.relative_to(ROOT.parent.parent)) + "/"
+                if match.group("prefix") + "skills/" != expected:
+                    match = None
             if not match:
                 if uri.startswith(_OTHER_SCHEMES):
                     foreign.append(f"{rel}:{lineno} {uri} (non-gh scheme)")

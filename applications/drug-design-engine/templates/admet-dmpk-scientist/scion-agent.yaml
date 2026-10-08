@@ -18,9 +18,9 @@ agent_instructions: agents.md
 system_prompt: system-prompt.md
 
 skills:
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/compound-property-profile"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/admet-property-prediction"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/bioactivity-landscape"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/in-vivo-pk-analysis"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/structure-similarity-search"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/artifact-conventions"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/compound-property-profile"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/admet-property-prediction"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/bioactivity-landscape"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/in-vivo-pk-analysis"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/structure-similarity-search"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/artifact-conventions"

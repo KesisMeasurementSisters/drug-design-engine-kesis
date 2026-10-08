@@ -26,6 +26,6 @@ system_prompt: system-prompt.md
 skills:
   - uri: "gh://scion-frontiers/agent-team/artifact-durability"
   - uri: "gh://scion-frontiers/agent-team/agent-state-continuity"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/artifact-conventions"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/program-state-management"
-  - uri: "https://github.com/GoogleCloudPlatform/LifeSciences/tree/main/applications/drug-design-engine/skills/hypothesis-entry"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/artifact-conventions"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/program-state-management"
+  - uri: "https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/86b340f215e1cd5efb79a82012c2840d053b6420/applications/drug-design-engine/skills/hypothesis-entry"
