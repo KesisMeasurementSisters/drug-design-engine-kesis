@@ -64,24 +64,24 @@ from ..common import (
 from ..core import provenance
 from ..core.errors import ArtifactError, DependencyError, UsageError
 from ..core.output import Emitter
-from ..core.structures import detect_structure_format
 from ..core.pocket_runtime import (
     atom_rows,
+    calculation_workspace,
+    primary_chain,
     publication,
-    residue_records,
-    run_bounded,
-    validate_input,
-    validate_pockets,
-    validate_vertices,
-    stage_structure,
     read_bundle_metadata,
-    resolve_selectors,
     residue_key,
     residue_label,
     residue_order,
-    calculation_workspace,
-    primary_chain,
+    residue_records,
+    resolve_selectors,
+    run_bounded,
+    stage_structure,
+    validate_input,
+    validate_pockets,
+    validate_vertices,
 )
+from ..core.structures import detect_structure_format
 
 TOOL = "fpocket"
 ARTIFACT_CLASS = "structures"
