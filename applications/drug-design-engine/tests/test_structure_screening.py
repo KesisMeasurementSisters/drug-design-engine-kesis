@@ -1701,7 +1701,6 @@ def test_make_pocket_runner_end_to_end():
     import tempfile
 
     import click
-
     from dde.commands.structure_screening import make_pocket_runner
 
     calls: list[list[Any]] = []
@@ -1732,7 +1731,9 @@ def test_make_pocket_runner_end_to_end():
                     "  remedy: choose a new destination with --out"
                 )
             click.echo("Warning: DDE source has uncommitted modifications", err=True)
-            click.echo(json.dumps({"outputs": {"pockets": str(pockets_path)}}, indent=2))
+            click.echo(
+                json.dumps({"outputs": {"pockets": str(pockets_path)}}, indent=2)
+            )
 
         @pocket.command()
         @click.argument("path")
@@ -1741,7 +1742,9 @@ def test_make_pocket_runner_end_to_end():
         @click.option("--json", "as_json", is_flag=True)
         def analyze(path, near, out, as_json):
             calls.append(["analyze", path, near, out])
-            click.echo(json.dumps({"outputs": {"analysis": str(analysis_path)}}, indent=2))
+            click.echo(
+                json.dumps({"outputs": {"analysis": str(analysis_path)}}, indent=2)
+            )
 
         runner = make_pocket_runner(
             project_dir="/proj", near="A:145", out="screen/run-2", cli=fake
