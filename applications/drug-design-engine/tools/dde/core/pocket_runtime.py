@@ -1,20 +1,36 @@
+# Copyright 2026 Technologies Kesis & Sisters Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """Bounded fpocket execution and failure-safe publication of new result bundles."""
 
 from __future__ import annotations
-from contextlib import contextmanager
+
 import fcntl
-import math
-import re
 import json
+import math
 import os
-from pathlib import Path
-import signal
+import re
 import shutil
+import signal
 import subprocess
 import tempfile
 import uuid
-from .errors import ArtifactError, UsageError
+from contextlib import contextmanager
+from pathlib import Path
+
 from . import provenance
+from .errors import ArtifactError, UsageError
 from .structures import detect_structure_format
 
 MAX_INPUT_BYTES = 128 * 1024 * 1024
@@ -180,7 +196,7 @@ def residue_records(text: str, fmt: str, *, identities=None):
             record = dict(identities[key])
         else:
             record = _residue(row, fmt)
-        seen[residue_key(record) + (record.get("resname"),)] = record
+        seen[(*residue_key(record), record.get("resname"))] = record
     return sorted(seen.values(), key=lambda r: residue_order(residue_key(r)))
 
 
