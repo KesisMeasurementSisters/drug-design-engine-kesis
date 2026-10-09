@@ -144,7 +144,7 @@ In the **Resources** section, select the **Templates** tab:
 1. Select **Import from URL**.
 2. Provide the GitHub URL for the DDE templates:
    ```text
-   https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/kesis/learning-sandbox/applications/drug-design-engine/templates
+   https://github.com/KesisMeasurementSisters/drug-design-engine-kesis/tree/main/applications/drug-design-engine/templates
    ```
 
 3. Click **Import Templates**:
