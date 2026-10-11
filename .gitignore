@@ -10,3 +10,12 @@ llms.txt
 
 .agents
 skills-lock.json
+
+# Public fork: keep runtime state and private experiments local.
+/.dde-local/
+/.scion/
+.env
+.env.*
+!.env.example
+# Repository guidance is intentionally public and versioned.
+!/AGENTS.md

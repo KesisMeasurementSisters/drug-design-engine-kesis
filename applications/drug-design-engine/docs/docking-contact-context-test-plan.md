@@ -1,3 +1,7 @@
+> Historical test plan. The later narrow acceptance decision is in
+> [docking-contact-context-acceptance.md](docking-contact-context-acceptance.md).
+> The original criteria below remain unchanged.
+
 # Contact-warning repair and two comparison tests
 
 Status: reversible candidate implemented on `codex/docking-contact-context`; shared tools are not promoted. Henry requested two concurrent comparison runs. The proposed comparison is original versus candidate on each of the two cases below: four fresh reviews, at most two active at once. The choice between that comparison and two candidate-only reviews is pending Henry's clarification. No research-agent review has started.
