@@ -796,7 +796,9 @@ def _parse_vina_poses(pdbqt_text: str) -> list[dict[str, Any]]:
     return poses
 
 
-def _parse_pdbqt_atoms(text: str) -> list[dict[str, Any]]:
+def _parse_pdbqt_atoms(
+    text: str, *, atom_context: bool = False
+) -> list[dict[str, Any]]:
     """Parse ATOM/HETATM records from PDBQT text.
 
     Returns a list of dicts with chain, res_name, res_num, x, y, z.
@@ -828,6 +830,14 @@ def _parse_pdbqt_atoms(text: str) -> list[dict[str, Any]]:
                 "z": z,
             }
         )
+        if atom_context:
+            # Atom names alone are not elements (e.g. protein CA is carbon).
+            # Preserve the PDBQT type instead; absent types stay unknown.
+            atoms[-1]["identity"] = {
+                "serial": line[6:11].strip(),
+                "name": line[12:16].strip(),
+                "autodock_type": line[77:].strip() or None,
+            }
     return atoms
 
 
@@ -902,6 +912,66 @@ def _compute_contacts(
 
     contacts.sort(key=lambda c: c["min_distance"])
     return contacts
+
+
+def _contact_atom_context(
+    pose_atoms: list[dict[str, Any]],
+    receptor_atoms: list[dict[str, Any]],
+    contact: dict[str, Any],
+    min_distance: float,
+) -> dict[str, Any]:
+    """Annotate an existing contact without changing its distance or warning.
+
+    This is opt-in because contact distances also feed matrices and viewers.
+    H/HD/HS are PDBQT hydrogen types. A missing type cannot support a claim
+    that only hydrogens account for the short distance. This is a geometric
+    diagnostic, not a chemistry-aware clash or hydrogen-bond assessment.
+    """
+    hydrogens = {"H", "HD", "HS"}
+    residue = [
+        a
+        for a in receptor_atoms
+        if (a["chain"], a["res_name"], a["res_num"])
+        == (contact["chain"], contact["res_name"], contact["res_num"])
+    ]
+    complete = all(a["identity"]["autodock_type"] for a in pose_atoms + residue)
+    nearest = None
+    heavy = None
+    for ra in residue:
+        for pa in pose_atoms:
+            distance = sum((pa[k] - ra[k]) ** 2 for k in ("x", "y", "z")) ** 0.5
+            pair = (distance, pa["identity"], ra["identity"])
+            if nearest is None or distance < nearest[0]:
+                nearest = pair
+            types = [pa["identity"]["autodock_type"], ra["identity"]["autodock_type"]]
+            if all(t and t not in hydrogens for t in types):
+                if heavy is None or distance < heavy[0]:
+                    heavy = pair
+
+    def record(pair):
+        if pair is None:
+            return None
+        return {
+            "distance": round(pair[0], 3),
+            "ligand_atom": pair[1],
+            "receptor_atom": pair[2],
+        }
+
+    # Match the existing diagnostic's rounded-distance threshold convention.
+    if heavy is not None and round(heavy[0], 3) < min_distance:
+        basis = "heavy_atom_below_threshold"
+    elif not complete:
+        basis = "unknown_atom_types"
+    elif contact["min_distance"] < min_distance:
+        basis = "hydrogen_involving_only"
+    else:
+        basis = "none_below_threshold"
+    return {
+        "nearest_pair": record(nearest),
+        "nearest_heavy_atom_pair": record(heavy),
+        "atom_types_complete": bool(complete),
+        "short_distance_basis": basis,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -1697,6 +1767,12 @@ def analyze_cmd(
     help="Contacts below this distance (Angstroms) are flagged as "
     "potential steric clashes (rigid-receptor docking artifacts).",
 )
+@click.option(
+    "--atom-context",
+    is_flag=True,
+    help="Annotate short-distance warnings with atom identities, heavy-atom "
+    "distances and interpretation limits. Existing distances and flags are preserved.",
+)
 @out_option
 @output_options
 @pass_state
@@ -1706,6 +1782,7 @@ def contacts_cmd(
     receptor_pdbqt: str,
     cutoff: float,
     min_distance: float,
+    atom_context: bool,
     out: str | None,
     as_json: bool,
     quiet: bool,
@@ -1718,6 +1795,10 @@ def contacts_cmd(
 
     Contacts closer than ``--min-distance`` are flagged as potential
     steric clashes (rigid-receptor docking artifacts).
+
+    ``--atom-context`` adds atom identities and heavy-atom distances without
+    changing the legacy contact counts or warning flags. For Vina output,
+    hydrogen-only short distances do not establish a protein steric defect.
 
     Outputs under ``raw/docking/``:
 
@@ -1742,7 +1823,7 @@ def contacts_cmd(
 
     # --- parse receptor ---
     receptor_text = receptor_path.read_text(encoding="utf-8", errors="replace")
-    receptor_atoms = _parse_pdbqt_atoms(receptor_text)
+    receptor_atoms = _parse_pdbqt_atoms(receptor_text, atom_context=atom_context)
     if not receptor_atoms:
         raise ArtifactError(
             f"no atom coordinates found in receptor {receptor_path.name}",
@@ -1757,8 +1838,14 @@ def contacts_cmd(
     per_pose_contacts: list[dict[str, Any]] = []
     steric_clashes: list[dict[str, Any]] = []
     for i, model_text in enumerate(models, start=1):
-        pose_atoms = _parse_pdbqt_atoms(model_text)
+        pose_atoms = _parse_pdbqt_atoms(model_text, atom_context=atom_context)
         contacts = _compute_contacts(pose_atoms, receptor_atoms, cutoff)
+        if atom_context:
+            for contact in contacts:
+                if contact["min_distance"] < min_distance:
+                    contact["atom_context"] = _contact_atom_context(
+                        pose_atoms, receptor_atoms, contact, min_distance
+                    )
         # Flag contacts below min_distance as potential steric clashes
         for contact in contacts:
             if contact["min_distance"] < min_distance:
@@ -1770,6 +1857,9 @@ def contacts_cmd(
                         "pose": i,
                     }
                 )
+                if atom_context:
+                    steric_clashes[-1]["chain"] = contact["chain"]
+                    steric_clashes[-1]["atom_context"] = contact["atom_context"]
         per_pose_contacts.append(
             {
                 "pose": i,
@@ -1803,6 +1893,8 @@ def contacts_cmd(
         "contacts": per_pose_contacts,
         "steric_clashes": steric_clashes,
     }
+    if atom_context:
+        contacts_record["atom_context_version"] = 1
     contacts_path = target_dir / f"{stem}.contacts.json"
     contacts_path.write_text(
         json.dumps(contacts_record, indent=2) + "\n", encoding="utf-8"
@@ -1820,6 +1912,8 @@ def contacts_cmd(
             "min_distance_threshold": min_distance,
         },
     )
+    if atom_context:
+        sidecar.parameters["atom_context"] = True
     sidecar.note("poses_sha256", provenance.sha256_file(poses_path))
     sidecar.note("receptor_sha256", provenance.sha256_file(receptor_path))
     sidecar.note("poses_path", str(poses_path))
@@ -1854,6 +1948,18 @@ def contacts_cmd(
         "or reactive-orientation analysis was performed.",
         code="docking.contact_is_not_binding_event",
     )
+    if atom_context and steric_clashes:
+        sidecar.warn(
+            "Identify the atom pair before interpreting a short-distance warning. "
+            "For AutoDock Vina, output hydrogen positions are arbitrary: a "
+            "hydrogen-involving-only warning does not establish heavy-atom "
+            "interpenetration or required protein movement. Check the separate "
+            "heavy-atom pair; do not dismiss a heavy-atom warning. Missing atom "
+            "types mean unresolved classification. Absence of a warning does "
+            "not establish a physically correct pose. Legacy warning flags "
+            "still describe the all-atom distance threshold.",
+            code="docking.short_distance_requires_atom_context",
+        )
 
     sidecar.add_output(contacts_path)
     meta_path = sidecar.write(target_dir / f"{stem}.contacts.meta.json")

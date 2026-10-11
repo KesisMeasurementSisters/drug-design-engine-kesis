@@ -520,6 +520,13 @@ RELAY_CODES: dict[str, str] = {
         "binding interaction. No hydrogen-bond geometry, electrostatic "
         "complementarity, or reactive-orientation check was performed."
     ),
+    "docking.short_distance_requires_atom_context": (
+        "Identify the atoms behind each short-distance warning. Vina output "
+        "hydrogen positions are arbitrary; a hydrogen-only warning does not "
+        "establish heavy-atom overlap or required protein movement. Preserve "
+        "heavy-atom warnings and treat missing atom types as unresolved. "
+        "Absence of a warning does not establish a physically correct pose."
+    ),
     "admet.prediction_not_measurement": (
         "Do not treat these predicted ADMET endpoints as measured values. Every "
         "number here is a rule-based prediction from molecular descriptors, not "
