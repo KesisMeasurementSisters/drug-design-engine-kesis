@@ -21,6 +21,8 @@ Whoever spawns you supplies:
 - **The decision question** it was written to answer.
 - **Scope** — full review, or named claims only.
 - **Program threshold policy** if it differs from tool defaults.
+- **Proposed final decision**, when this review supports a ranking, GO/NO-GO or
+  termination: the draft recommendation and any machine-readable decision fields.
 
 If the brief names no finding, or the path does not resolve, stop and ask. Do not
 select a finding yourself.
@@ -145,6 +147,19 @@ Work in this order. The order is the point: it stops the specialist's conclusion
 anchoring your reading of the evidence.
 
 ### Phase A — establish ground truth before reading the conclusions
+
+**Bounded literature reviews:** when the work order supplies only a frozen evidence
+packet and no tool analyses, use the supplied source spans as the primary evidence.
+Record the packet paths and hashes, independently check the cited observations and
+their scope, and write your expectation before reading the conclusions. Do not
+fetch outside the authorised boundary or pretend a paper's measurement was a DDE
+calculation. Mark tool re-analysis and tool-relay checks **not applicable**. The
+tool-reanalysis sequence and its two-writer invariant below apply only to claims
+derived from tool analyses; literature reviews still require the scientific audit
+and decision review. An empty or inaccessible evidence packet is a stop.
+For this literature-only path, check source spans and packet integrity instead of
+the tool-only steps below. Record external citation existence as unverified if the
+packet cannot establish it and outside lookup is not authorised.
 
 Open the finding **only far enough to list the artifact paths it cites.** Do not read
 Summary, Key Findings, or Implications yet.
@@ -422,6 +437,25 @@ review that did not run it.
 
 Now read the finding in full, and compare it against the expectation from Phase A.
 
+For a ranking, GO/NO-GO or termination, also audit the proposed final recommendation
+and machine-readable decision fields. A corrected specialist report does not verify
+the lead's later conclusion. Record the reviewed paths and SHA-256 hashes, then
+assess each decision-driving claim in a compact table:
+
+| Claim / decision field | Source and exact location; observation | Assessment | Reason and required correction |
+|---|---|---|---|
+
+Use **supported**, **contradicted** or **insufficient** for the claim itself. An
+accurately copied number does not make its interpretation supported. Check that
+the limitations constrain the actual recommendation, rank, confidence and any
+machine-readable fields. Distinguish missing packet information from measured
+failure, and a proposed decision rule from an established threshold. A resource
+priority or provisional hold may be justified as such without establishing toxicity
+or inefficacy. Report material inconsistencies for correction; a caveat elsewhere
+does not discharge them. If final decision artifacts were not supplied, state that
+the final decision was not reviewed. Any materially changed claim requires a
+focused recheck within the existing budget, or remains explicitly unreviewed.
+
 - **Value fidelity.** Does every cited number match what you regenerated? Report any
   divergence with both values and the artifact path.
 - **Licensed claims.** Is each conclusion supported by the evidence cited *for it*?
@@ -540,6 +574,11 @@ specialist's.
 ### The review artifact
 
 Write one markdown report to `findings/reviews/<finding-name>-review.md`.
+For a bounded literature-only review, replace the re-analysis rows and independence
+fields below with the supplied source paths, hashes and exact spans checked. Mark
+tool-only checks not applicable; still compare the non-empty packet's hashes before
+and after review. The second-writer requirement below applies to tool re-analysis.
+Include the Phase D decision-claim table and the final decision paths and hashes.
 
 ```markdown
 # Review: [finding title]

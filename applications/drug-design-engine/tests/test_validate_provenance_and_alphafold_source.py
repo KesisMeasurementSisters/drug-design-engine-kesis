@@ -40,6 +40,7 @@ from dde.commands.validate import (
     _overall_verdict,
 )
 from dde.core.provenance import Sidecar, write_analysis
+from dde.core.thresholds import declared_sets
 
 
 def _sha256(data: bytes) -> str:
@@ -330,7 +331,7 @@ def test_analysis_source_project_relative() -> None:
         # Write analysis with project-relative source (the fix)
         analysis = {
             "source": "raw/structures/AF-P04637-F1.meta.json",
-            "threshold_set": "alphafold@default",
+            "threshold_set": declared_sets()["alphafold"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
         }
@@ -344,14 +345,7 @@ def test_analysis_source_project_relative() -> None:
         assert "status" in result
         assert "kind" in result
         # With the fixed source path, the source file should resolve
-        source_issues = [
-            i
-            for i in result.get("detail", {}).get("issues", [])
-            if "source reference does not resolve" in i.get("issue", "")
-        ]
-        assert not source_issues, (
-            f"Unexpected source resolution issues: {source_issues}"
-        )
+        assert result["status"] == "ok", result
         print("  PASS: project-relative source path resolves correctly")
 
 
@@ -369,7 +363,7 @@ def test_analysis_source_bare_name_fails() -> None:
         # Write analysis with BARE source name (the bug — before fix)
         analysis = {
             "source": "AF-P04637-F1.meta.json",  # bare name, not project-relative
-            "threshold_set": "alphafold@default",
+            "threshold_set": declared_sets()["alphafold"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
         }
@@ -387,8 +381,9 @@ def test_analysis_source_bare_name_fails() -> None:
         source_issues = [
             i
             for i in result.get("detail", {}).get("issues", [])
-            if "source reference does not resolve" in i.get("issue", "")
+            if "file not found" in i.get("issue", "")
         ]
+        assert result["result"] == "fail", result
         assert source_issues, "Bare filename should fail to resolve from project root"
         print("  PASS: bare filename correctly fails to resolve (confirms the bug)")
 
@@ -407,7 +402,7 @@ def test_analyze_prediction_source_project_relative() -> None:
         # Write analysis with project-relative source (the fix)
         analysis = {
             "source": "raw/structures/AF3-test.summary.json",
-            "threshold_set": "af3@default",
+            "threshold_set": declared_sets()["af3"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
         }
@@ -418,14 +413,7 @@ def test_analyze_prediction_source_project_relative() -> None:
 
         assert "status" in result
         assert "kind" in result
-        source_issues = [
-            i
-            for i in result.get("detail", {}).get("issues", [])
-            if "source reference does not resolve" in i.get("issue", "")
-        ]
-        assert not source_issues, (
-            f"Unexpected source resolution issues: {source_issues}"
-        )
+        assert result["status"] == "ok", result
         print("  PASS: AF3 project-relative source path resolves correctly")
 
 
@@ -606,7 +594,7 @@ def test_analysis_citations_scoped_two_wos() -> None:
         # WO-A: valid analysis
         analysis_a = {
             "source": "raw/structures/AF-A.meta.json",
-            "threshold_set": "alphafold@default",
+            "threshold_set": declared_sets()["alphafold"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
             "work_order_id": "WO-A",
@@ -654,7 +642,7 @@ def test_analysis_citations_backward_compat_untagged() -> None:
         # Untagged analysis (no work_order_id — pre-#166 record)
         analysis_old = {
             "source": "raw/structures/OLD.meta.json",
-            "threshold_set": "alphafold@default",
+            "threshold_set": declared_sets()["alphafold"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
         }
@@ -684,7 +672,7 @@ def test_analysis_citations_null_wo_checked() -> None:
 
         analysis = {
             "source": "raw/structures/X.meta.json",
-            "threshold_set": "alphafold@default",
+            "threshold_set": declared_sets()["alphafold"].tag,
             "metrics": {},
             "assessment": {"verdict": "confident"},
             "work_order_id": None,
@@ -717,7 +705,7 @@ def test_analysis_citations_no_wo_id_checks_all() -> None:
         for label in ("WO-A", "WO-B"):
             analysis = {
                 "source": f"raw/structures/{label}.meta.json",
-                "threshold_set": "alphafold@default",
+                "threshold_set": declared_sets()["alphafold"].tag,
                 "metrics": {},
                 "assessment": {"verdict": "confident"},
                 "work_order_id": label,

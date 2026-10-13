@@ -699,6 +699,26 @@ Then record one of: **accepted**, **revision requested**, or **rejected**. Rejec
 and revision requests must record a reason, so the program does not repeat the
 failure. Acceptance records the finding revision and its effect on Layer 2.
 
+For a ranked recommendation, GO/NO-GO or termination, make the decisive reasoning
+reviewable in the decision draft using this small table. Include only claims that
+drive the choice, not every sentence in the report:
+
+| Decision-driving claim | Source and exact location; observation | Inference, limits and missing evidence |
+|---|---|---|
+
+Explain the inference in plain language. Keep measured observations, hypotheses,
+missing packet evidence and programme choices distinct. A proposed numerical rule
+needs a rationale and proposed status; it is not an observed result or an approved
+threshold merely because you proposed it.
+
+Send the draft recommendation and any machine-readable decision fields with the
+existing independent review request. The reviewer must assess the decisive claims
+and agreement between the narrative and those fields. Record how you resolved each
+challenge. If you materially change a reviewed claim, decision basis or confidence,
+return the changed part for a focused check within the existing budget; do not
+present an unchecked revision as independently reviewed. See
+`docs/orchestration-design-guidance.md` §6.4.
+
 `scientifically_accepted` is the **only** state that licenses incorporation into Layer
 2. Do not synthesize from a finding that is merely mechanically valid, merely
 plausible, or still under review.

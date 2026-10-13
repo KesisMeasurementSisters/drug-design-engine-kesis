@@ -41,7 +41,7 @@ from ..common import (
     output_options,
     pass_state,
 )
-from ..core import controlstore
+from ..core import controlstore, thresholds
 from ..core.context import ARTIFACT_DIRS, normalize_artifact_class
 from ..core.controlstore import normalize_deliverables
 from ..core.env import CLI_VERSION
@@ -1032,12 +1032,70 @@ def _check_provenance_valid(
     }
 
 
+# These existing analyzers use descriptive identifiers rather than ThresholdSet
+# tags. Keep their emitted identifiers valid without accepting arbitrary names.
+_ANALYSIS_IDENTIFIERS = {
+    "allen-search",
+    "allen-donors",
+    "cellxgene-search",
+    "disco-search",
+    "disignatlas-search",
+    "differentiation",
+    "faers-analysis@1.0",
+    "geo-search",
+    "gwas-opentargets",
+    "gwas-gwas-catalog",
+    "gwas-clinvar",
+    "pathway-membership@1.0",
+    "patent-google-patents",
+    "phenotype-mgi",
+    "phenotype-hpo",
+    "ppi-string",
+    "pubmed-search",
+    "pubmed-bq-search",
+    "retro-askcos",
+    "scp-search",
+    "spatialdb-search",
+    "preprint-search",
+    "cbioportal-search",
+}
+
+
+def _check_threshold_reference(value: Any) -> tuple[list[str], list[str]]:
+    """Validate identifiers, without claiming to validate applied policy/values.
+
+    Older numeric versions remain readable but require review against their
+    recorded runtime. Program overrides and compound/assay composite tags are
+    emitted by existing tools and must not become false failures.
+    """
+    if not isinstance(value, str) or not value.strip():
+        return ["'threshold_set' must be a non-empty string"], []
+    errors: list[str] = []
+    warnings: list[str] = []
+    declared = thresholds.declared_sets()
+    for part in re.split(r"\+(?!program(?:\+|$))", value):
+        if part in _ANALYSIS_IDENTIFIERS:
+            continue
+        match = re.fullmatch(
+            r"([a-z][a-z0-9-]*)@(\d+(?:\.\d+)*(?:-[a-z0-9.-]+)?)(?:\+program)?",
+            part,
+        )
+        if match is None or match[1] not in declared:
+            errors.append(f"unrecognised threshold identifier: {part!r}")
+        elif match[2] != declared[match[1]].version:
+            warnings.append(
+                f"threshold version {part!r} differs from this runtime's "
+                f"{declared[match[1]].tag!r}; verify against the recorded runtime"
+            )
+    return errors, warnings
+
+
 def _check_analysis_citations(
     project_root: Path,
     deliverables: dict[str, Any],
     wo_id: str | None = None,
 ) -> dict[str, Any]:
-    """Check 5 — verify analysis records have source and threshold_set.
+    """Check 5 — verify analysis source paths and threshold identifiers.
 
     When *wo_id* is provided, only analysis files tagged with that work
     order (or untagged, for backward compatibility with pre-#166 records)
@@ -1045,6 +1103,7 @@ def _check_analysis_citations(
     silently skipped (#253).
     """
     issues: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
     analyses_checked = 0
 
     layer_0_classes = deliverables.get("layer_0_classes", [])
@@ -1115,23 +1174,27 @@ def _check_analysis_citations(
                     }
                 )
                 continue
-            if "source" not in data:
+            source = data.get("source")
+            if not isinstance(source, str) or not source.strip():
                 issues.append(
                     {
                         "file": str(child.relative_to(project_root)),
-                        "issue": "missing 'source' field",
+                        "issue": "'source' must be a non-empty path string",
                     }
                 )
-            if "threshold_set" not in data:
-                issues.append(
-                    {
-                        "file": str(child.relative_to(project_root)),
-                        "issue": "missing 'threshold_set' field",
-                    }
+            threshold_errors, threshold_warnings = _check_threshold_reference(
+                data.get("threshold_set")
+            )
+            for target, messages in (
+                (issues, threshold_errors),
+                (warnings, threshold_warnings),
+            ):
+                target.extend(
+                    {"file": str(child.relative_to(project_root)), "issue": message}
+                    for message in messages
                 )
             # Verify source reference resolves within the project root.
-            source = data.get("source")
-            if isinstance(source, str) and source:
+            if isinstance(source, str) and source.strip():
                 source_path = confine_path(project_root, Path(source))
                 if source_path is None:
                     issues.append(
@@ -1154,6 +1217,8 @@ def _check_analysis_citations(
                     )
 
     detail: dict[str, Any] = {"analyses_checked": analyses_checked}
+    if warnings:
+        detail["warnings"] = warnings
     if issues:
         detail["issues"] = issues
         return {
@@ -1166,31 +1231,32 @@ def _check_analysis_citations(
     return {
         "name": "analysis_citations",
         "result": "pass",
-        "status": "ok",
+        "status": "warn" if warnings else "ok",
         "kind": "DATA_INTEGRITY",
         "detail": detail,
     }
 
 
-def _collect_relay_codes(
+def _collect_relay_records(
     project_root: Path,
     deliverables: dict[str, Any],
     wo_id: str | None = None,
-) -> set[str]:
-    """Collect mandatory relay codes from sidecar and analysis files.
+) -> tuple[dict[Path, set[str]], dict[Path, set[Path]]]:
+    """Collect per-record codes and their source/output paths.
 
     Scans all ``.meta.json`` and ``.analysis.json`` files in each
-    artifact-class directory declared in *deliverables* and returns
-    the set of relay code strings found in ``mandatory_relays[].code``.
+    artifact-class directory declared in *deliverables*. Return each record's
+    ``mandatory_relays[].code`` set and its confined source/output references.
 
     When *wo_id* is provided, records tagged with a different work
     order are skipped (#166).
     """
     layer_0_classes = deliverables.get("layer_0_classes", [])
-    relay_codes: set[str] = set()
+    records: dict[Path, set[str]] = {}
+    references: dict[Path, set[Path]] = {}
 
     if not isinstance(layer_0_classes, list):
-        return relay_codes
+        return records, references
 
     for artifact_class in layer_0_classes:
         normalized = normalize_artifact_class(artifact_class)
@@ -1219,13 +1285,66 @@ def _collect_relay_codes(
             record_wo = data.get("work_order_id")
             if wo_id is not None and record_wo is not None and record_wo != wo_id:
                 continue
+            child = child.resolve()
+            records[child] = set()
+            references[child] = set()
+            source = data.get("source")
+            if isinstance(source, str) and source:
+                resolved = confine_path(project_root, Path(source))
+                if resolved is not None:
+                    references[child].add(resolved)
+            outputs = data.get("outputs", [])
+            if isinstance(outputs, list):
+                for output in outputs:
+                    path = output.get("path") if isinstance(output, dict) else None
+                    if isinstance(path, str) and path:
+                        resolved = confine_path(project_root, child.parent / path)
+                        if resolved is not None:
+                            references[child].add(resolved)
             relays = data.get("mandatory_relays", [])
             if isinstance(relays, list):
                 for r in relays:
-                    if isinstance(r, dict) and "code" in r:
-                        relay_codes.add(r["code"])
+                    code = r.get("code") if isinstance(r, dict) else None
+                    if isinstance(code, str) and code:
+                        records[child].add(code)
 
-    return relay_codes
+    return records, references
+
+
+def _collect_relay_codes(
+    project_root: Path,
+    deliverables: dict[str, Any],
+    wo_id: str | None = None,
+) -> set[str]:
+    records, _ = _collect_relay_records(project_root, deliverables, wo_id)
+    return set().union(*records.values())
+
+
+def _finding_artifact_references(
+    project_root: Path, finding: Path, text: str
+) -> set[Path]:
+    """Resolve supported local citations; link validation reports broken paths."""
+    references: set[Path] = set()
+    for match in _MARKDOWN_LINK_RE.finditer(text):
+        target = match[1].strip().strip("<>").split("#", 1)[0]
+        if not target or "://" in target:
+            continue
+        path = confine_path(project_root, finding.parent / target)
+        if path is not None and path.is_file():
+            references.add(path)
+        else:
+            path = confine_path(project_root, Path(target))
+            if path is not None and path.is_file():
+                references.add(path)
+    root_paths = [m[1] for m in _SOURCE_TAG_RE.finditer(text)]
+    root_paths += [m[1] for m in _SOURCE_TABLE_TAG_RE.finditer(text)]
+    root_paths += re.findall(r"\[(raw/[^\]\n]+)\](?!\()", text)
+    for target in root_paths:
+        target = re.sub(r":\d+$", "", target).split("#", 1)[0]
+        path = confine_path(project_root, Path(target))
+        if path is not None and path.is_file():
+            references.add(path)
+    return references
 
 
 # Regex for the standard relay label format: **Relay: `<code>`**
@@ -1239,7 +1358,12 @@ def _check_relay_coverage(
 ) -> dict[str, Any]:
     """Check 6 — verify mandatory relay codes are addressed in findings.
 
-    Two-tier check:
+    Check each finding separately, using its cited artifacts to select relays.
+    A finding without attributable citations must carry the work order's full
+    relay set; omitting citations cannot exempt it. Every emitted code must also
+    be covered somewhere. This checks attribution/presence, not scientific meaning.
+
+    Two-tier check within each finding:
 
     1. **Presence** — the relay code string must appear somewhere in
        the findings text.  Missing → ``fail`` / ``COMPLETENESS``.
@@ -1262,7 +1386,8 @@ def _check_relay_coverage(
             "detail": "no layer_0_classes declared",
         }
 
-    relay_codes = _collect_relay_codes(project_root, deliverables, wo_id)
+    records, references = _collect_relay_records(project_root, deliverables, wo_id)
+    relay_codes = set().union(*records.values())
 
     if not relay_codes:
         return {
@@ -1278,45 +1403,70 @@ def _check_relay_coverage(
             },
         }
 
-    # Read all Layer 1 findings content
-    findings_text = ""
-    if isinstance(layer_1, list):
-        for rel_path in layer_1:
-            resolved = confine_path(project_root, Path(rel_path))
-            if resolved is not None and resolved.is_file():
-                findings_text += resolved.read_text(encoding="utf-8", errors="replace")
+    # A source or sidecar may point to another record. Include that chain so
+    # citing the underlying data still carries the originating relay.
+    def dependencies(path: Path) -> set[Path]:
+        seen: set[Path] = set()
+        pending = [path]
+        while pending:
+            item = pending.pop()
+            if item not in seen:
+                seen.add(item)
+                pending.extend(references.get(item, set()) - seen)
+        return seen
 
-    # Collect codes found in standard label format.
-    labeled_codes: set[str] = set()
-    for m in _RELAY_LABEL_RE.finditer(findings_text):
-        labeled_codes.add(m.group(1))
-
-    # Check each code against findings text
+    related = {path: dependencies(path) for path in records}
+    known_artifacts = set().union(*related.values())
     addressed: set[str] = set()
-    unaddressed: list[str] = []
+    missing_by_finding: list[dict[str, Any]] = []
     sub_findings: list[dict[str, Any]] = []
-
-    for code in sorted(relay_codes):
-        if code in findings_text:
+    files_checked = 0
+    for rel_path in layer_1 if isinstance(layer_1, list) else []:
+        finding = confine_path(project_root, Path(rel_path))
+        if finding is None or not finding.is_file():
+            missing_by_finding.append({"file": rel_path, "codes": sorted(relay_codes)})
+            continue
+        files_checked += 1
+        text = finding.read_text(encoding="utf-8", errors="replace")
+        cited = _finding_artifact_references(project_root, finding, text)
+        cited = set().union(*(dependencies(path) for path in cited))
+        applicable = (
+            set().union(
+                *(codes for path, codes in records.items() if related[path] & cited)
+            )
+            if cited & known_artifacts
+            else relay_codes
+        )
+        labeled = {m[1] for m in _RELAY_LABEL_RE.finditer(text)}
+        missing: list[str] = []
+        for code in sorted(applicable):
+            if not re.search(r"(?<![\w.])" + re.escape(code) + r"(?![\w.])", text):
+                missing.append(code)
+                continue
             addressed.add(code)
-            # Label-format sub-check.
-            if code not in labeled_codes:
+            if code not in labeled:
                 sub_findings.append(
                     {
+                        "file": rel_path,
                         "code": code,
                         "status": "warn",
                         "kind": "FORMAT",
                         "detail": "relay code found in text but not in standard label format",
                     }
                 )
-        else:
-            unaddressed.append(code)
+        if missing:
+            missing_by_finding.append({"file": rel_path, "codes": missing})
+
+    missing_codes = set().union(*(set(item["codes"]) for item in missing_by_finding))
+    unaddressed = sorted((relay_codes - addressed) | missing_codes)
 
     detail: dict[str, Any] = {
         "codes_checked": len(relay_codes),
-        "codes_addressed": len(addressed),
+        "codes_addressed": len(relay_codes) - len(unaddressed),
         "codes_not_addressed": len(unaddressed),
         "unaddressed": unaddressed,
+        "files_checked": files_checked,
+        "missing_by_finding": missing_by_finding,
     }
 
     if unaddressed:

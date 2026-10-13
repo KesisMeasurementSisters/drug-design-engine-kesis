@@ -357,6 +357,30 @@ A stage gate is a scientific decision followed by a reporting snapshot:
 Gate documents never become the operational routing surface. Subsequent routing
 continues from the updated Layer 2 state and decision record.
 
+### 6.4 Evidence for the final decision
+
+For a ranked recommendation, GO/NO-GO or termination, put a compact table in the
+decision draft covering only the claims that determine the choice:
+
+| Decision-driving claim | Source and exact location; observation | Inference, limits and missing evidence |
+|---|---|---|
+| The claim actually used to advance, hold or reject | Artifact field or supplied source span, with assay and comparator scope | Why the observation supports the choice, and what it cannot establish |
+
+The independent reviewer assesses those claims as **supported**, **contradicted**
+or **insufficient**, with a short evidence-backed reason. Review the proposed final
+recommendation and any machine-readable decision fields, not only the specialist
+reports. Record the reviewed paths and hashes. The lead records the disposition of
+each challenged claim before finalising; materially changed claims or decision
+fields require a focused check within the existing review budget. An unchecked
+change remains explicitly unreviewed, not accepted by the earlier review.
+
+A provisional hold, resource priority or proposed threshold may be a programme
+choice: name that basis and its rationale instead of presenting it as a measured
+scientific failure. Evidence missing from the supplied packet is not evidence that
+it does not exist. The lead's narrative, ranking, confidence and machine-readable
+fields must express the same conclusion. This is scientific review; mechanical
+validation does not establish that an inference is supported.
+
 ---
 
 ## 7. Publication is a deterministic projection

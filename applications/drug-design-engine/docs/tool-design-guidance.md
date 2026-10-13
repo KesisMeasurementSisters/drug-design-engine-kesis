@@ -520,6 +520,21 @@ Phase 2 emits `<name>.analysis.json`, which cites its inputs and the thresholds 
 
 ### 5.1 Relay codes
 
+Mechanical validation checks relay presence separately in each finding, using its
+artifact links and source tags to identify applicable sidecar/analysis relays. A
+label in another finding cannot discharge that obligation. A finding without
+attributable artifact citations must cover the work order's complete relay set;
+omitting links is not an exemption. Every emitted code must still be covered.
+This is a traceability check, not proof that the prose obeys the relay. Scientific
+review must assess the conclusion itself.
+
+Analysis citation validation requires a non-empty source path resolving to a file
+inside the project and a recognised threshold identifier. It accepts existing
+descriptive analyzer identifiers, versioned threshold tags, program overrides and
+composite tags. A historical version differing from the current runtime produces a
+warning requiring review against the recorded runtime. Recognition does not verify
+the applied values or their suitability for the programme's decision.
+
 A relay carries a stable code as well as prose. The code is what makes the reviewer
 check mechanical. Prose is reworded between builds and cannot be matched on. A skill
 names a code; a reviewer enumerates the codes in an artifact and confirms each one was

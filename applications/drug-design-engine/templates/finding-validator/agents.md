@@ -58,11 +58,16 @@ It does not go to the science lead.
       Checksums in the sidecar match the file on disk.
 
 - [ ] **Analysis records.** Each `.analysis.json` cites its source artifact and its
-      `threshold_set`.
+      `threshold_set`. Both must be non-empty strings; the source must resolve to
+      a file inside the program and the threshold identifier must be recognised.
+      Carry version warnings forward for review against the recorded runtime.
 
 - [ ] **Relay codes addressed.** Every code in `mandatory_relays` — on the sidecar
       **and** on the `.analysis.json` — is addressed in the Layer 1 finding. Run
-      `dde relays` for the registry.
+      `dde relays` for the registry. Check each finding against the relays of its
+      cited artifacts; a code in a different finding does not satisfy it. Report
+      the file-specific failures from `dde validate`. Presence is mechanical;
+      whether the conclusion obeys the obligation belongs to scientific review.
 
   > Know the limit of what you are testing. You confirm the code is *addressed* — it
   > appears in the finding in connection with the condition it names. Whether the finding
