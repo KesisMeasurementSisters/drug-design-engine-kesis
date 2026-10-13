@@ -456,6 +456,15 @@ does not discharge them. If final decision artifacts were not supplied, state th
 the final decision was not reviewed. Any materially changed claim requires a
 focused recheck within the existing budget, or remains explicitly unreviewed.
 
+Before accepting a decision-driving causal claim, reconcile it with your own failure
+hypotheses. If a plausible alternative could produce the supplied observations while
+the claimed mechanism is false, identify the supplied evidence that distinguishes
+the explanations. If that distinction remains unresolved, mark the claim of an
+established mechanism **insufficient** and require narrower wording in both the
+narrative and machine-readable decision. Listing a caveat or proposing a future
+experiment does not resolve the objection. A provisional follow-up choice may still
+be justified.
+
 - **Value fidelity.** Does every cited number match what you regenerated? Report any
   divergence with both values and the artifact path.
 - **Licensed claims.** Is each conclusion supported by the evidence cited *for it*?
