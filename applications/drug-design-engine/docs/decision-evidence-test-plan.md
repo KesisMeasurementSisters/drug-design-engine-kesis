@@ -1,8 +1,10 @@
 # Decision evidence: implementation and test plan
 
-Status: candidate implemented on `codex/decision-evidence-checks`; software checks
-run, agent comparison proposed and not launched. Shared tools and imported role
-templates have not been promoted. Existing pilot inputs and reports are unchanged.
+Status: experiments closed. Mechanical validation fixes and review traceability
+are retained; the comparisons did not demonstrate improved detection of causal
+overclaims. The additional reviewer paragraph was removed after the final clean
+comparison failed. No further experiments are authorised. Shared tools and imported
+role templates have not been promoted. Private experiment records remain archived.
 
 Baseline: `a9cf6836d14a8973a2287eedd4344c79f6f04a93` from the fork's fetched
 `origin/main`. Bind the candidate to the commit containing this plan and record its
@@ -45,7 +47,9 @@ and work-order governance tests, one pytest process per module. Run lint and the
 invocation, artifact-path, skill-URI and threshold-name documentation checkers.
 These are software and instruction checks, not scientific validation.
 
-## One paired agent comparison
+## Original comparison protocol (closed)
+
+The following preserves the original protocol, not an instruction to launch a run.
 
 Use one fresh, small synthetic literature packet and the same neutral decision
 question twice: once with the baseline instructions and once with the candidate.
