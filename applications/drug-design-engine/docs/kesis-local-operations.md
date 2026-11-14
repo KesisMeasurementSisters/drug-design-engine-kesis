@@ -1,65 +1,79 @@
-# Kesis local operations: handoff for a new session
+# Kesis local Antigravity operations
 
-State as of 2026-10-08. Read this before touching the environment. Nothing here
-contains a credential; the Gemini login lives only inside agent containers.
+Runtime baseline verified on 2026-11-14: **Antigravity CLI 1.5.9** and
+**Gemini 4 Hydrogen, High reasoning** (`gemini-4-hydrogen-high`). This is a
+sanitized operating guide, not an inventory of a particular workstation.
+Recheck the live runtime before starting work.
 
-## What exists
+## Configure a new local runtime
 
-| Thing | Where | State |
-|---|---|---|
-| Trunk | `https://github.com/KesisMeasurementSisters/drug-design-engine-kesis`, branch `main` (default), public | `ed5d60d` and later. Upstream GoogleCloudPlatform/LifeSciences is remote `upstream`; sync with `git merge upstream/main` on `main`. |
-| Local checkout | `~/Code/KesisMeasurementSisters/drug-design-engine` | `origin` = fork, `upstream` = Google. |
-| Scion server | workstation mode, loopback only: Hub + broker + web on `http://127.0.0.1:8080` | `scion server status` / `start` / `stop`. Dev-auth token is printed in `~/.scion/server.log`; export it as `SCION_DEV_TOKEN` for CLI calls. Project is linked to the Hub. |
-| Templates | 22 role templates imported into `.scion/templates/` and synced to the Hub | Skill URIs pinned to fork commit `86b340f`. Bump when skills change (see below). |
-| Tools volume | Podman volume `dde-tools-arm64`, mounted at `/scion-volumes` in every DDE container | venv at `/scion-volumes/tools/.venv`, binaries in `tools/bin` (fpocket, vina, muscle, rate4site, hypex, elo, prox), editable DDE source at `/scion-volumes/source` checked out at the fork tip. `source /scion-volumes/tools/env.sh` first. |
-| Learning project | `/scion-volumes/learning` (28 files, compound artifacts only) | `DDE_PROJECT` for agents. |
-| Agents | `controller` (research-operations-controller, created, not started); `subscription-smoke` (default template, running, has the Gemini login) | `scion list` |
-| Containers | `dde-tools-arm64` (running; host repo read-only at `/baseline`), `drug-design-engine--subscription-smoke` (running), qualification containers `dde-fpocket-edge-offline` / `dde-fpocket-scion-check` / `dde-fpocket-intel` (stopped; volumes retained) | |
-| fpocket release | v3, binary `d6a779e6…c156cb0`, env stamp `sha256:1e9d67ba…` | `local-platform/fpocket-arm64/repair/review-fixes-20261008/` holds the handover, manifest and verification record. Rollback snapshot `/scion-volumes/fpocket-v3-rollback-20261008`. |
+The [example configuration](../config/antigravity-local.example.yaml) selects
+Hydrogen High explicitly in the model field, command arguments and environment.
+It contains no credentials, project identifiers or experiment mounts. Copy it to
+an ignored local directory and supply the authorized project's mounts there.
+The versioned image name is a **locally built ARM64 image**, not a public image
+that users can pull. Other platforms must build and verify their own image.
 
-`dde doctor` inside the tools container exits 0. Remaining warnings are credentials
-not set (GCP ADC, AlphaGenome, NCBI key) and threshold sets with unresolved names.
+Use the official `agy update` command to update the host CLI and a disposable
+build container based on the existing qualified DDE image. Record the reported
+version and updater verification result. Build a new versioned image containing
+the updated Linux binary; do not retag or modify an image used by a frozen run.
+Keep credentials and runtime caches out of the build context and image layers.
+Updating the macOS host CLI alone does not update the Linux agent image.
 
-## Launching the controller
+Scion can normalize local image names to a configured registry prefix. Confirm
+that the runtime broker resolves the intended local image ID before launch. A
+local registry-style alias does not require publishing the image.
 
-```bash
-export SCION_DEV_TOKEN=$(grep -o 'scion_dev_[0-9a-f]*' ~/.scion/server.log | tail -1)
-scion start controller        # created from research-operations-controller with .dde-local/scion-arm-learning.yaml
-scion attach controller       # complete the agy (Gemini subscription) login once
-# inside the agent, after login:
-python3 /home/scion/.scion/harness/capture_auth.py
-```
+## Verify before promotion
 
-`capture_auth.py` stores the Gemini credential as a Scion secret (`AGY_TOKEN`) so
-specialists the controller spawns inherit it. Then send the program directive from
-`docs/quickstart-pilot.md`. Role agents use image
-`localhost/dde-antigravity-arm64:learning`, model `gemini-3.8-flash-high`, and the
-env in `.dde-local/scion-arm-learning.yaml`; pass that file with `--config` when
-creating further agents by hand.
+1. Confirm the host and actual agent-container CLI versions with `agy --version`.
+2. List models with `agy models` in the authenticated environment; verify that
+   `gemini-4-hydrogen-high` is available to the account. Do not assume that API
+   availability implies subscription access.
+3. Launch a fresh, bounded smoke agent using the private configuration, with no
+   scientific inputs or prior-run mounts. Verify the actual model process flag
+   and session display, a successful inference, and one harmless tool call.
+4. Run `dde doctor --json` with the intended tools mounted read-only and a
+   disposable project. Preserve warnings and failures as well as successful
+   results. A passing doctor check is not validation of every scientific tool.
+5. Stop the smoke agent. Promote the launch configuration only after the checks
+   pass, retaining the previous configuration, image identity and host binary
+   for rollback. Existing agents retain their original runtime until explicitly
+   replaced; never resume a completed experiment to change its model.
 
-## Rules that keep the evidence chain intact
+This baseline passed authenticated inference and a terminal-tool smoke test,
+plus the DDE health check. Optional credentials, external services and unresolved
+thresholds can still produce warnings. A wrapper token-injection warning was
+observed even though authenticated inference succeeded; a warning alone must not
+be mistaken for either an authentication failure or a successful login.
 
-- `tools/dde/commands/pocket.py` and `tools/dde/core/pocket_runtime.py` are hash-bound
-  into the release manifest. Any edit forces the gate rerun documented in
-  `local-platform/fpocket-arm64/repair/README.md` (qualify a+b, run_dde, workflow
-  scripts, assemble_release, rollback + promote). Do not edit them casually.
-- `structure_screening.py` is not provisioned by the release scripts; after changing it,
-  copy it into `/scion-volumes/source/...` by hand or `git fetch && git checkout` there.
-- `dde pocket run` never overwrites; rerun with `--out`. Failed runs leave
-  `.<stem>.failed-*/` and a lock file; keep them.
-- Files moved into the tools volume with `podman cp` carry an SELinux label that
-  `shutil.copytree` cannot re-apply; recreate the tree with `tar` inside the container.
-- Pytest is deliberately absent from the DDE venv; install it to a side directory and
-  use `PYTHONPATH`, one pytest process per module.
+## Authentication and publication boundary
 
-## When skills or templates change
+Use the existing Scion/Antigravity authentication flow. Keep OAuth tokens, API
+keys, development-auth tokens, account details and local logs in protected local
+storage. Do not paste token-bearing server output into issues, PRs or reports.
+Keep the local Scion control service on loopback unless a separately reviewed
+network deployment is intended.
 
-1. Commit and push to `main`.
-2. Replace the pinned SHA in every `templates/*/scion-agent.yaml` with the commit that
-   carries the skills; run `python3 tools/check_skill_uris.py` (expects 32 of 41 skills
-   reachable; nine upstream skills are granted by no template).
-3. `scion template import applications/drug-design-engine/templates --all --force`
-   then `scion templates sync --all`. Agents provisioned earlier keep the old pin.
+Private operating records belong under ignored `.dde-local/` and `.scion/`.
+Never force-add those paths. Ignore rules do not protect files already tracked:
+review the exact staged diff and scan committed history before public release.
+Publish sanitized configuration examples and technical instructions only, not
+binaries, agent homes, raw source libraries, experiment reports or withheld keys.
+Use a GitHub-provided noreply commit address when avoiding personal author email
+exposure. Removing a file in a new commit does not remove it from old commits.
 
-The fork must stay public: Scion downloads `SKILL.md` from raw.githubusercontent.com
-without authentication, so a private repo cannot provision role agents.
+## Scientific tools and frozen records
+
+This model/harness update does not change or requalify scientific tools.
+`tools/dde/commands/pocket.py` and `tools/dde/core/pocket_runtime.py` remain subject
+to the gate in `local-platform/fpocket-arm64/repair/README.md`. Do not modify them
+as part of a runtime upgrade. Preserve the accepted tool source identity and
+rollback records.
+
+Record each new experiment's model, reasoning setting, CLI version, image ID,
+source identity, input hashes and bounded budget before launch. Compare model
+changes using unchanged evidence and decision rules. Retain previous inputs,
+results, failed attempts and acceptance decisions separately. Runtime readiness
+does not establish scientific accuracy or authorize a new experiment.
