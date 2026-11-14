@@ -38,7 +38,11 @@ class TestAF2GetResultsPathTraversal:
         config = MagicMock()
         config.project_id = "test-project"
         config.region = "us-central1"
-        return AF2GetResultsTool(tool_config=tool_config, config=config)
+        # Path validation tests must not initialize real cloud clients or require ADC.
+        with patch("foldrun_app.core.base_tool._ensure_clients"):
+            tool = AF2GetResultsTool(tool_config=tool_config, config=config)
+            tool.storage_client = MagicMock()
+            return tool
 
     @patch("foldrun_app.models.af2.tools.get_results.get_task_details")
     @patch("foldrun_app.models.af2.tools.get_results.get_pipeline_job")
@@ -104,7 +108,17 @@ class TestAF2GetResultsPathTraversal:
         tool._download_from_gcs = lambda uri, dest: downloaded_paths.append(dest)
 
         out_dir = str(tmp_path / "results")
-        result = tool.run({"job_id": "job-123", "output_dir": out_dir})
+        with (
+            patch(
+                "foldrun_app.core.download_utils.prepare_signing_context",
+                return_value=(None, None),
+            ),
+            patch(
+                "foldrun_app.core.download_utils.generate_signed_download_url",
+                return_value=None,
+            ),
+        ):
+            result = tool.run({"job_id": "job-123", "output_dir": out_dir})
 
         assert result["status"] == "success"
         assert len(downloaded_paths) == 1
